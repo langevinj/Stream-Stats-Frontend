@@ -1,0 +1,9 @@
+/* General purpose CSS for all forms: centers them on page and restricts their size */
+.form-container {
+    display: inline-block;
+    width: 20rem;
+}
+
+.edit {
+    text-align: left;
+}

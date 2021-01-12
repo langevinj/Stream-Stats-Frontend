@@ -7,7 +7,7 @@ import Home from './Home'
 import NavBar from './NavBar'
 // import Routes from './Routes'
 import StreamingApi from './Api'
-// import UserContext from './UserContext'
+import UserContext from './UserContext'
 import './App.css';
 
 export const TOKEN_KEY = "stream-stat-token"
@@ -48,12 +48,12 @@ function App() {
 
   return (
       <BrowserRouter>
-      {/* <UserContext.Provider value={{ currUser, setCurrUser }}> */}
+      <UserContext.Provider value={{ currUser, setCurrUser }}>
         <div className="App">
           <NavBar logOut={logOut} />
           <Routes setToken={setToken} />
         </div>
-      {/* </UserContext.Provider> */}
+      </UserContext.Provider>
       </BrowserRouter>
   );
 }

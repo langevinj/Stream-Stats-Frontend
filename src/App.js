@@ -3,9 +3,8 @@ import { BrowserRouter, Route, Switch } from "react-router-dom"
 import { decode } from "jsonwebtoken"
 import useLocalStorage from './hooks'
 
-import Home from './Home'
 import NavBar from './NavBar'
-// import Routes from './Routes'
+import Routes from './Routes'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
 import './App.css';

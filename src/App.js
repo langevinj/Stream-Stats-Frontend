@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { BrowserRouter, Route, Switch } from "react-router-dom"
+import { BrowserRouter } from "react-router-dom"
 import { decode } from "jsonwebtoken"
 import useLocalStorage from './hooks'
 

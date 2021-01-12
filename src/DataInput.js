@@ -41,7 +41,7 @@ function DataInput(){
         }
 
         //return to homepage, might want to change this depending on where you want to send user
-        history.push("/");
+        // history.push("/");
     }
 
     function handleChange(evt) {
@@ -52,7 +52,7 @@ function DataInput(){
     return (
         <div className="container">
             <div className="form-container">
-                <form className="form-container">
+                <form className="form-container" onSubmit={handleSubmit}>
                     <h4>Want to import some bandcamp data?</h4>
                     <div className="form-group">
                         <label htmlFor="distrokid">Paste the Distrokid page here:</label>

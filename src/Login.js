@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Alert from './Alert'
 import StreamingApi from './Api'
-// import './Forms.css'
+import './Forms.css'
 
 function Login({ setToken }) {
     const history = useHistory();

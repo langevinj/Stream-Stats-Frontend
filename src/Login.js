@@ -54,10 +54,10 @@ function Login({ setToken }) {
         try {
             if (endpoint === 'login') {
                 token = await StreamingApi.login(data);
-                JoblyApi.token = token;
+                StreamingApi.token = token;
             } else {
                 token = await StreamingApi.signup(data);
-                JoblyApi.token = token;
+                StreamingApi.token = token;
             }
         } catch (errors) {
             return setFormData(f => ({ ...f, errors }));

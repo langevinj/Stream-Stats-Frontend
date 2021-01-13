@@ -8,7 +8,7 @@ import './NavBar.css'
 function NavBar({ logOut }) {
     //grab the user from the Context provider
     const { currUser } = useContext(UserContext);
-
+ 
     //navbar view if a user is logged in
     const loggedInView = (
         <nav className="navbar navbar-expand-md navbar-light bg-white">

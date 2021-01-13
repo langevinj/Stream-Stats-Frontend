@@ -39,6 +39,12 @@ class StreamingApi {
         return res.token;
     }
 
+    //get info on a user by username
+    static async getUserInfo(username) {
+        let res = await this.request(`users/${username}`);
+        return res.user;
+    }
+
 
 }
 

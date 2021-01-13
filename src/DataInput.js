@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import StreamingApi from './Api'
 import Alert from './Alert'
+import { formatBandcamp, formatDistrokid } from './parser'
 
 function DataInput(){
     //set intiail state of the form
@@ -19,7 +20,8 @@ function DataInput(){
         let responses = []
         
         if(formData.distrokid){
-            let data = { page: formData.distrokid }
+            //format the pasted distrokid page
+            let data = formatDistrokid(formData.distrokid);
 
             try {
                 let res = await StreamingApi.distrokidImport(data);
@@ -31,7 +33,8 @@ function DataInput(){
         }
 
         if(formData.bandcamp){
-            let data = { page: formData.bandcamp }
+            //format the pasted bandcamp page
+            let data = formatBandcamp(formData.bandcamp);
 
             try {
                 let res = await StreamingApi.bandcampImport(data);

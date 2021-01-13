@@ -7,6 +7,8 @@ function DataInput(){
     const [formData, setFormData] = useState({
         distrokid: "",
         bandcamp: "",
+        spotifyEmail: "",
+        spotifyPwd: "",
         errors: []
     });
 
@@ -53,7 +55,14 @@ function DataInput(){
         <div className="container">
             <div className="form-container">
                 <form className="form-container" onSubmit={handleSubmit}>
-                    <h4>Want to import some bandcamp data?</h4>
+                    <h4>Want to import some stats?</h4>
+                    <div className="form-group">
+                        <h3>Enter your Spotify-for-Artists credentials here:</h3>
+                        <label htmlFor="spotifyEmail">Email:</label>
+                        <input name="spotifyEmail" value={formData.spotifyEmail} id="spotifyEmail" onChange={handleChange} type="text" className="form-control"></input>
+                        <label htmlFor="spotifyPwd">Password:</label>
+                        <input name="spotifyPwd" value={formData.spotifyPwd} id="spotifyPwd" type="password" onChange={handleChange} className="form-control"></input>
+                    </div>
                     <div className="form-group">
                         <label htmlFor="distrokid">Paste the Distrokid page here:</label>
                         <textarea name="distrokid" value={formData.distrokid} id="distrokid" onChange={handleChange} className="form-control"></textarea>

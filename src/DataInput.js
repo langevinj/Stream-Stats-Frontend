@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import StreamingApi from './Api'
 import Alert from './Alert'
 import { formatBandcamp, formatDistrokid } from './parser'
+import UserContext from './UserContext'
 
 function DataInput(){
+
+    const { currUser } = useContext(UserContext);
     //set intiail state of the form
     const [formData, setFormData] = useState({
         distrokid: "",
@@ -22,7 +25,7 @@ function DataInput(){
         //if distrokid information is passed, process it
         if(formData.distrokid){
             //format the pasted distrokid page
-            let data = {page: formData.distrokid};
+            let data = {page: formData.distrokid, username: currUser.username};
 
             try {
                 let res = await StreamingApi.distrokidImport(data);

@@ -11,7 +11,7 @@ class StreamingApi {
 
     static async request(endpoint, data={}, method = "get") {
         console.debug("API Call:", endpoint, data, method);
-        
+
         const url = `${BASE_API_URL}/${endpoint}`;
         const headers = { Authorization: `Bearer ${StreamingApi.token}` };
         const params = (method === "get")
@@ -43,6 +43,21 @@ class StreamingApi {
     static async getUserInfo(username) {
         let res = await this.request(`users/${username}`);
         return res.user;
+    }
+
+    //save user's distrokid data to the server
+    static async distrokidImport(data){
+
+    }
+
+    //save user's bandcamp data to the server
+    static async bandcampImport(data){
+
+    }
+
+    //save user's spotify credentials to the server
+    static async userSpotifyCredentials(data){
+        
     }
 
 

@@ -22,7 +22,7 @@ function DataInput(){
         //if distrokid information is passed, process it
         if(formData.distrokid){
             //format the pasted distrokid page
-            let data = formatDistrokid(formData.distrokid);
+            let data = {page: formData.distrokid};
 
             try {
                 let res = await StreamingApi.distrokidImport(data);
@@ -68,6 +68,7 @@ function DataInput(){
     function handleChange(evt) {
         const { name, value } = evt.target;
         setFormData(f => ({...f, [name]: value }));
+        console.log(typeof(formData.distrokid))
     }
     // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (

@@ -47,7 +47,8 @@ class StreamingApi {
 
     //save user's distrokid data to the server
     static async distrokidImport(data){
-
+        let res = await this.request(`distrokid/rawImport`, data, "post");
+        return res.token;
     }
 
     //save user's bandcamp data to the server

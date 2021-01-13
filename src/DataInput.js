@@ -19,6 +19,7 @@ function DataInput(){
         //list of responses from adding data to the backend
         let responses = []
         
+        //if distrokid information is passed, process it
         if(formData.distrokid){
             //format the pasted distrokid page
             let data = formatDistrokid(formData.distrokid);
@@ -32,12 +33,27 @@ function DataInput(){
             }
         }
 
+        //if bandcamp data is passed, process it
         if(formData.bandcamp){
             //format the pasted bandcamp page
             let data = formatBandcamp(formData.bandcamp);
 
             try {
                 let res = await StreamingApi.bandcampImport(data);
+                //add response to response list
+                responses.push(res);
+            } catch (errors) {
+                return setFormData(f => ({ ...f, errors }));
+            }
+        }
+
+        //if spotify credentials are passed, process them
+        if(formData.spotifyEmail && formData.spotifyPwd){
+            //send pre-hashed password and email for spotify credentials to be saved
+            let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
+
+            try {
+                let res = await StreamingApi.userSpotifyCredentials(data);
                 //add response to response list
                 responses.push(res);
             } catch (errors) {

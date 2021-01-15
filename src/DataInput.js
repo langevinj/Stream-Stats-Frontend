@@ -73,6 +73,14 @@ function DataInput(){
         setFormData(f => ({...f, [name]: value }));
         console.log(typeof(formData.distrokid))
     }
+
+    //quick trial function for gathering spotify data via scrape
+    function gatherSpotifyData(evt){
+        evt.preventDefault();
+        let res = await StreamingApi.gatherSpotifyData({ username: username });
+        console.log(res)
+    }
+    
     // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (
         <div className="container">
@@ -97,6 +105,7 @@ function DataInput(){
                     {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
                     <button className="submitButton btn-primary rounded">Submit</button>
                 </form>
+                <button onClick={gatherSpotifyData}>Gather Data!</button>
             </div>
         </div>
     )

@@ -53,7 +53,8 @@ class StreamingApi {
 
     //save user's bandcamp data to the server
     static async bandcampImport(data){
-
+        let res = await this.request(`bandcamp/rawImport`, data, "post");
+        return res.token;
     }
 
     //save user's spotify credentials to the server

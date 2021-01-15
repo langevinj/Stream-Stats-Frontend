@@ -58,8 +58,9 @@ class StreamingApi {
     }
 
     //save user's spotify credentials to the server
-    static async userSpotifyCredentials(data){
-        
+    static async saveUserSpotifyCredentials(data){
+        let res = await this.request(`spotify/saveCredentials`, data, "post");
+        return res.token;
     }
 
 

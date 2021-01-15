@@ -56,7 +56,7 @@ function DataInput(){
             let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
 
             try {
-                let res = await StreamingApi.userSpotifyCredentials(data);
+                let res = await StreamingApi.saveUserSpotifyCredentials(data);
                 //add response to response list
                 responses.push(res);
             } catch (errors) {

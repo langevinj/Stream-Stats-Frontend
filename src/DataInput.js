@@ -53,7 +53,7 @@ function DataInput(){
         //if spotify credentials are passed, process them
         if(formData.spotifyEmail && formData.spotifyPwd){
             //send pre-hashed password and email for spotify credentials to be saved
-            let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
+            let data = { email: formData.spotifyEmail, password: formData.spotifyPwd, username: currUser.username }
 
             try {
                 let res = await StreamingApi.saveUserSpotifyCredentials(data);

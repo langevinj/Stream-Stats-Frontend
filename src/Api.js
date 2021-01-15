@@ -63,6 +63,12 @@ class StreamingApi {
         return res.token;
     }
 
+    //crawl Spotify and gather information for user
+    static async gatherSpotifyData(data){
+        let res = await this.request(`spotify/gatherData`, data, "post");
+        return res.token;
+    }
+
 
 }
 

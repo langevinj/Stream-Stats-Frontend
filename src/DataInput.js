@@ -56,7 +56,8 @@ function DataInput(){
             let data = { email: formData.spotifyEmail, password: formData.spotifyPwd, username: currUser.username }
 
             try {
-                let res = await StreamingApi.saveUserSpotifyCredentials(data);
+                // let res = await StreamingApi.saveUserSpotifyCredentials(data);
+                let res = await StreamingApi.gatherSpotifyData(data)
                 //add response to response list
                 responses.push(res);
             } catch (errors) {
@@ -75,11 +76,11 @@ function DataInput(){
     }
 
     //quick trial function for gathering spotify data via scrape
-    function gatherSpotifyData(evt){
-        evt.preventDefault();
-        let res = await StreamingApi.gatherSpotifyData({ username: username });
-        console.log(res)
-    }
+    // async function gatherSpotifyData(evt){
+    //     evt.preventDefault();
+    //     let res = await StreamingApi.gatherSpotifyData({ username: currUser.username });
+    //     console.log(res)
+    // }
     
     // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (
@@ -105,7 +106,7 @@ function DataInput(){
                     {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
                     <button className="submitButton btn-primary rounded">Submit</button>
                 </form>
-                <button onClick={gatherSpotifyData}>Gather Data!</button>
+                {/* <button onClick={gatherSpotifyData}>Gather Data!</button> */}
             </div>
         </div>
     )

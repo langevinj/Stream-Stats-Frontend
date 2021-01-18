@@ -13,6 +13,8 @@ function DataInput(){
         bandcamp: "",
         spotifyEmail: "",
         spotifyPwd: "",
+        spotifyRawMonth: "",
+        spotifyRawAll: "",
         errors: []
     });
 
@@ -65,6 +67,32 @@ function DataInput(){
             }
         }
 
+        //if spotify page for a month sort is passed, process it
+        if(formData.spotifyRawMonth){
+            let data = { page: formData.spotifyRawMonth, username: currUser.username };
+
+            try {
+                let res = await StreamingApi.spotifyMonthImport(data);
+                //add response to response list
+                responses.push(res);
+            } catch (errors) {
+                return setFormData(f => ({ ...f, errors }));
+            }
+        }
+
+        //if spotify page for all time is passed, process it
+        if (formData.spotifyRawAll) {
+            let data = { page: formData.spotifyRawAll, username: currUser.username };
+
+            try {
+                let res = await StreamingApi.spotifyAlltimeImport(data);
+                //add response to response list
+                responses.push(res);
+            } catch (errors) {
+                return setFormData(f => ({ ...f, errors }));
+            }
+        }
+
         //return to homepage, might want to change this depending on where you want to send user
         // history.push("/");
     }
@@ -72,7 +100,6 @@ function DataInput(){
     function handleChange(evt) {
         const { name, value } = evt.target;
         setFormData(f => ({...f, [name]: value }));
-        console.log(typeof(formData.distrokid))
     }
 
     //quick trial function for gathering spotify data via scrape
@@ -96,6 +123,14 @@ function DataInput(){
                         <input name="spotifyPwd" value={formData.spotifyPwd} id="spotifyPwd" type="password" onChange={handleChange} className="form-control"></input>
                     </div>
                     <div className="form-group">
+                        <label htmlFor="spotifyRawMonth">Paste the "Last 28 days" Spotify page here:</label>
+                        <textarea name="spotifyRawMonth" value={formData.spotifyRawMonth} id="spotifyRawMonth" onChange={handleChange}></textarea>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="spotifyRawAll">Paste the "All time" Spotify page here:</label>
+                        <textarea name="spotifyRawAll" value={formData.spotifyRawAll} id="spotifyRawAll" onChange={handleChange}></textarea>
+                    </div>
+                    <div className="form-group">
                         <label htmlFor="distrokid">Paste the Distrokid page here:</label>
                         <textarea name="distrokid" value={formData.distrokid} id="distrokid" onChange={handleChange} className="form-control"></textarea>
                     </div>
@@ -103,7 +138,7 @@ function DataInput(){
                         <label htmlFor="bandcamp">Paste the Bandcamp page here:</label>
                         <textarea name="bandcamp" value={formData.bandcamp} id="bandcamp" onChange={handleChange} className="form-control"></textarea>
                     </div>
-                    {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
+                    {/* {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null} */}
                     <button className="submitButton btn-primary rounded">Submit</button>
                 </form>
                 {/* <button onClick={gatherSpotifyData}>Gather Data!</button> */}

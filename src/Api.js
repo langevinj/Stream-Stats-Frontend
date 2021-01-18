@@ -69,6 +69,18 @@ class StreamingApi {
         return res.token;
     }
 
+    //save a user's spotify data for the past month to the server
+    static async spotifyMonthImport(data){
+        let res = await this.request(`spotify/rawMonthImport`, data, "post");
+        return res.token;
+    }
+
+    //save a user's spotify data for all time
+    static async spotifyAlltimeImport(data){
+        let res = await this.request(`spotify/rawAlltimeImport`, data, "post");
+        return res.token;
+    }
+
 
 }
 

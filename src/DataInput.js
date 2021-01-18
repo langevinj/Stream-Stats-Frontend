@@ -61,7 +61,7 @@ function DataInput(){
         //if bandcamp data is passed, process it
         if (formData.bandcamp) {
             //format the pasted bandcamp page
-            let data = { page: formData.bandcamp, username: currUser.username };
+            let data = { page: formData.bandcamp };
 
             try {
                 let res = await StreamingApi.bandcampImport(data);

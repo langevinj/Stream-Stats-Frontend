@@ -1,12 +1,9 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import StreamingApi from './Api'
 import Alert from './Alert'
-import { formatBandcamp, formatDistrokid } from './parser'
-import UserContext from './UserContext'
 
 function DataInput(){
 
-    const { currUser } = useContext(UserContext);
     //set intiail state of the form
     const [formData, setFormData] = useState({
         distrokid: "",
@@ -45,7 +42,7 @@ function DataInput(){
     async function handleDistrokid() {
         if (formData.distrokid) {
             //format the pasted distrokid page
-            let data = { page: formData.distrokid, username: currUser.username };
+            let data = { page: formData.distrokid };
 
             try {
                 let res = await StreamingApi.distrokidImport(data);
@@ -77,7 +74,7 @@ function DataInput(){
         //if spotify credentials are passed, process them
         if (formData.spotifyEmail && formData.spotifyPwd) {
             //send pre-hashed password and email for spotify credentials to be saved
-            let data = { email: formData.spotifyEmail, password: formData.spotifyPwd, username: currUser.username }
+            let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
 
             try {
                 // let res = await StreamingApi.saveUserSpotifyCredentials(data);
@@ -93,7 +90,7 @@ function DataInput(){
     async function handleSpotifyMonth() {
         //if spotify page for a month sort is passed, process it
         if (formData.spotifyRawMonth) {
-            let data = { page: formData.spotifyRawMonth, username: currUser.username };
+            let data = { page: formData.spotifyRawMonth };
 
             try {
                 let res = await StreamingApi.spotifyMonthImport(data);
@@ -108,7 +105,7 @@ function DataInput(){
     async function handleSpotifyAll() {
         //if spotify page for all time is passed, process it
         if (formData.spotifyRawAll) {
-            let data = { page: formData.spotifyRawAll, username: currUser.username };
+            let data = { page: formData.spotifyRawAll };
 
             try {
                 let res = await StreamingApi.spotifyAlltimeImport(data);

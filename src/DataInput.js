@@ -33,9 +33,8 @@ function DataInput(){
 
         const starterPromise = Promise.resolve(null);
         //run through each submissing in sequence as to not overload db at once
-        const log = result => console.log(result);
         await [handleBandcamp(), handleSpotifyAll(), handleSpotifyMonth(), handleSpotifyCredentials(), handleDistrokid()].reduce(
-            (p, spec) => p.then(() => spec.then(log)),
+            (p, spec) => p.then(() => spec.then()),
             starterPromise
         )
         
@@ -151,7 +150,7 @@ function DataInput(){
                         <label htmlFor="bandcamp">Paste the Bandcamp page here:</label>
                         <textarea name="bandcamp" value={formData.bandcamp} id="bandcamp" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
                     </div>
-                    {/* {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null} */}
+                    {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
                     {!isLoading ? <button className="submitButton btn-primary rounded" type="submit">Submit</button> : <button className="loadingButton btn-primary rounded" type="button" disabled><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...</button>}
                 </form>
                 {/* <button onClick={gatherSpotifyData}>Gather Data!</button> */}

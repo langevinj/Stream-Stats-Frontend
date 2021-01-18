@@ -46,8 +46,8 @@ class StreamingApi {
     }
 
     //save user's distrokid data to the server
-    static async distrokidImport(data){
-        let res = await this.request(`distrokid/rawImport`, data, "post");
+    static async distrokidImport(data, username){
+        let res = await this.request(`distrokid/rawImport/${username}`, data, "post");
         return res.token;
     }
 
@@ -64,20 +64,20 @@ class StreamingApi {
     }
 
     //crawl Spotify and gather information for user
-    static async gatherSpotifyData(data){
-        let res = await this.request(`spotify/gatherData`, data, "post");
+    static async gatherSpotifyData(data, username){
+        let res = await this.request(`spotify/gatherData/${username}`, data, "post");
         return res.token;
     }
 
     //save a user's spotify data for the past month to the server
-    static async spotifyMonthImport(data){
-        let res = await this.request(`spotify/rawMonthImport`, data, "post");
+    static async spotifyMonthImport(data, username){
+        let res = await this.request(`spotify/rawMonthImport/${username}`, data, "post");
         return res.token;
     }
 
     //save a user's spotify data for all time
-    static async spotifyAlltimeImport(data){
-        let res = await this.request(`spotify/rawAlltimeImport`, data, "post");
+    static async spotifyAlltimeImport(data, username){
+        let res = await this.request(`spotify/rawAlltimeImport/${username}`, data, "post");
         return res.token;
     }
 

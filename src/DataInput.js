@@ -46,7 +46,7 @@ function DataInput(){
             let data = { page: formData.distrokid };
 
             try {
-                let res = await StreamingApi.distrokidImport(data);
+                let res = await StreamingApi.distrokidImport(data, currUser.username);
                 //add response to response list
                 responses.push(res);
             } catch (errors) {
@@ -79,7 +79,7 @@ function DataInput(){
 
             try {
                 // let res = await StreamingApi.saveUserSpotifyCredentials(data);
-                let res = await StreamingApi.gatherSpotifyData(data)
+                let res = await StreamingApi.gatherSpotifyData(data, currUser.username)
                 //add response to response list
                 responses.push(res);
             } catch (errors) {
@@ -94,7 +94,7 @@ function DataInput(){
             let data = { page: formData.spotifyRawMonth };
 
             try {
-                let res = await StreamingApi.spotifyMonthImport(data);
+                let res = await StreamingApi.spotifyMonthImport(data, currUser.username);
                 //add response to response list
                 responses.push(res);
             } catch (errors) {
@@ -109,7 +109,7 @@ function DataInput(){
             let data = { page: formData.spotifyRawAll };
 
             try {
-                let res = await StreamingApi.spotifyAlltimeImport(data);
+                let res = await StreamingApi.spotifyAlltimeImport(data, currUser.username);
                 //add response to response list
                 responses.push(res);
             } catch (errors) {

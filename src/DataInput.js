@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import StreamingApi from './Api'
 import Alert from './Alert'
+import UserContext from './UserContext'
 
 function DataInput(){
-
+    const { currUser } = useContext(UserContext)
     //set intiail state of the form
     const [formData, setFormData] = useState({
         distrokid: "",
@@ -61,7 +62,7 @@ function DataInput(){
             let data = { page: formData.bandcamp };
 
             try {
-                let res = await StreamingApi.bandcampImport(data);
+                let res = await StreamingApi.bandcampImport(data, currUser.username);
                 //add response to response list
                 responses.push(res);
             } catch (errors) {

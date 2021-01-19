@@ -21,6 +21,7 @@ function NavBar({ logOut }) {
                     {/* <NavLink exact to="/companies" className="nav-item nav-link">Companies</NavLink>
                     <NavLink exact to="/jobs" className="nav-link nav-item">Jobs</NavLink>
                     <NavLink exact to="/profile" className="nav-link nav-item">Profile</NavLink> */}
+                    <NavLink exact to="/chart" className="Navbar-link">Chart</NavLink>
                     <Link to="/input" className="nav-link nav-item">Import Data</Link>
                     <Link to="/" className="nav-link nav-item" onClick={logOut}>Logout</Link>
                 </div>
@@ -35,7 +36,6 @@ function NavBar({ logOut }) {
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item active">
                     <NavLink exact to="/login" className="Navbar-link">Login</NavLink>
-                    <NavLink exact to="/chart" className="Navbar-link">Chart</NavLink>
                 </li>
             </ul>
         </nav>

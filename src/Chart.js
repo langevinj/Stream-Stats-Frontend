@@ -20,7 +20,11 @@ function Chart(){
         getBandcampData();
     }, []);
 
-
+    return(
+        <>
+            <p>{bandcampData}</p>
+        </>
+    )
 }
 
 export default Chart;

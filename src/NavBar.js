@@ -35,6 +35,7 @@ function NavBar({ logOut }) {
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item active">
                     <NavLink exact to="/login" className="Navbar-link">Login</NavLink>
+                    <NavLink exact to="/chart" className="Navbar-link">Chart</NavLink>
                 </li>
             </ul>
         </nav>

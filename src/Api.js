@@ -51,10 +51,15 @@ class StreamingApi {
         return res.token;
     }
 
-    //save user's bandcamp data to the server
-    static async bandcampImport(data, username){
-        let res = await this.request(`bandcamp/rawImport/${username}`, data, "post");
+    //save user's alltime bandcamp data to the server
+    static async bandcampAlltimeImport(data, username){
+        let res = await this.request(`bandcamp/rawAlltimeImport/${username}`, data, "post");
         return res.token;
+    }
+
+    //save a user's month bandcamp data to the server
+    static async bandcampMonthImport(data, username){
+        let res = await this.request(`bandcamp/rawMonthImport/${username}`, data, "post")
     }
 
     //save user's spotify credentials to the server

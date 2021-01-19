@@ -81,6 +81,20 @@ function ChartData(){
     return(
         <>
             <XYPlot xType="ordinal" width={3000} height={700} xDistance={1000} className="ml-5">
+                <DiscreteColorLegend
+                    style={{ position: 'absolute', left: '50px', top: '10px' }}
+                    orientation="horizontal"
+                    items={[
+                        {
+                            title: 'Bandcamp',
+                            color: '#12939A'
+                        },
+                        {
+                            title: 'Oranges',
+                            color: '#79C7E3'
+                        }
+                    ]}
+                />
                 <VerticalGridLines />
                 <HorizontalGridLines />
                 <XAxis />

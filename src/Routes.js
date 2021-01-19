@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import Home from './Home'
 import Login from './Login'
 import DataInput from './DataInput'
-import Chart from './Chart'
+import ChartData from './Chart'
 // import Profile from './Profile'
 import UserContext from './UserContext'
 
@@ -21,7 +21,7 @@ function Routes({ setToken }) {
     const loggedInRoutes = (
         <Switch>
             {/* <Route exact path="/profile"><Profile /></Route> */}
-            <Route exact path="/chart"><Chart /></Route>
+            <Route exact path="/chartdata"><ChartData /></Route>
             <Route exact path="/input"><DataInput /></Route>
             <Route exact path="/"><Home /></Route>
             <Redirect to="/"></Redirect>

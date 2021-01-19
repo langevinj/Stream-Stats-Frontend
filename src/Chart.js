@@ -2,18 +2,21 @@ import React, {useState, useEffect, useContext} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
 import { v4 as uuid} from 'uuid'
+import { XYPlot, XAxis, YAxis, ChartLabel, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, LabelSeries } from 'react-vis';
 
-function Chart(){
+function ChartData(){
     const { currUser } = useContext(UserContext);
     const [bandcampData, setBandcampData] = useState([])
+    const [distrokidData, setDistrokidData] = useState([])
 
     //get bandcamp data for user upon loading page
     useEffect(() => {
         async function getBandcampData() {
             try {
-                let data = await StreamingApi.getUserBandcampData({ range: "alltime"}, currUser.username);
-                console.log(data)
-                setBandcampData(data)
+                let bdata = await StreamingApi.getUserBandcampData({ range: "alltime"}, currUser.username);
+                setBandcampData(bdata)
+                let ddata = await StreamingApi.getUserDistrokidData({ range: "alltime"}, currUser.username);
+                setDistrokidData(ddata)
             } catch (err) {
                 throw err;
             }
@@ -21,11 +24,40 @@ function Chart(){
         getBandcampData();
     }, []);
 
+    // const dta = React.useMemo(
+    //     () => bandcampData.map(d => {label': d.title, data: [d.plays]})
+    // )
+    const bandcampPlaysData = [];
+
+    for(let d of bandcampData){
+       bandcampPlaysData.push({x: d.title, y: d.plays});
+    }
+
+    // const distrokidPlaysData = [];
+
+    // for(let d of distrokidPlay)
+
+    // const labelData = playsData.map((d, idx) => ({
+    //     x: d.x,
+    //     y: playsData[idx].y
+    // }));
+    const [state, setState] = useState({ useCanvas: false })
+    const { useCanvas } = state;
+    const content = useCanvas ? 'TOGGLE TO SVG' : 'TOGGLE TO CANVAS';
+    const BarSeries = useCanvas ? VerticalBarSeriesCanvas : VerticalBarSeries;
+
     return(
         <>
-            {bandcampData ? <>{bandcampData.map(d => <p key={uuid()}>{d.title}</p>)}</> : <p>NOTHING</p>}
+            <XYPlot xType="ordinal" width={1000} height={300} xDistance={100} className="ml-5">
+                <VerticalGridLines />
+                <HorizontalGridLines />
+                <XAxis />
+                <YAxis />
+                <BarSeries className="vertical-bar-series-example" data={bandcampPlaysData} />
+                {/* <LabelSeries data={labelData} getLabel={d => d.x} /> */}
+            </XYPlot>
         </>
     )
 }
 
-export default Chart;
+export default ChartData;

@@ -51,6 +51,12 @@ class StreamingApi {
         return res.token;
     }
 
+    //get user with username's distrokid data
+    static async distrokidImport(data, username){
+        let res = await this.request(`distrokid/${username}`, data);
+        return res.response;
+    }
+
     //save user's alltime bandcamp data to the server
     static async bandcampAlltimeImport(data, username){
         let res = await this.request(`bandcamp/rawAlltimeImport/${username}`, data, "post");

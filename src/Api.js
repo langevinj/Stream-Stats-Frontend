@@ -66,7 +66,7 @@ class StreamingApi {
     //get user with username's bandcamp data
     static async getUserBandcampData(data, username){
         let res = await this.request(`bandcamp/${username}`, data);
-        return res;
+        return res.response;
     }
 
     //save user's spotify credentials to the server

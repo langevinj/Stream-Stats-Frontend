@@ -19,6 +19,7 @@ function DataInput(){
     });
 
     const handleChange = (evt) => {
+        // evt.preventDefault();
         const { name, value } = evt.target;
         setFormData(f => ({
             ...f,
@@ -30,6 +31,7 @@ function DataInput(){
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
+        setFormData(f => ({...f}))
         setIsLoading(true);
 
         const starterPromise = Promise.resolve(null);
@@ -165,7 +167,7 @@ function DataInput(){
                     </div>
                     <div className="form-group">
                         <label htmlFor="bandcampAlltime">Paste the "All time" Bandcamp page here:</label>
-                        <textarea name="bandcampAlltime" value={formData.bandcampAlltime} id="bandcampAlltime" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
+                        <textarea name="bandcampAlltime" value={formData.bandcampAlltime} id="bandcampAlltime" className="form-control" onChange={(evt) => handleChange(evt)}></textarea>
                     </div>
                     <div className="form-group">
                         <label htmlFor="bandcampMonth">Paste the "30 days" Bandcamp page here:</label>

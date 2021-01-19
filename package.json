@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.6.0",
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
+    "chart.js": "^2.9.4",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "react": "^17.0.1",

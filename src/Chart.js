@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
 import { v4 as uuid} from 'uuid'
-import { XYPlot, XAxis, YAxis, ChartLabel, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, LabelSeries } from 'react-vis';
+import { XYPlot, XAxis, YAxis, ChartLabel, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, LabelSeries, DiscreteColorLegend } from 'react-vis';
 
 function ChartData(){
     const { currUser } = useContext(UserContext);
@@ -32,6 +32,18 @@ function ChartData(){
     for(let d of bandcampData){
        bandcampPlaysData.push({x: d.title, y: d.plays});
     }
+
+    let allStoreData = {};
+    for(let dataset of distrokidData){
+        if(allStoreData[dataset.store]){
+            allStoreData[dataset.store] = [...allStoreData[dataset.store], { title: dataset.title, plays: dataset.plays, profit: dataset.profit }]
+        } else {
+            allStoreData[dataset.store] = [{ title: dataset.title, plays: dataset.plays, profit: dataset.profit }]
+        }
+        
+    }
+    console.log(allStoreData)
+    
 
     // const distrokidPlaysData = [];
 

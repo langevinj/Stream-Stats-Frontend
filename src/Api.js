@@ -52,7 +52,7 @@ class StreamingApi {
     }
 
     //get user with username's distrokid data
-    static async distrokidImport(data, username){
+    static async getUserDistrokidData(data, username){
         let res = await this.request(`distrokid/${username}`, data);
         return res.response;
     }

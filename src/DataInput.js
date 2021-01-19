@@ -9,7 +9,8 @@ function DataInput(){
     //set intiail state of the form
     const [formData, setFormData] = useState({
         distrokid: "",
-        bandcamp: "",
+        bandcampAlltime: "",
+        bandcampMonth: "",
         spotifyEmail: "",
         spotifyPwd: "",
         spotifyRawMonth: "",
@@ -33,7 +34,7 @@ function DataInput(){
 
         const starterPromise = Promise.resolve(null);
         //run through each submissing in sequence as to not overload db at once
-        await [handleBandcamp(), handleSpotifyAll(), handleSpotifyMonth(), handleSpotifyCredentials(), handleDistrokid()].reduce(
+        await [handleBandcampAlltime(), handleBandcampMonth(), handleSpotifyAll(), handleSpotifyMonth(), handleSpotifyCredentials(), handleDistrokid()].reduce(
             (p, spec) => p.then(() => spec.then()),
             starterPromise
         )
@@ -57,14 +58,30 @@ function DataInput(){
         }
     }
 
-    async function handleBandcamp() {
-        //if bandcamp data is passed, process it
-        if (formData.bandcamp) {
+    async function handleBandcampAlltime() {
+        //if bandcamp alltime data is passed, process it
+        if (formData.bandcampAlltime) {
             //format the pasted bandcamp page
-            let data = { page: formData.bandcamp };
+            let data = { page: formData.bandcampAlltime };
 
             try {
-                let res = await StreamingApi.bandcampImport(data, currUser.username);
+                let res = await StreamingApi.bandcampAlltimeImport(data, currUser.username);
+                //add response to response list
+                responses.push(res);
+            } catch (errors) {
+                return setFormData(f => ({ ...f, errors }));
+            }
+        }
+    }
+
+    async function handleBandcampMonth() {
+        //if bandcamp month data is passed, process it
+        if (formData.bandcampMonth) {
+            //format the pasted bandcamp page
+            let data = { page: formData.bandcampMonth };
+
+            try {
+                let res = await StreamingApi.bandcampMonthImport(data, currUser.username);
                 //add response to response list
                 responses.push(res);
             } catch (errors) {
@@ -147,8 +164,12 @@ function DataInput(){
                         <textarea name="distrokid" value={formData.distrokid} id="distrokid" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="bandcamp">Paste the Bandcamp page here:</label>
-                        <textarea name="bandcamp" value={formData.bandcamp} id="bandcamp" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
+                        <label htmlFor="bandcampAlltime">Paste the "All time" Bandcamp page here:</label>
+                        <textarea name="bandcampAlltime" value={formData.bandcampAlltime} id="bandcampAlltime" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="bandcampMonth">Paste the "30 days" Bandcamp page here:</label>
+                        <textarea name="bandcampMonth" value={formData.bandcampMonth} id="bandcampMonth" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
                     </div>
                     {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
                     {!isLoading ? <button className="submitButton btn-primary rounded" type="submit">Submit</button> : <button className="loadingButton btn-primary rounded" type="button" disabled><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...</button>}

@@ -99,6 +99,12 @@ class StreamingApi {
         return res.token;
     }
 
+    //get user with username's spotify data
+    static async getUserSpotifyData(data, username){
+        let res = await this.request(`spotify/${username}`, data);
+        return res.response;
+    }
+
 
 }
 

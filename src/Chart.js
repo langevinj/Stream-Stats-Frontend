@@ -7,23 +7,28 @@ import { colorsMap } from './colors.js'
 
 function ChartData(){
     const { currUser } = useContext(UserContext);
-    const [bandcampData, setBandcampData] = useState([])
-    const [distrokidData, setDistrokidData] = useState([])
+    const [bandcampData, setBandcampData] = useState([]);
+    const [distrokidData, setDistrokidData] = useState([]);
+    const [spotifyData, setSpotifyData] = useState([]);
 
     //get bandcamp data for user upon loading page
     useEffect(() => {
         async function getBandcampData() {
             try {
-                let bdata = await StreamingApi.getUserBandcampData({ range: "alltime"}, currUser.username);
-                setBandcampData(bdata)
-                let ddata = await StreamingApi.getUserDistrokidData({ range: "alltime"}, currUser.username);
-                setDistrokidData(ddata)
+                let bdata = await StreamingApi.getUserBandcampData({ range: "alltime" }, currUser.username);
+                setBandcampData(bdata);
+                let ddata = await StreamingApi.getUserDistrokidData({ range: "alltime" }, currUser.username);
+                setDistrokidData(ddata);
+                let sdata = await StreamingApi.getUserSpotifyData({ range: "alltime" }, currUser.username);
+                setSpotifyData(sdata);
             } catch (err) {
                 throw err;
             }
         }
         getBandcampData();
     }, [currUser.username]);
+
+    console.log(`SPOTIFY DATA IS: ${spotifyData}`);
 
     //parse the distrokid data and set it up as an array of songs per store
     let allStoreData = {};

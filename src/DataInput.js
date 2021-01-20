@@ -20,6 +20,7 @@ function DataInput(){
 
     const handleChange = (evt) => {
         // evt.preventDefault();
+        // console.log(evt.target.id, evt.target.value);
         const { name, value } = evt.target;
         setFormData(f => ({
             ...f,
@@ -31,66 +32,83 @@ function DataInput(){
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
-        setFormData(f => ({...f}))
         setIsLoading(true);
 
-        const starterPromise = Promise.resolve(null);
-        //run through each submissing in sequence as to not overload db at once
-        await [handleBandcampAlltime(), handleBandcampMonth(), handleSpotifyAll(), handleSpotifyMonth(), handleSpotifyCredentials(), handleDistrokid()].reduce(
-            (p, spec) => p.then(() => spec.then()),
-            starterPromise
-        )
+        const dataToSend = ['distrokid', 'bandcampAlltime', 'bandcampMonth', 'spotifyRawMonth', 'spotifyRawAll'];
+        setTimeout(() => {
+
+            for(let dataset of dataToSend){
+                //format the data in an object
+                let data = { page: formData[dataset] };
+
+                try {
+                    //send the data to the import endpoint
+                    let res = await StreamingApi.dataImport(data, currUser.username, dataset);
+                    responses.push(res);
+                } catch (errors) {
+                    return setFormData(f => ({ ...f, errors }));
+                }
+                
+            }
+        }, 1000)
+
+        // const starterPromise = Promise.resolve(null);
+        // //run through each submissing in sequence as to not overload db at once
+        // await [handleBandcampAlltime(), handleBandcampMonth(), handleSpotifyAll(), handleSpotifyMonth(), handleSpotifyCredentials(), handleDistrokid()].reduce(
+        //     (p, spec) => p.then(() => spec.then()),
+        //     starterPromise
+        // )
         
         setIsLoading(false);
         return responses;
     }
 
-    async function handleDistrokid() {
-        if (formData.distrokid) {
-            //format the pasted distrokid page
-            let data = { page: formData.distrokid };
+    // async function handleDistrokid() {
+    //     if (formData.distrokid) {
+    //         //format the pasted distrokid page
+    //         let data = { page: formData.distrokid };
 
-            try {
-                let res = await StreamingApi.distrokidImport(data, currUser.username);
-                //add response to response list
-                responses.push(res);
-            } catch (errors) {
-                return setFormData(f => ({ ...f, errors }));
-            }
-        }
-    }
+    //         try {
+    //             let res = await StreamingApi.distrokidImport(data, currUser.username);
+    //             //add response to response list
+    //             responses.push(res);
+    //         } catch (errors) {
+    //             return setFormData(f => ({ ...f, errors }));
+    //         }
+    //     }
+    // }
 
-    async function handleBandcampAlltime() {
-        //if bandcamp alltime data is passed, process it
-        if (formData.bandcampAlltime) {
-            //format the pasted bandcamp page
-            let data = { page: formData.bandcampAlltime };
+    // async function handleBandcampAlltime() {
+    //     //if bandcamp alltime data is passed, process it
+    //     if (formData.bandcampAlltime) {
+    //         //format the pasted bandcamp page
+    //         let data = { page: formData.bandcampAlltime };
 
-            try {
-                let res = await StreamingApi.bandcampAlltimeImport(data, currUser.username);
-                //add response to response list
-                responses.push(res);
-            } catch (errors) {
-                return setFormData(f => ({ ...f, errors }));
-            }
-        }
-    }
+    //         try {
+    //             let res = await StreamingApi.bandcampAlltimeImport(data, currUser.username);
+    //             //add response to response list
+    //             responses.push(res);
+    //         } catch (errors) {
+    //             return setFormData(f => ({ ...f, errors }));
+    //         }
+    //     }
+    // }
 
-    async function handleBandcampMonth() {
-        //if bandcamp month data is passed, process it
-        if (formData.bandcampMonth) {
-            //format the pasted bandcamp page
-            let data = { page: formData.bandcampMonth };
+    // async function handleBandcampMonth() {
+    //     //if bandcamp month data is passed, process it
+    //     if (formData.bandcampMonth) {
+    //         //format the pasted bandcamp page
+    //         let data = { page: formData.bandcampMonth };
 
-            try {
-                let res = await StreamingApi.bandcampMonthImport(data, currUser.username);
-                //add response to response list
-                responses.push(res);
-            } catch (errors) {
-                return setFormData(f => ({ ...f, errors }));
-            }
-        }
-    }
+    //         try {
+    //             let res = await StreamingApi.bandcampMonthImport(data, currUser.username);
+    //             //add response to response list
+    //             responses.push(res);
+    //         } catch (errors) {
+    //             return setFormData(f => ({ ...f, errors }));
+    //         }
+    //     }
+    // }
 
     async function handleSpotifyCredentials() {
         //if spotify credentials are passed, process them
@@ -109,35 +127,35 @@ function DataInput(){
         }
     }
 
-    async function handleSpotifyMonth() {
-        //if spotify page for a month sort is passed, process it
-        if (formData.spotifyRawMonth) {
-            let data = { page: formData.spotifyRawMonth };
+    // async function handleSpotifyMonth() {
+    //     //if spotify page for a month sort is passed, process it
+    //     if (formData.spotifyRawMonth) {
+    //         let data = { page: formData.spotifyRawMonth };
 
-            try {
-                let res = await StreamingApi.spotifyMonthImport(data, currUser.username);
-                //add response to response list
-                responses.push(res);
-            } catch (errors) {
-                return setFormData(f => ({ ...f, errors }));
-            }
-        }
-    }
+    //         try {
+    //             let res = await StreamingApi.spotifyMonthImport(data, currUser.username);
+    //             //add response to response list
+    //             responses.push(res);
+    //         } catch (errors) {
+    //             return setFormData(f => ({ ...f, errors }));
+    //         }
+    //     }
+    // }
 
-    async function handleSpotifyAll() {
-        //if spotify page for all time is passed, process it
-        if (formData.spotifyRawAll) {
-            let data = { page: formData.spotifyRawAll };
+    // async function handleSpotifyAll() {
+    //     //if spotify page for all time is passed, process it
+    //     if (formData.spotifyRawAll) {
+    //         let data = { page: formData.spotifyRawAll };
 
-            try {
-                let res = await StreamingApi.spotifyAlltimeImport(data, currUser.username);
-                //add response to response list
-                responses.push(res);
-            } catch (errors) {
-                return setFormData(f => ({ ...f, errors }));
-            }
-        }
-    }
+    //         try {
+    //             let res = await StreamingApi.spotifyAlltimeImport(data, currUser.username);
+    //             //add response to response list
+    //             responses.push(res);
+    //         } catch (errors) {
+    //             return setFormData(f => ({ ...f, errors }));
+    //         }
+    //     }
+    // }
 
     // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (

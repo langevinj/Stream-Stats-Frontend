@@ -97,15 +97,13 @@ function ChartData(){
 
     //iterate through distrokid stores, applying correct color to each
     for(let [store, songs] of Object.entries(masterObj)){
-        if(store !== "Spoftiy"){
+        if(store !== "Spotify"){
             let foundColor = colorsMap.get(store)
             let tempEl = (<BarSeries data={songs} key={uuid()} className="vertical-bar-series" barWidth={1} fill={foundColor} />)
             graphItems.push(tempEl);
             colorItems.push({ title: store, color: foundColor });
         }
     }
-
-    console.log(bandcampData)
 
     return(
         <>

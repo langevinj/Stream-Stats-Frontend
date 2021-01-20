@@ -4,7 +4,7 @@ import UserContext from './UserContext'
 import { v4 as uuid} from 'uuid'
 import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, DiscreteColorLegend } from 'react-vis';
 import { colorsMap } from './colors.js'
-import '../node_modules/react-vis/dist/style.css';
+import './style.css';
 
 function ChartData(){
     const { currUser } = useContext(UserContext);

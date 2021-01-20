@@ -38,12 +38,21 @@ function DataInput(){
         setTimeout(() => {
 
             for(let dataset of dataToSend){
+                //set endpoint for the request
+                let endpoint;
+                if(dataset.includes('distrokid')) endpoint = 'distrokid';
+                if(dataset.includes('bandcamp')) endpoint = 'bandcamp';
+                if(dataset.includes('spotify')) endpoint = 'spotify';
+
+                //set the range of the dataset
+                let range = dataset.includes('Month') ? 'month' : 'alltime';
+
                 //format the data in an object
-                let data = { page: formData[dataset] };
+                let data = { page: formData[dataset], endpoint: endpoint, range: range };
 
                 try {
                     //send the data to the import endpoint
-                    let res = await StreamingApi.dataImport(data, currUser.username, dataset);
+                    let res = await StreamingApi.dataImport(data, currUser.username);
                     responses.push(res);
                 } catch (errors) {
                     return setFormData(f => ({ ...f, errors }));

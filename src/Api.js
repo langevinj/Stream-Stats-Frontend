@@ -105,6 +105,12 @@ class StreamingApi {
         return res.response;
     }
 
+    //send data to import to the backend
+    static async dataImport(data, username){
+        let res = await this.request(`${data.endpoint}/import/${username}`, data, "post");
+        return res.response;
+    }
+
 
 }
 

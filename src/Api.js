@@ -45,29 +45,12 @@ class StreamingApi {
         return res.user;
     }
 
-    //save user's distrokid data to the server
-    static async distrokidImport(data, username){
-        let res = await this.request(`distrokid/rawImport/${username}`, data, "post");
-        return res.token;
-    }
-
     //get user with username's distrokid data
     static async getUserDistrokidData(data, username){
         let res = await this.request(`distrokid/${username}`, data);
         return res.response;
     }
 
-    //save user's alltime bandcamp data to the server
-    static async bandcampAlltimeImport(data, username){
-        let res = await this.request(`bandcamp/rawAlltimeImport/${username}`, data, "post");
-        return res.token;
-    }
-
-    //save a user's month bandcamp data to the server
-    static async bandcampMonthImport(data, username){
-        let res = await this.request(`bandcamp/rawMonthImport/${username}`, data, "post");
-        return res.token;
-    }
 
     //get user with username's bandcamp data
     static async getUserBandcampData(data, username){
@@ -87,18 +70,6 @@ class StreamingApi {
         return res.token;
     }
 
-    //save a user's spotify data for the past month to the server
-    static async spotifyMonthImport(data, username){
-        let res = await this.request(`spotify/rawMonthImport/${username}`, data, "post");
-        return res.token;
-    }
-
-    //save a user's spotify data for all time
-    static async spotifyAlltimeImport(data, username){
-        let res = await this.request(`spotify/rawAlltimeImport/${username}`, data, "post");
-        return res.token;
-    }
-
     //get user with username's spotify data
     static async getUserSpotifyData(data, username){
         let res = await this.request(`spotify/${username}`, data);
@@ -110,8 +81,6 @@ class StreamingApi {
         let res = await this.request(`${data.endpoint}/import/${username}`, data, "post");
         return res.response;
     }
-
-
 }
 
 export default StreamingApi;

@@ -3,6 +3,7 @@ import StreamingApi from './Api'
 import UserContext from './UserContext'
 import { v4 as uuid} from 'uuid'
 import { XYPlot, XAxis, YAxis, ChartLabel, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, LabelSeries, DiscreteColorLegend } from 'react-vis';
+import { colorsMap } from './colors.js'
 
 function ChartData(){
     const { currUser } = useContext(UserContext);
@@ -54,10 +55,6 @@ function ChartData(){
     const content = useCanvas ? 'TOGGLE TO SVG' : 'TOGGLE TO CANVAS';
     const BarSeries = useCanvas ? VerticalBarSeriesCanvas : VerticalBarSeries;
 
-    function generateRandomColor(){
-        return parseInt((0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6));
-    }
-
     //format an option where keys are the name of the store and values are an array of objects formatted for the chart
     let masterObj = {}
     for(let [name, songs] of Object.entries(allStoreData)){
@@ -72,35 +69,37 @@ function ChartData(){
         }
         masterObj[name] = temp;
     }
+    const colorItems = [{ title: 'Bandcamp', color: '#12939A'}];
+    const graphItems = []
 
-    const data2 = masterObj['Amazon Unlimited']
-    let t = Object.values(masterObj).map(store => <BarSeries data={store} className="vertical-bar-series" barWidth={1}/>)
-    // let t = Object.entries(masterObj).map((store, songData) => <BarSeries data={songData} fill={generateRandomColor}/>)
-    // console.log(t);
+    // let graphItems = Object.values(masterObj).map(store => {
+    //     let color = colorsMap[store.x];
+    //     colorItems.push({ title: store.x, color: color })
+    //     return <BarSeries data={store} className="vertical-bar-series" barWidth={1} fill={color} />
+    // });
+    //iterate through distrokid stores, applying correct color to each
+    for(let [store, songs] of Object.entries(masterObj)){
+        let foundColor = colorsMap.get(store)
+        let tempEl = (<BarSeries data={songs} className="vertical-bar-series" barWidth={1} fill={foundColor} />)
+        graphItems.push(tempEl);
+        colorItems.push({ title: store, color: foundColor});
+    }
 
+    console.log(colorItems)
     return(
         <>
             <XYPlot xType="ordinal" width={3000} height={700} xDistance={1000} className="ml-5">
                 <DiscreteColorLegend
                     style={{ position: 'absolute', left: '50px', top: '10px' }}
                     orientation="horizontal"
-                    items={[
-                        {
-                            title: 'Bandcamp',
-                            color: '#12939A'
-                        },
-                        {
-                            title: 'Oranges',
-                            color: '#79C7E3'
-                        }
-                    ]}
+                    items={colorItems}
                 />
                 <VerticalGridLines />
                 <HorizontalGridLines />
                 <XAxis />
                 <YAxis />
                 <BarSeries className="vertical-bar-series-example" data={bandcampPlaysData} />
-                {t.map(el => el)}
+                {graphItems.map(el => el)}
                 {/* <BarSeries className="vertical-bar-series" data={data2} /> */}
                 {/* <LabelSeries data={labelData} getLabel={d => d.x} /> */}
             </XYPlot>

@@ -4,6 +4,7 @@ import UserContext from './UserContext'
 import { v4 as uuid} from 'uuid'
 import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, DiscreteColorLegend } from 'react-vis';
 import { colorsMap } from './colors.js'
+import '../node_modules/react-vis/dist/style.css';
 
 function ChartData(){
     const { currUser } = useContext(UserContext);
@@ -106,7 +107,7 @@ function ChartData(){
     }
 
     return(
-        <>
+        <div>
             <XYPlot xType="ordinal" width={3000} height={700} xDistance={1000} className="ml-5">
                 <DiscreteColorLegend
                     style={{ position: 'absolute', left: '150px', top: '10px' }}
@@ -121,7 +122,7 @@ function ChartData(){
                 <BarSeries className="vertical-bar-series" data={formattedSpotifyData} fill={'#1DB954'}/>
                 {graphItems.map(el => el)}
             </XYPlot>
-        </>
+        </div>
     )
 }
 

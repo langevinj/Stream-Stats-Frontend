@@ -19,8 +19,6 @@ function DataInput(){
     });
 
     const handleChange = (evt) => {
-        // evt.preventDefault();
-        // console.log(evt.target.id, evt.target.value);
         const { name, value } = evt.target;
         setFormData(f => ({
             ...f,
@@ -35,7 +33,7 @@ function DataInput(){
         setIsLoading(true);
 
         const dataToSend = ['distrokid', 'bandcampAlltime', 'bandcampMonth', 'spotifyRawMonth', 'spotifyRawAll'];
-        setTimeout(() => {
+        setTimeout(async () => {
 
             for(let dataset of dataToSend){
                 //set endpoint for the request
@@ -52,7 +50,7 @@ function DataInput(){
 
                 try {
                     //send the data to the import endpoint
-                    let res = StreamingApi.dataImport(data, currUser.username);
+                    let res = await StreamingApi.dataImport(data, currUser.username);
                     responses.push(res);
                 } catch (errors) {
                     return setFormData(f => ({ ...f, errors }));

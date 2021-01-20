@@ -91,7 +91,7 @@ function ChartData(){
         for(let song of allSongs){
             let res = songs.filter(s => s.title === song)[0]
             if(res){
-                temp.push({x: res.title, y: res.plays});
+                temp.push({x: res.title, y: parseInt(res.plays)});
             } else {
                 temp.push({x: song, y: 0})
             }
@@ -120,7 +120,22 @@ function ChartData(){
         }
     }
 
-    // const findMaxHeight = 
+    //iterate through graphItems nested array and find the max height
+    const findMaxHeight = (allItems) => {
+        const heights = allItems.map(service => service.map(song => song.y))
+        let max;
+
+        function _helper(array){
+            if(!array) return max
+            if(Array.isArray(array[0])) _helper(array);
+            let tempMax = Math.max(...array);
+            if(!max || max < tempMax) max = tempMax
+        }
+
+        return _helper(heights)
+    }
+
+    const [heightMax, setMaxHeight] = useState(0);
 
     return(
         <div>
@@ -141,9 +156,6 @@ function ChartData(){
                 <XAxis />
                 <YAxis />
                 {graphItems.map((service, idx) => <BarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} fill={colorItems[idx].color}/>)}
-                {/* <BarSeries className="vertical-bar-series-example" data={bandcampPlaysData} fill={'#12939A'} onValueMouseOver={_onNearestX}/>
-                <BarSeries className="vertical-bar-series" data={formattedSpotifyData} fill={'#1DB954'} onValueMouseOver={_onNearestX}/>
-                {graphItems.map(el => el)} */}
             </XYPlot>
         </div>
     )

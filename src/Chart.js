@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
 import { v4 as uuid} from 'uuid'
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, DiscreteColorLegend } from 'react-vis';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, DiscreteColorLegend, Crosshair, Hint } from 'react-vis';
 import { colorsMap } from './colors.js'
 import './style.css';
 
@@ -96,11 +96,19 @@ function ChartData(){
     const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];
     const graphItems = []
 
+    
+
+    const [hintValue, setHintValue] = useState({});
+    const _onNearestX = (value, {index}) => {
+        if(hintValue !== value){
+            setHintValue(value)
+        }
+    }
     //iterate through distrokid stores, applying correct color to each
-    for(let [store, songs] of Object.entries(masterObj)){
-        if(store !== "Spotify"){
+    for (let [store, songs] of Object.entries(masterObj)) {
+        if (store !== "Spotify") {
             let foundColor = colorsMap.get(store)
-            let tempEl = (<BarSeries data={songs} key={uuid()} className="vertical-bar-series" barWidth={1} fill={foundColor} />)
+            let tempEl = (<BarSeries data={songs} key={uuid()} className="vertical-bar-series" barWidth={1} fill={foundColor} onValueMouseOver={_onNearestX} />)
             graphItems.push(tempEl);
             colorItems.push({ title: store, color: foundColor });
         }
@@ -114,12 +122,18 @@ function ChartData(){
                     orientation="horizontal"
                     items={colorItems}
                 />
+                <Hint value={hintValue}>
+                    {hintValue ? <div style={{ background: 'black'}}>
+                        <p>{hintValue.y}</p>
+                    </div> : <></>}
+                    
+                </Hint>
                 <VerticalGridLines />
                 <HorizontalGridLines />
                 <XAxis />
                 <YAxis />
-                <BarSeries className="vertical-bar-series-example" data={bandcampPlaysData} fill={'#12939A'} />
-                <BarSeries className="vertical-bar-series" data={formattedSpotifyData} fill={'#1DB954'}/>
+                <BarSeries className="vertical-bar-series-example" data={bandcampPlaysData} fill={'#12939A'} onValueMouseOver={_onNearestX}/>
+                <BarSeries className="vertical-bar-series" data={formattedSpotifyData} fill={'#1DB954'} onValueMouseOver={_onNearestX}/>
                 {graphItems.map(el => el)}
             </XYPlot>
         </div>

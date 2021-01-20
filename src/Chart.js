@@ -29,6 +29,8 @@ function ChartData(){
         getBandcampData();
     }, [currUser.username]);
 
+    const graphItems = []
+
     //make an array of all the songs listed on spotify
     const spotifySongs = []
     for(let dataset of spotifyData) {
@@ -49,8 +51,10 @@ function ChartData(){
     const bandcampPlaysData = [];
 
     for(let d of bandcampData){
-       bandcampPlaysData.push({x: d.title, y: d.plays});
+        bandcampPlaysData.push({x: d.title, y: d.plays});
     }
+
+    graphItems.push(bandcampPlaysData);
 
     //create an array of all song titles
     const allSongs = bandcampPlaysData.map(b => b.x)
@@ -66,6 +70,8 @@ function ChartData(){
             formattedSpotifyData.push({x: res.title, y: res.streams})
         }
     }
+
+    graphItems.push(formattedSpotifyData);
 
     // const labelData = bandcampPlaysData.map((d, idx) => ({
     //     x: d.x,
@@ -94,7 +100,6 @@ function ChartData(){
     }
     //set the array of color indicators up for the legend
     const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];
-    const graphItems = []
 
     
 
@@ -104,15 +109,18 @@ function ChartData(){
             setHintValue(value)
         }
     }
+
     //iterate through distrokid stores, applying correct color to each
     for (let [store, songs] of Object.entries(masterObj)) {
         if (store !== "Spotify") {
             let foundColor = colorsMap.get(store)
-            let tempEl = (<BarSeries data={songs} key={uuid()} className="vertical-bar-series" barWidth={1} fill={foundColor} onValueMouseOver={_onNearestX} />)
-            graphItems.push(tempEl);
+            // let tempEl = (<BarSeries data={songs} key={uuid()} className="vertical-bar-series" barWidth={1} fill={foundColor} onValueMouseOver={_onNearestX} />)
             colorItems.push({ title: store, color: foundColor });
+            graphItems.push(songs);
         }
     }
+
+    // const findMaxHeight = 
 
     return(
         <div>
@@ -132,9 +140,10 @@ function ChartData(){
                 <HorizontalGridLines />
                 <XAxis />
                 <YAxis />
-                <BarSeries className="vertical-bar-series-example" data={bandcampPlaysData} fill={'#12939A'} onValueMouseOver={_onNearestX}/>
+                {graphItems.map((service, idx) => <BarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} fill={colorItems[idx].color}/>)}
+                {/* <BarSeries className="vertical-bar-series-example" data={bandcampPlaysData} fill={'#12939A'} onValueMouseOver={_onNearestX}/>
                 <BarSeries className="vertical-bar-series" data={formattedSpotifyData} fill={'#1DB954'} onValueMouseOver={_onNearestX}/>
-                {graphItems.map(el => el)}
+                {graphItems.map(el => el)} */}
             </XYPlot>
         </div>
     )

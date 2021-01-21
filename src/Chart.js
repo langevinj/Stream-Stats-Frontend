@@ -30,31 +30,22 @@ function ChartData(){
         }
         getUserData();
     }, [currUser.username]);
-    console.log(spotifyData)
+
     //create an array of all songs released by the artist/musician
     const allSongs = []
+
     function listAllSongs(bandcampData, spotifyData, distrokidData){
-        if(bandcampData){
-            for(let d of bandcampData){
-                if(!allSongs.includes(d.title)) allSongs.push(d.title);
-            }
+        for(let dataset of [bandcampData, spotifyData, distrokidData]){
+           if(dataset){
+               for(let d of dataset){
+                   if (!allSongs.includes(d.title)) allSongs.push(d.title);
+               }
+           } 
         }
-
-        if(spotifyData){
-            for(let d of spotifyData) {
-                if(!allSongs.includes(d.title)) allSongs.push(d.title);
-            }
-        }
-
-        if(distrokidData){
-            for(let d of distrokidData){
-                if(!allSongs.includes(d.title)) allSongs.push(d.title)
-            }
-        }
-
     }
+
     listAllSongs(bandcampData, spotifyData, distrokidData)
-    console.log(allSongs)
+
     //go through the bandcamp data and format it correctly
     const bandcampPlaysData = [];
 
@@ -87,15 +78,8 @@ function ChartData(){
     
 
     const formattedSpotifyData = [];
-    //format the spotify data for the table
-    for (let song of allSongs) {
-        //if the song is not on spotify, pass it in without data
-        if(!spotifySongs.includes(song)){
-            formattedSpotifyData.push({ x: song, y: 0});
-        } else {
-            let res = spotifyData.filter(dataset => dataset.title === song)[0]
-            formattedSpotifyData.push({x: res.title, y: res.streams})
-        }
+    for(let d of spotifyData){
+        formattedSpotifyData.push({x: d.title, y: d.streams})
     }
 
     graphItems.push(formattedSpotifyData);
@@ -120,7 +104,7 @@ function ChartData(){
             if(res){
                 temp.push({x: res.title, y: parseInt(res.plays)});
             } else {
-                temp.push({x: song, y: 0})
+                // temp.push({x: song, y: 0})
             }
         }
         masterObj[name] = temp;

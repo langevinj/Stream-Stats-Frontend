@@ -32,21 +32,6 @@ function ChartData(){
         getUserData();
     }, [currUser.username]);
 
-    //create an array of all songs released by the artist/musician
-    const allSongs = []
-
-    function listAllSongs(bandcampData, spotifyData, distrokidData){
-        for(let dataset of [bandcampData, spotifyData, distrokidData]){
-           if(dataset){
-               for(let d of dataset){
-                   if (!allSongs.includes(d.title)) allSongs.push(d.title);
-               }
-           } 
-        }
-    }
-
-    listAllSongs(bandcampData, spotifyData, distrokidData)
-
     //go through the bandcamp data and format it correctly
     const bandcampPlaysData = [];
     for (let d of bandcampData) {

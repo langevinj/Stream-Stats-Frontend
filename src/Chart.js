@@ -2,9 +2,10 @@ import React, {useState, useEffect, useContext} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
 import { v4 as uuid} from 'uuid'
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint } from 'react-vis';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint, AreaSeries } from 'react-vis';
 import { colorsMap } from './colors.js'
 import './style.css';
+import { filterFeatures, getPPP } from './responsive-vis-utils';
 
 function ChartData(){
     const { currUser } = useContext(UserContext);

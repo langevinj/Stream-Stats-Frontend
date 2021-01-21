@@ -17,16 +17,13 @@ function ChartData(){
     const graphItems = []
     const FlexibleXYPlot = makeVisFlexible(XYPlot);
 
-    console.log(userData)
-    
-
     //get streaming data for user upon loading page
     useEffect(() => {
         async function getUserData() {
             setIsLoading(true)
             setLoadedVal(0)
             try {
-                if(!userData[`bandcamp_${chartRange}`]){
+                if(!userData[`bandcamp_${chartRange}`].length){
                     let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
                     chartRange === "alltime" ? setUserData(d => ({ ...d, bandcamp_alltime: [...bdata] })) : setUserData(d => ({ ...d, bandcamp_month: bdata }));
                 }
@@ -39,7 +36,7 @@ function ChartData(){
                 setLoadedVal(50);
                 // let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
                 // setBandcampData(bdata);
-                if(!userData[`spotify_${chartRange}`]){
+                if(!userData[`spotify_${chartRange}`].length){
                     let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, currUser.username);
                     chartRange === "alltime" ? setUserData(d => ({ ...d, spotify_alltime: [...sdata] })) : setUserData(d => ({ ...d, spotify_month: sdata }));
                 }
@@ -172,7 +169,7 @@ function ChartData(){
                         <HorizontalGridLines />
                         <XAxis tickLabelAngle={-45} style={{ text: { stroke: 'none', fill: 'black' } }} />
                         <YAxis />
-                        {graphItems.map((service, idx) => <VerticalBarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} color={colorItems[idx].color} onTouchStart={_onNearestX}/>)}
+                        {graphItems.map((service, idx) => <VerticalBarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} color={colorItems[idx].color}/>)}
                     </FlexibleXYPlot></>}
                 </div>
             </div>

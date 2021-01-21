@@ -2,10 +2,10 @@ import React, {useState, useEffect, useContext} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
 import { v4 as uuid} from 'uuid'
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint, AreaSeries } from 'react-vis';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint, makeVisFlexible } from 'react-vis';
 import { colorsMap } from './colors.js'
 import './style.css';
-import { filterFeatures, getPPP } from './responsive-vis-utils';
+import './Chart.css'
 
 function ChartData(){
     const { currUser } = useContext(UserContext);
@@ -13,23 +13,37 @@ function ChartData(){
     const [distrokidData, setDistrokidData] = useState([]);
     const [spotifyData, setSpotifyData] = useState([]);
     const [chartRange, setChartRange] = useState("alltime");
+    const [toggleText, setToggleText] = useState("30-day")
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadedVal, setLoadedVal] = useState(0);
     const graphItems = []
+    const FlexibleXYPlot = makeVisFlexible(XYPlot);
 
     //get streaming data for user upon loading page
     useEffect(() => {
         async function getUserData() {
-            console.log("called!")
+            setIsLoading(true)
+            setLoadedVal(0)
             try {
                 let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
                 setBandcampData(bdata);
+                setLoadedVal(25)
                 let ddata = await StreamingApi.getUserDistrokidData({ range: chartRange }, currUser.username);
                 setDistrokidData(ddata);
+                setLoadedVal(50);
                 let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, currUser.username);
-                console.log(sdata)
                 setSpotifyData(sdata);
+                setLoadedVal(75)
+                let newText = chartRange === "30day" ? "Alltime" : "30-day";
+                setToggleText(newText);
+                setLoadedVal(100);
             } catch (err) {
                 throw err;
             }
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 1000)
+            
         }
         getUserData()
     }, [chartRange, currUser.username]);
@@ -82,22 +96,22 @@ function ChartData(){
     }
 
     //iterate through graphItems nested array and find the max height
-    const findMaxHeight = (allItems) => {
-        const heights = allItems.map(service => service.map(song => parseInt(song.y)));
+    // const findMaxHeight = (allItems) => {
+    //     const heights = allItems.map(service => service.map(song => parseInt(song.y)));
 
-        //flatten the array of all heights
-        let flattenedHeights = [];
-        for(let el of heights){
-            if(Array.isArray(el)){
-                flattenedHeights = [...flattenedHeights, ...el]
-            } else {
-                flattenedHeights = [...flattenedHeights, el]
-            }
-        }
+    //     //flatten the array of all heights
+    //     let flattenedHeights = [];
+    //     for(let el of heights){
+    //         if(Array.isArray(el)){
+    //             flattenedHeights = [...flattenedHeights, ...el]
+    //         } else {
+    //             flattenedHeights = [...flattenedHeights, el]
+    //         }
+    //     }
 
-        //find the max height
-        return Math.max(...flattenedHeights);
-    }
+    //     //find the max height
+    //     return Math.max(...flattenedHeights);
+    // }
 
     //iterate through distrokid stores, applying correct color to each
     if(chartRange === "alltime"){
@@ -119,29 +133,38 @@ function ChartData(){
             setChartRange("alltime")
         }
     }
-
+    
     return(
-        <div>
-            <button className="btn btn-primary round m-1" onClick={toggleView}>30-day</button>
-            <button className="btn btn-primary round m-1" onClick={toggleView}>All-time</button>
-            <XYPlot xType="ordinal" width={3000} height={Math.max(findMaxHeight(graphItems), 500)} xDistance={1000} className="ml-5">
-                <DiscreteColorLegend
-                    style={{ position: 'absolute', left: '150px', top: '10px' }}
-                    orientation="horizontal"
-                    items={colorItems}
-                />
-                <Hint value={hintValue}>
-                    {hintValue ? <div style={{ background: 'black'}}>
-                        <p>{hintValue.y}</p>
-                    </div> : <></>}
-                </Hint>
-                <VerticalGridLines />
-                <HorizontalGridLines />
-                <XAxis />
-                <YAxis />
-                {graphItems.map((service, idx) => <VerticalBarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} fill={colorItems[idx].color}/>)}
-            </XYPlot>
-        </div>
+        <div className="container-fluid" id="main-container">
+            <div className="row">
+                <div className="col-1"></div>
+                <div className="container-fluid col-10" id="chart-container">
+                    {isLoading ? <div className="progress mt-5">
+                        <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div>
+                    </div> : <>
+                    <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView}>{toggleText}</button>
+                    <FlexibleXYPlot xType="ordinal" margin={{ bottom: 200 }}>
+                        <DiscreteColorLegend
+                            style={{ position: 'absolute', right: '1rem', top: '10px' }}
+                            orientation="vertical"
+                            items={colorItems}
+                        />
+                        <Hint value={hintValue}>
+                            {hintValue ? <div style={{ background: 'black' }}>
+                                <p>{hintValue.y}</p>
+                            </div> : <></>}
+                        </Hint>
+                        <VerticalGridLines />
+                        <HorizontalGridLines />
+                        <XAxis tickLabelAngle={-45} style={{ text: { stroke: 'none', fill: 'black' } }} />
+                        <YAxis />
+                        {graphItems.map((service, idx) => <VerticalBarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} color={colorItems[idx].color} onTouchStart={_onNearestX}/>)}
+                    </FlexibleXYPlot></>}
+                </div>
+            </div>
+                <div className="col-1"></div>
+            </div>
+        
     )
 }
 

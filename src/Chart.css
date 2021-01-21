@@ -1,0 +1,10 @@
+#chart-container {
+    height: 50rem;
+    margin: 1em;
+    position: relative;
+    display: block;
+}
+
+#main-container {
+    height: 75%;
+}

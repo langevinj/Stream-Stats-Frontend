@@ -17,19 +17,21 @@ function ChartData(){
     //get streaming data for user upon loading page
     useEffect(() => {
         async function getUserData() {
+            console.log("called!")
             try {
                 let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
                 setBandcampData(bdata);
                 let ddata = await StreamingApi.getUserDistrokidData({ range: chartRange }, currUser.username);
                 setDistrokidData(ddata);
                 let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, currUser.username);
+                console.log(sdata)
                 setSpotifyData(sdata);
             } catch (err) {
                 throw err;
             }
         }
-        getUserData();
-    }, [currUser.username, chartRange]);
+        getUserData()
+    }, [chartRange, currUser.username]);
 
     //go through the bandcamp data and format it correctly
     const bandcampPlaysData = [];
@@ -110,7 +112,6 @@ function ChartData(){
 
     //toggle between the two date ranges
     const toggleView = (evt) => {
-        evt.preventDefault();
         if(chartRange === "alltime"){
             setChartRange("30day");
         } else {
@@ -122,7 +123,7 @@ function ChartData(){
         <div>
             <button className="btn btn-primary round m-1" onClick={toggleView}>30-day</button>
             <button className="btn btn-primary round m-1" onClick={toggleView}>All-time</button>
-            <XYPlot xType="ordinal" width={3000} height={findMaxHeight(graphItems)} xDistance={1000} className="ml-5">
+            <XYPlot xType="ordinal" width={3000} height={Math.max(findMaxHeight(graphItems), 500)} xDistance={1000} className="ml-5">
                 <DiscreteColorLegend
                     style={{ position: 'absolute', left: '150px', top: '10px' }}
                     orientation="horizontal"

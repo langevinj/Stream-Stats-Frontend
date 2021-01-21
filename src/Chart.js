@@ -2,10 +2,9 @@ import React, {useState, useEffect, useContext} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
 import { v4 as uuid} from 'uuid'
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, DiscreteColorLegend, Hint } from 'react-vis';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint } from 'react-vis';
 import { colorsMap } from './colors.js'
 import './style.css';
-import { parse } from 'ipaddr.js';
 
 function ChartData(){
     const { currUser } = useContext(UserContext);
@@ -67,23 +66,10 @@ function ChartData(){
     }
 
     graphItems.push(formattedSpotifyData);
-
-    // const labelData = bandcampPlaysData.map((d, idx) => ({
-    //     x: d.x,
-    //     y: bandcampPlaysData + 100
-    // }));
-    
-
-    const [state] = useState({ useCanvas: false })
-    const { useCanvas } = state;
-    // const content = useCanvas ? 'TOGGLE TO SVG' : 'TOGGLE TO CANVAS';
-    const BarSeries = useCanvas ? VerticalBarSeriesCanvas : VerticalBarSeries;
-
     
     //set the array of color indicators up for the legend
     const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];
 
-    
     //set the hint when a bar is hovered over
     const [hintValue, setHintValue] = useState({});
     const _onNearestX = (value, {index}) => {
@@ -91,8 +77,6 @@ function ChartData(){
             setHintValue(value)
         }
     }
-
-    // const [heightMax, setMaxHeight] = useState(0);
 
     //iterate through graphItems nested array and find the max height
     const findMaxHeight = (allItems) => {
@@ -121,15 +105,20 @@ function ChartData(){
         }    
     }
 
-    //call the function to set max height now that all graphdata is stored in one plac
-    // setMaxHeight(findMaxHeight(graphItems));
-
-    
-
-    
+    //toggle between the two date ranges
+    const toggleView = (evt) => {
+        evt.preventDefault();
+        if(chartRange === "alltime"){
+            setChartRange("30day");
+        } else {
+            setChartRange("alltime")
+        }
+    }
 
     return(
         <div>
+            <button className="btn btn-primary round m-1" onClick={toggleView}>30-day</button>
+            <button className="btn btn-primary round m-1" onClick={toggleView}>All-time</button>
             <XYPlot xType="ordinal" width={3000} height={findMaxHeight(graphItems)} xDistance={1000} className="ml-5">
                 <DiscreteColorLegend
                     style={{ position: 'absolute', left: '150px', top: '10px' }}
@@ -140,13 +129,12 @@ function ChartData(){
                     {hintValue ? <div style={{ background: 'black'}}>
                         <p>{hintValue.y}</p>
                     </div> : <></>}
-                    
                 </Hint>
                 <VerticalGridLines />
                 <HorizontalGridLines />
                 <XAxis />
                 <YAxis />
-                {graphItems.map((service, idx) => <BarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} fill={colorItems[idx].color}/>)}
+                {graphItems.map((service, idx) => <VerticalBarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} fill={colorItems[idx].color}/>)}
             </XYPlot>
         </div>
     )

@@ -29,7 +29,7 @@ function ChartData(){
             }
         }
         getUserData();
-    }, [currUser.username]);
+    }, [currUser.username, chartRange]);
 
     //go through the bandcamp data and format it correctly
     const bandcampPlaysData = [];

@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react'
 import StreamingApi from './Api'
-import UserContext from './UserContext'
+import UserContext from './UserContext';
+import DataContext from './DataContext';
 import { v4 as uuid} from 'uuid'
 import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint, makeVisFlexible } from 'react-vis';
 import { colorsMap } from './colors.js'
@@ -9,15 +10,15 @@ import './Chart.css'
 
 function ChartData(){
     const { currUser } = useContext(UserContext);
-    const [bandcampData, setBandcampData] = useState([]);
-    const [distrokidData, setDistrokidData] = useState([]);
-    const [spotifyData, setSpotifyData] = useState([]);
+    const { userData, setUserData } = useContext(DataContext);
     const [chartRange, setChartRange] = useState("alltime");
-    const [toggleText, setToggleText] = useState("30-day")
     const [isLoading, setIsLoading] = useState(false);
     const [loadedVal, setLoadedVal] = useState(0);
     const graphItems = []
     const FlexibleXYPlot = makeVisFlexible(XYPlot);
+
+    console.log(userData)
+    
 
     //get streaming data for user upon loading page
     useEffect(() => {
@@ -25,17 +26,24 @@ function ChartData(){
             setIsLoading(true)
             setLoadedVal(0)
             try {
-                let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
-                setBandcampData(bdata);
-                setLoadedVal(25)
-                let ddata = await StreamingApi.getUserDistrokidData({ range: chartRange }, currUser.username);
-                setDistrokidData(ddata);
+                if(!userData[`bandcamp_${chartRange}`]){
+                    let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
+                    chartRange === "alltime" ? setUserData(d => ({ ...d, bandcamp_alltime: [...bdata] })) : setUserData(d => ({ ...d, bandcamp_month: bdata }));
+                }
+                setLoadedVal(25);
+
+                if(userData[`distrokid`].length === 0){
+                    let ddata = await StreamingApi.getUserDistrokidData({ range: chartRange }, currUser.username);
+                    setUserData(d => ({ ...d, distrokid: [...ddata]}));
+                };
                 setLoadedVal(50);
-                let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, currUser.username);
-                setSpotifyData(sdata);
-                setLoadedVal(75)
-                let newText = chartRange === "30day" ? "Alltime" : "30-day";
-                setToggleText(newText);
+                // let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
+                // setBandcampData(bdata);
+                if(!userData[`spotify_${chartRange}`]){
+                    let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, currUser.username);
+                    chartRange === "alltime" ? setUserData(d => ({ ...d, spotify_alltime: [...sdata] })) : setUserData(d => ({ ...d, spotify_month: sdata }));
+                }
+                setLoadedVal(75);
                 setLoadedVal(100);
             } catch (err) {
                 throw err;
@@ -47,19 +55,22 @@ function ChartData(){
         }
         getUserData()
     }, [chartRange, currUser.username]);
-
+    
     //go through the bandcamp data and format it correctly
     const bandcampPlaysData = [];
-    for (let d of bandcampData) {
-        bandcampPlaysData.push({ x: d.title, y: d.plays });
+    if (userData[`bandcamp_${chartRange}`]){
+        for (let d of userData[`bandcamp_${chartRange}`]) {
+            bandcampPlaysData.push({ x: d.title, y: d.plays });
+        }
     }
+    
 
     //add bandcamp data to the overall graphItems data list
     graphItems.push(bandcampPlaysData);
 
     //parse the distrokid data and set it up as an array of songs per store
     let allStoreData = {};
-    for (let dataset of distrokidData) {
+    for (let dataset of userData[`distrokid`]) {
         if (allStoreData[dataset.store]) {
             allStoreData[dataset.store] = [...allStoreData[dataset.store], { title: dataset.title, plays: dataset.plays}]
         } else {
@@ -78,9 +89,12 @@ function ChartData(){
     }
     
     const formattedSpotifyData = [];
-    for(let d of spotifyData){
-        formattedSpotifyData.push({x: d.title, y: d.streams})
+    if (userData[`spotify_${chartRange}`]) {
+        for (let d of userData[`spotify_${chartRange}`]) {
+            formattedSpotifyData.push({ x: d.title, y: d.streams })
+        }
     }
+    
 
     graphItems.push(formattedSpotifyData);
     
@@ -128,7 +142,7 @@ function ChartData(){
     //toggle between the two date ranges
     const toggleView = (evt) => {
         if(chartRange === "alltime"){
-            setChartRange("30day");
+            setChartRange("month");
         } else {
             setChartRange("alltime")
         }
@@ -142,7 +156,7 @@ function ChartData(){
                     {isLoading ? <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div>
                     </div> : <>
-                    <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView}>{toggleText}</button>
+                    <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView}>{chartRange === "month" ? "Alltime" : "30-day"}</button>
                     <FlexibleXYPlot xType="ordinal" margin={{ bottom: 200 }}>
                         <DiscreteColorLegend
                             style={{ position: 'absolute', right: '1rem', top: '10px' }}

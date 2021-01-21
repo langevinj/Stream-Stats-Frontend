@@ -7,6 +7,7 @@ import NavBar from './NavBar'
 import Routes from './Routes'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
+import DataContext from './DataContext'
 import './App.css';
 
 export const TOKEN_KEY = "stream-stat-token"
@@ -14,6 +15,7 @@ export const TOKEN_KEY = "stream-stat-token"
 function App() {
   const[userLoaded, setUserLoaded] = useState(false);
   const[currUser, setCurrUser] = useState(null);
+  const[userData, setUserData] = useState({distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: []});
 
   const [token, setToken] = useLocalStorage(TOKEN_KEY);
 
@@ -48,10 +50,12 @@ function App() {
   return (
       <BrowserRouter>
       <UserContext.Provider value={{ currUser, setCurrUser }}>
+      <DataContext.Provider value={{ userData, setUserData }}>
         <div className="App">
           <NavBar logOut={logOut} />
           <Routes setToken={setToken} />
         </div>
+      </DataContext.Provider>
       </UserContext.Provider>
       </BrowserRouter>
   );

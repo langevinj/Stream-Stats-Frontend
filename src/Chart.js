@@ -5,6 +5,7 @@ import { v4 as uuid} from 'uuid'
 import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, VerticalBarSeriesCanvas, DiscreteColorLegend, Hint } from 'react-vis';
 import { colorsMap } from './colors.js'
 import './style.css';
+import { parse } from 'ipaddr.js';
 
 function ChartData(){
     const { currUser } = useContext(UserContext);
@@ -48,22 +49,12 @@ function ChartData(){
 
     //go through the bandcamp data and format it correctly
     const bandcampPlaysData = [];
-
     for (let d of bandcampData) {
         bandcampPlaysData.push({ x: d.title, y: d.plays });
     }
 
     //add bandcamp data to the overall graphItems data list
     graphItems.push(bandcampPlaysData);
-
-    //create an array of all song titles
-    // const allSongs = bandcampPlaysData.map(b => b.x)
-
-    //make an array of all the songs listed on spotify
-    const spotifySongs = []
-    for(let dataset of spotifyData) {
-        spotifySongs.push(dataset.title)
-    }
 
     //parse the distrokid data and set it up as an array of songs per store
     let allStoreData = {};
@@ -75,8 +66,16 @@ function ChartData(){
         }
     }
 
+    //format an option where keys are the name of the store and values are an array of objects formatted for the chart
+    let masterObj = {}
+    for (let [name, songs] of Object.entries(allStoreData)) {
+        let temp = [];
+        for(let song of songs){
+            temp.push({x: song.title, y: parseInt(song.plays)})
+        }
+        masterObj[name] = temp;
+    }
     
-
     const formattedSpotifyData = [];
     for(let d of spotifyData){
         formattedSpotifyData.push({x: d.title, y: d.streams})
@@ -95,20 +94,7 @@ function ChartData(){
     // const content = useCanvas ? 'TOGGLE TO SVG' : 'TOGGLE TO CANVAS';
     const BarSeries = useCanvas ? VerticalBarSeriesCanvas : VerticalBarSeries;
 
-    //format an option where keys are the name of the store and values are an array of objects formatted for the chart
-    let masterObj = {}
-    for(let [name, songs] of Object.entries(allStoreData)){
-        let temp = [];
-        for(let song of allSongs){
-            let res = songs.filter(s => s.title === song)[0]
-            if(res){
-                temp.push({x: res.title, y: parseInt(res.plays)});
-            } else {
-                // temp.push({x: song, y: 0})
-            }
-        }
-        masterObj[name] = temp;
-    }
+    
     //set the array of color indicators up for the legend
     const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];
 

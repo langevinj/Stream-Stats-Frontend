@@ -102,7 +102,7 @@ function ChartData(){
     const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];
 
     
-
+    //set the hint when a bar is hovered over
     const [hintValue, setHintValue] = useState({});
     const _onNearestX = (value, {index}) => {
         if(hintValue !== value){
@@ -110,36 +110,45 @@ function ChartData(){
         }
     }
 
+    // const [heightMax, setMaxHeight] = useState(0);
+
+    //iterate through graphItems nested array and find the max height
+    const findMaxHeight = (allItems) => {
+        const heights = allItems.map(service => service.map(song => parseInt(song.y)));
+
+        //flatten the array of all heights
+        let flattenedHeights = [];
+        for(let el of heights){
+            if(Array.isArray(el)){
+                flattenedHeights = [...flattenedHeights, ...el]
+            } else {
+                flattenedHeights = [...flattenedHeights, el]
+            }
+        }
+
+        //find the max height
+        return Math.max(...flattenedHeights);
+    }
+
     //iterate through distrokid stores, applying correct color to each
     for (let [store, songs] of Object.entries(masterObj)) {
         if (store !== "Spotify") {
             let foundColor = colorsMap.get(store)
-            // let tempEl = (<BarSeries data={songs} key={uuid()} className="vertical-bar-series" barWidth={1} fill={foundColor} onValueMouseOver={_onNearestX} />)
             colorItems.push({ title: store, color: foundColor });
             graphItems.push(songs);
-        }
+        }    
     }
 
-    //iterate through graphItems nested array and find the max height
-    const findMaxHeight = (allItems) => {
-        const heights = allItems.map(service => service.map(song => song.y))
-        let max;
+    //call the function to set max height now that all graphdata is stored in one plac
+    // setMaxHeight(findMaxHeight(graphItems));
 
-        function _helper(array){
-            if(!array) return max
-            if(Array.isArray(array[0])) _helper(array);
-            let tempMax = Math.max(...array);
-            if(!max || max < tempMax) max = tempMax
-        }
+    
 
-        return _helper(heights)
-    }
-
-    const [heightMax, setMaxHeight] = useState(0);
+    
 
     return(
         <div>
-            <XYPlot xType="ordinal" width={3000} height={700} xDistance={1000} className="ml-5">
+            <XYPlot xType="ordinal" width={3000} height={findMaxHeight(graphItems)} xDistance={1000} className="ml-5">
                 <DiscreteColorLegend
                     style={{ position: 'absolute', left: '150px', top: '10px' }}
                     orientation="horizontal"

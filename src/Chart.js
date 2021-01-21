@@ -97,13 +97,16 @@ function ChartData(){
     }
 
     //iterate through distrokid stores, applying correct color to each
-    for (let [store, songs] of Object.entries(masterObj)) {
-        if (store !== "Spotify") {
-            let foundColor = colorsMap.get(store)
-            colorItems.push({ title: store, color: foundColor });
-            graphItems.push(songs);
-        }    
+    if(chartRange === "alltime"){
+        for (let [store, songs] of Object.entries(masterObj)) {
+            if (store !== "Spotify") {
+                let foundColor = colorsMap.get(store)
+                colorItems.push({ title: store, color: foundColor });
+                graphItems.push(songs);
+            }
+        }
     }
+    
 
     //toggle between the two date ranges
     const toggleView = (evt) => {

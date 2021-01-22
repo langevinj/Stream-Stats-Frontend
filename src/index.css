@@ -5,9 +5,20 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* background: url('./images/herringbone/herringbone.png') repeat 0 0; */
+  /* background: url('./images/beanstalk-dark/beanstalk-dark.png') repeat 0 0; */
+  background: url('./images/cork-wallet/cork-wallet.png') repeat 0 0;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Droid Serif', Georgia, Times, serif;
+}
+
+p, div, label {
+  font-family: 'Droid Sans', Helvetica, Arial, sans-serif;
 }

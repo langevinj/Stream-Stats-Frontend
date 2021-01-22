@@ -28,9 +28,9 @@ function DataInput(){
     
     let responses = [];
 
-    const handleSubmit = async (evt) => {
+    const handleSubmit = (evt) => {
         evt.preventDefault();
-        setIsLoading(true);
+        // setIsLoading(true);
 
         const dataToSend = ['distrokid', 'bandcampAlltime', 'bandcampMonth', 'spotifyRawMonth', 'spotifyRawAll'];
         setTimeout(async () => {
@@ -50,7 +50,7 @@ function DataInput(){
 
                 try {
                     //send the data to the import endpoint
-                    let res = await StreamingApi.dataImport(data, currUser.username);
+                    let res = StreamingApi.dataImport(data, currUser.username);
                     responses.push(res);
                 } catch (errors) {
                     return setFormData(f => ({ ...f, errors }));
@@ -59,8 +59,22 @@ function DataInput(){
             }
         }, 1000);
 
-        setIsLoading(false);
-        return responses;
+        // async function scrapeSpotify(){
+            if (formData.spotifyEmail && formData.spotifyPwd) {
+                try {
+                    let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
+                    let res = StreamingApi.gatherSpotifyData(data, currUser.username);
+                    responses.push(res);
+                } catch (errors) {
+                    return setFormData(f => ({ ...f, errors }));
+                }
+            }
+        //     setTimeout(() => {
+        //         setIsLoading(false)
+        //     }, 1000);
+        // }
+
+        // return scrapeSpotify();
     }
 
     
@@ -81,11 +95,12 @@ function DataInput(){
         }
     }
 
+
     // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (
         <div className="container">
             <div className="form-container">
-                <form className="form-container" onSubmit={handleSubmit}>
+                <form className="form-container" onSubmit={(evt) => handleSubmit(evt)}>
                     <h4>Want to import some stats?</h4>
                     <div className="form-group">
                         <h3>Enter your Spotify-for-Artists credentials here:</h3>
@@ -115,7 +130,7 @@ function DataInput(){
                         <label htmlFor="bandcampMonth">Paste the "30 days" Bandcamp page here:</label>
                         <textarea name="bandcampMonth" value={formData.bandcampMonth} id="bandcampMonth" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
                     </div>
-                    {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
+                    {/* {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null} */}
                     {!isLoading ? <button className="submitButton btn-primary rounded" type="submit">Submit</button> : <button className="loadingButton btn-primary rounded" type="button" disabled><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...</button>}
                 </form>
                 {/* <button onClick={gatherSpotifyData}>Gather Data!</button> */}

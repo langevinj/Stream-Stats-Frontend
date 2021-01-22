@@ -26,7 +26,7 @@ function ChartData(){
             try {
                 if(!localData[`bandcamp_${chartRange}`]){
                     let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
-                    chartRange === "alltime" ? setLocalData(old => ({ ...old, bandcamp_alltime: [...bdata] })) : setLocalData(old => ({ ...old, bandcamp_month: bdata }));
+                    chartRange === "alltime" ? setLocalData(old => ({ ...localData, bandcamp_alltime: [...bdata] })) : setLocalData(old => ({ ...old, bandcamp_month: bdata }));
                 }
                 setLoadedVal(25);
 
@@ -119,6 +119,14 @@ function ChartData(){
             setChartRange("alltime")
         }
     }
+
+    const checkEmpty = (obj) => {
+        const isEmpty = true;
+        for(let el of ['distrokid', 'bandcamp_alltime', 'bandcamp_month', 'spotify_alltime', 'spotify_month']){
+            if(obj[el] !== undefined && obj[el].length) return false
+        }
+        return isEmpty;
+    }
     
     return(
         <div className="container-fluid" id="main-container">
@@ -127,7 +135,7 @@ function ChartData(){
                 <div className="col-10" id="chart-container">
                     {isLoading ? <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div>
-                    </div> : <>
+                    </div> : <>{!isLoading && checkEmpty(localData) ? <><h1>Looks like you haven't imported any data yet!</h1></> : <>
                             <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
                     <FlexibleXYPlot xType="ordinal" margin={{ bottom: 200 }}>
                         <DiscreteColorLegend
@@ -145,7 +153,7 @@ function ChartData(){
                         <XAxis tickLabelAngle={-45} style={{ text: { stroke: 'none', fill: 'black' } }} />
                         <YAxis />
                         {graphItems.map((service, idx) => <VerticalBarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} color={colorItems[idx].color}/>)}
-                    </FlexibleXYPlot></>}
+                    </FlexibleXYPlot></>}</>}
                 </div>
             </div>
                 <div className="col-1"></div>

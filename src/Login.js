@@ -54,7 +54,6 @@ function Login({ setToken }) {
         try {
             if (endpoint === 'login') {
                 token = await StreamingApi.login(data);
-                console.log(token)
                 StreamingApi.token = token;
             } else {
                 token = await StreamingApi.signup(data);

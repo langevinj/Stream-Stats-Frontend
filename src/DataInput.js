@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import StreamingApi from './Api'
 import Alert from './Alert'
 import UserContext from './UserContext'
@@ -6,6 +6,7 @@ import UserContext from './UserContext'
 function DataInput(){
     const { currUser } = useContext(UserContext)
     const [isLoading, setIsLoading] = useState(false);
+    const [loadedVal, setLoadedVal] = useState(0);
     //set intiail state of the form
     const [formData, setFormData] = useState({
         distrokid: "",
@@ -56,6 +57,7 @@ function DataInput(){
                     return setFormData(f => ({ ...f, errors }));
                 }
                 
+                
             }
         }, 1000);
 
@@ -69,6 +71,9 @@ function DataInput(){
                     return setFormData(f => ({ ...f, errors }));
                 }
             }
+            // setLoadedVal(loadedVal => loadedVal + 20);
+            
+            
         //     setTimeout(() => {
         //         setIsLoading(false)
         //     }, 1000);
@@ -77,6 +82,16 @@ function DataInput(){
         // return scrapeSpotify();
     }
 
+    useEffect(() => {
+        function unloadVal(){
+            if(loadedVal === 100){
+                setTimeout(() => {
+                    setLoadedVal(loadedVal => 0);
+                }, 1000);
+            }
+        }
+        unloadVal()
+    }, [loadedVal]);
     
     async function handleSpotifyCredentials() {
         //if spotify credentials are passed, process them
@@ -130,7 +145,8 @@ function DataInput(){
                         <textarea name="bandcampMonth" value={formData.bandcampMonth} id="bandcampMonth" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
                     </div>
                     {/* {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null} */}
-                    {!isLoading ? <button className="submitButton btn-primary rounded" type="submit">Submit</button> : <button className="loadingButton btn-primary rounded" type="button" disabled><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...</button>}
+                    {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded" type="submit">Submit</button> : <div className="progress mt-5">
+                        <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div>}
                 </form>
                 {/* <button onClick={gatherSpotifyData}>Gather Data!</button> */}
             </div>

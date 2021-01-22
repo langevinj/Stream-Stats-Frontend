@@ -21,7 +21,7 @@ function NavBar({ logOut }) {
                     {/* <NavLink exact to="/companies" className="nav-item nav-link">Companies</NavLink>
                     <NavLink exact to="/jobs" className="nav-link nav-item">Jobs</NavLink>
                     <NavLink exact to="/profile" className="nav-link nav-item">Profile</NavLink> */}
-                    <Link to="/chartdata" className="nav-link nav-item">ChartData</Link>
+                    <Link to="/chartdata" className="nav-link nav-item">Chart</Link>
                     <Link to="/input" className="nav-link nav-item">Import Data</Link>
                     <Link to="/" className="nav-link nav-item" onClick={logOut}>Logout</Link>
                 </div>

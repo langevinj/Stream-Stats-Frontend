@@ -23,3 +23,20 @@ h1, h2, h3, h4, h5, h6 {
 p, div, label {
   font-family: 'Droid Sans', Helvetica, Arial, sans-serif;
 }
+
+.btn-custom {
+  background-color: hsl(0, 100%, 82%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fecccc", endColorstr="#fea3a3");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#fecccc), to(#fea3a3));
+  background-image: -moz-linear-gradient(top, #fecccc, #fea3a3);
+  background-image: -ms-linear-gradient(top, #fecccc, #fea3a3);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fecccc), color-stop(100%, #fea3a3));
+  background-image: -webkit-linear-gradient(top, #fecccc, #fea3a3);
+  background-image: -o-linear-gradient(top, #fecccc, #fea3a3);
+  background-image: linear-gradient(#fecccc, #fea3a3);
+  border-color: #fea3a3 #fea3a3 hsl(0, 100%, 80%);
+  color: #333 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.13);
+  -webkit-font-smoothing: antialiased;
+}

@@ -153,7 +153,7 @@ function ChartData(){
                     {isLoading ? <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div>
                     </div> : <>
-                    <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView}>{chartRange === "month" ? "Alltime" : "30-day"}</button>
+                    <button className="btn btn-primary btn-custom round m-1 btn-sm" onClick={toggleView}>{chartRange === "month" ? "Alltime" : "30-day"}</button>
                     <FlexibleXYPlot xType="ordinal" margin={{ bottom: 200 }}>
                         <DiscreteColorLegend
                             style={{ position: 'absolute', right: '1rem', top: '10px' }}

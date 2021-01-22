@@ -14,9 +14,19 @@ function ChartData(){
     const [isLoading, setIsLoading] = useState(false);
     const [loadedVal, setLoadedVal] = useState(0);
     const [localData, setLocalData] = useLocalStorage("data");
-
+    const [tryCount, setTryCount] = useState(0);
     const graphItems = []
     const FlexibleXYPlot = makeVisFlexible(XYPlot);
+    
+
+    //toggle between the two date ranges
+    const toggleView = (evt) => {
+        if (chartRange === "alltime") {
+            setChartRange("month");
+        } else {
+            setChartRange("alltime")
+        }
+    }
 
     //get streaming data for user upon loading page
     useEffect(() => {
@@ -52,6 +62,12 @@ function ChartData(){
         }
         getUserData()
     }, [chartRange, currUser.username]);
+
+    //if there is no alltime data to load, automatically check if there is any in the 30day chart
+    if(tryCount === 0 && !localData['distrokid'] && !localData['spotify_alltime'] && !localData['bandcamp_alltime']){
+        setTryCount(tryCount => tryCount + 1);
+        toggleView();
+    }
     
     //go through the bandcamp data and format it correctly, then push into main data area
     if (localData[`bandcamp_${chartRange}`]){
@@ -111,14 +127,7 @@ function ChartData(){
     }
     
 
-    //toggle between the two date ranges
-    const toggleView = (evt) => {
-        if(chartRange === "alltime"){
-            setChartRange("month");
-        } else {
-            setChartRange("alltime")
-        }
-    }
+    
 
     const checkEmpty = (obj) => {
         const isEmpty = true;

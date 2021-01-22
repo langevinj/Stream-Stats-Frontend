@@ -1,0 +1,36 @@
+#top-row{
+    margin-top: 12vh;
+}
+
+.description, ul{
+    font-size: 2.5vh;
+    padding-left: 15vw;
+    padding-right: 15vw;
+}
+
+li span {
+    position: relative;
+    left: -10px;
+}
+
+.logo {
+    height: 4vh;
+}
+
+ul {
+    list-style: none;
+}
+
+/* li {
+    height: 3vh;
+    margin: 3vh;
+} */
+
+.Home {
+    margin-bottom: 5vh;
+    height: 75%;
+}
+/* li > img {
+    height: 2vh;
+} */
+

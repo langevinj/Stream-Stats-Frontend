@@ -149,7 +149,7 @@ function ChartData(){
         <div className="container-fluid" id="main-container">
             <div className="row">
                 <div className="col-1"></div>
-                <div className="container-fluid col-10" id="chart-container">
+                <div className="col-10" id="chart-container">
                     {isLoading ? <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div>
                     </div> : <>

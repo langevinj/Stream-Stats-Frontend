@@ -101,9 +101,8 @@ function DataInput(){
         <div className="container">
             <div className="form-container">
                 <form className="form-container" onSubmit={(evt) => handleSubmit(evt)}>
-                    <h4>Want to import some stats?</h4>
+                    <h4 id="prompt">Want to import some stats?</h4>
                     <div className="form-group">
-                        <h3>Enter your Spotify-for-Artists credentials here:</h3>
                         <label htmlFor="spotifyEmail">Email:</label>
                         <input name="spotifyEmail" value={formData.spotifyEmail} id="spotifyEmail" onChange={handleChange} type="text" className="form-control"></input>
                         <label htmlFor="spotifyPwd">Password:</label>

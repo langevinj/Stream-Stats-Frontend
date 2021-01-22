@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.container-narrow {
+  background: url('./images/cork-wallet/cork-wallet-60.png') repeat 0 0;
+}

@@ -53,7 +53,9 @@ function App() {
       <DataContext.Provider value={{ userData, setUserData }}>
         <div className="App">
           <NavBar logOut={logOut} />
-          <Routes setToken={setToken} />
+          <div className="container container-narrow">
+              <Routes setToken={setToken} />
+          </div>
         </div>
       </DataContext.Provider>
       </UserContext.Provider>

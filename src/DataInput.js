@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import StreamingApi from './Api'
 import Alert from './Alert'
 import UserContext from './UserContext'
+import './DataInput.css'
 
 function DataInput(){
     const { currUser } = useContext(UserContext)

@@ -29,7 +29,7 @@ function DataInput(){
     
     let responses = [];
 
-    const handleSubmit = (evt) => {
+    const handleSubmit = async (evt) => {
         evt.preventDefault();
         // setIsLoading(true);
 
@@ -62,15 +62,16 @@ function DataInput(){
         }, 1000);
 
         // async function scrapeSpotify(){
-            if (formData.spotifyEmail && formData.spotifyPwd) {
+            // if (formData.spotifyEmail && formData.spotifyPwd) {
                 try {
                     let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
-                    let res = StreamingApi.gatherSpotifyData(data, currUser.username);
+                    let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
                     responses.push(res);
                 } catch (errors) {
+                    console.log(`ERRORS ARE : ${errors}`)
                     return setFormData(f => ({ ...f, errors }));
                 }
-            }
+            // }
             // setLoadedVal(loadedVal => loadedVal + 20);
             
             
@@ -144,7 +145,7 @@ function DataInput(){
                         <label htmlFor="bandcampMonth">Paste the "30 days" Bandcamp page here:</label>
                         <textarea name="bandcampMonth" value={formData.bandcampMonth} id="bandcampMonth" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
                     </div>
-                    {/* {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null} */}
+                    {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
                     {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded" type="submit">Submit</button> : <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div>}
                 </form>

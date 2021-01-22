@@ -14,6 +14,7 @@ function ChartData(){
     const [isLoading, setIsLoading] = useState(false);
     const [loadedVal, setLoadedVal] = useState(0);
     const [localData, setLocalData] = useLocalStorage("data");
+
     const graphItems = []
     const FlexibleXYPlot = makeVisFlexible(XYPlot);
 
@@ -32,17 +33,14 @@ function ChartData(){
                 if(!localData[`distrokid`]){
                     let ddata = await StreamingApi.getUserDistrokidData({ range: chartRange }, currUser.username);
                     setLocalData(old => ({...old, distrokid: ddata}));
-                    // setUserData(d => ({ ...d, distrokid: [...ddata]}));
                 };
                 setLoadedVal(50);
-                // let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
-                // setBandcampData(bdata);
+
                 if(!localData[`spotify_${chartRange}`]){
                     let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, currUser.username);
                     chartRange === "alltime" ? setLocalData(old => ({ ...old, spotify_alltime: [...sdata] })) : setLocalData(old => ({ ...old, spotify_month: sdata }));
                 }
                 setLoadedVal(75);
-                // setLocalData(o => userData || { distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: [] })
                 setLoadedVal(100);
             } catch (err) {
                 throw err;
@@ -54,27 +52,18 @@ function ChartData(){
         }
         getUserData()
     }, [chartRange, currUser.username]);
-
-    console.log(localData[`distrokid`])
-    // useEffect(() => {
-    //     function saveUserData() {
-    //         setLocalData(o => userData);
-    //         console.log(`LocalData is ${localData['bandcamp_alltime']}`);
-    //     }
-    //     saveUserData()
-    // }, [userData]);
     
-    //go through the bandcamp data and format it correctly
-    const bandcampPlaysData = [];
+    //go through the bandcamp data and format it correctly, then push into main data area
     if (localData[`bandcamp_${chartRange}`]){
-        for (let d of localData[`bandcamp_${chartRange}`]) {
-            bandcampPlaysData.push({ x: d.title, y: d.plays });
-        }
+        let temp = localData[`bandcamp_${chartRange}`].map(d => ({ x: d.title, y: d.plays }));
+        graphItems.push(temp);
     }
-    
 
-    //add bandcamp data to the overall graphItems data list
-    graphItems.push(bandcampPlaysData);
+    //iterate through spotify data, add it to the main items array
+    if (localData[`spotify_${chartRange}`]) {
+        const temp = localData[`spotify_${chartRange}`].map(d => ({ x: d.title, y: d.streams }))
+        graphItems.push(temp);
+    }
 
     //parse the distrokid data and set it up as an array of songs per store
     let allStoreData = {};
@@ -98,16 +87,6 @@ function ChartData(){
         }
         masterObj[name] = temp;
     }
-    
-    const formattedSpotifyData = [];
-    if (localData[`spotify_${chartRange}`]) {
-        for (let d of localData[`spotify_${chartRange}`]) {
-            formattedSpotifyData.push({ x: d.title, y: d.streams })
-        }
-    }
-    
-
-    graphItems.push(formattedSpotifyData);
     
     //set the array of color indicators up for the legend
     const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];

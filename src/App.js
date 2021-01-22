@@ -16,6 +16,7 @@ function App() {
   const[currUser, setCurrUser] = useState(null);
 
   const [token, setToken] = useLocalStorage(TOKEN_KEY);
+  const [localData, setLocalData] = useLocalStorage("data");
 
   //when the app renders, or when the token is set, update the users information and set the token for API calls
   useEffect(() => {
@@ -38,6 +39,7 @@ function App() {
   const logOut = () => {
     setCurrUser(null);
     setToken(null);
+    setLocalData(null);
   }
 
   //if the users data is not loaded, present a loading screen

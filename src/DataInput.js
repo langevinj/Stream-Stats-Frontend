@@ -61,26 +61,20 @@ function DataInput(){
             }
         }, 1000);
 
-        // async function scrapeSpotify(){
-            // if (formData.spotifyEmail && formData.spotifyPwd) {
-                try {
-                    let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
-                    let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
-                    responses.push(res);
-                } catch (errors) {
-                    console.log(`ERRORS ARE : ${errors}`)
-                    return setFormData(f => ({ ...f, errors }));
+                //send credentials for spotify scrape off
+                if(formData.spotifyEmail || formData.spotifyPwd){
+                    try {
+                        let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
+                        let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
+                        console.log(res)
+                        responses.push(res);
+                    } catch (errors) {
+                        console.log(`ERRORS ARE : ${errors}`)
+                        return setFormData(f => ({ ...f, errors }));
+                    }
                 }
-            // }
-            // setLoadedVal(loadedVal => loadedVal + 20);
+                
             
-            
-        //     setTimeout(() => {
-        //         setIsLoading(false)
-        //     }, 1000);
-        // }
-
-        // return scrapeSpotify();
     }
 
     useEffect(() => {

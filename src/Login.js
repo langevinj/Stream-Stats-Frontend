@@ -94,7 +94,7 @@ function Login({ setToken }) {
             <input name="bandName" value={formData.bandName} id="bandName" onChange={handleChange} type="text" className="form-control"></input>
         </div>
         {formData.errors ? <Alert type="danger" messages={formData.errors} /> : null}
-        <button className="submitButton btn-primary rounded">Submit</button>
+        <button className="submitButton btn-primary rounded mb-3">Submit</button>
     </form>)
 
     const loginForm = (<form className="login-form form-container" onSubmit={handleSubmit}>
@@ -108,7 +108,7 @@ function Login({ setToken }) {
             <input name="password" value={formData.password} id="password" onChange={handleChange} type="password" className="form-control"></input>
         </div>
         {formData.errors ? <Alert type="danger" messages={formData.errors} /> : null}
-        <button className="submitButton btn-primary rounded">Submit</button>
+        <button className="submitButton btn-primary rounded mb-3">Submit</button>
     </form>)
 
 

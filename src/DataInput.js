@@ -140,7 +140,7 @@ function DataInput(){
                             <textarea name="spotifyRawAll" value={formData.spotifyRawAll} id="spotifyRawAll" onChange={(evt) => handleChange(evt)}  onPaste={handleChange} className="form-control"></textarea>
                         </div> </>}
 
-                    <button onClick={toggleSpotifyView} className="btn-primary rounded mb-5">{!spotifyPaste ? "I prefer to paste my spotify data" : "I'll login with my username/password"}</button>
+                    <button onClick={toggleSpotifyView} className="btn-primary rounded mb-4">{!spotifyPaste ? "I prefer to paste my spotify data" : "I'll login with my username/password"}</button>
                     <div className="form-group">
                         <label htmlFor="distrokid">Paste the Distrokid page here:</label>
                         <textarea name="distrokid" value={formData.distrokid} id="distrokid" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
@@ -155,7 +155,7 @@ function DataInput(){
                     </div>
                     {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
                     {/* <Alert type="success" message="Data imported sucessfully!" /> */}
-                    {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded" type="submit">Submit</button> : <div className="progress mt-5">
+                    {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded mb-3" type="submit">Submit</button> : <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div>}
                 </form>
                 {/* <button onClick={gatherSpotifyData}>Gather Data!</button> */}

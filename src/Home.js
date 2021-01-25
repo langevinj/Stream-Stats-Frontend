@@ -16,7 +16,7 @@ function Home() {
                     <br></br>
                     <h4 className="font-weight-bold">We currently support the following services:</h4>
                     <div className="container d-flex justify-content-center">
-                        <div className="row">
+                        <div className="row mb-5">
                             <div className="col-3"></div>
                             <div className="col-6">
                             <ul>

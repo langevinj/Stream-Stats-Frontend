@@ -158,7 +158,6 @@ function DataInput(){
                     {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded mb-3" type="submit">Submit</button> : <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div>}
                 </form>
-                {/* <button onClick={gatherSpotifyData}>Gather Data!</button> */}
             </div>
         </div>
     )

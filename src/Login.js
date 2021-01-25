@@ -14,7 +14,7 @@ function Login({ setToken }) {
         username: "",
         password: "",
         email: "",
-        bandName: "",
+        band_name: "",
         errors: []
     });
 
@@ -38,7 +38,7 @@ function Login({ setToken }) {
                 username: formData.username,
                 password: formData.password,
                 email: formData.email,
-                bandName: formData.bandName || undefined
+                band_name: formData.band_name || undefined
             };
             endpoint = "register";
         } else {
@@ -90,8 +90,8 @@ function Login({ setToken }) {
             <input name="email" value={formData.email} id="email" onChange={handleChange} type="text" className="form-control"></input>
         </div>
         <div className="form-group">
-            <label htmlFor="bandName">Band Name:</label>
-            <input name="bandName" value={formData.bandName} id="bandName" onChange={handleChange} type="text" className="form-control"></input>
+            <label htmlFor="band_name">Band Name:</label>
+            <input name="band_name" value={formData.band_name} id="band_name" onChange={handleChange} type="text" className="form-control"></input>
         </div>
         {formData.errors ? <Alert type="danger" messages={formData.errors} /> : null}
         <button className="submitButton btn-primary rounded mb-3">Submit</button>
@@ -110,7 +110,6 @@ function Login({ setToken }) {
         {formData.errors ? <Alert type="danger" messages={formData.errors} /> : null}
         <button className="submitButton btn-primary rounded mb-3">Submit</button>
     </form>)
-
 
     return (
         <div className="container">

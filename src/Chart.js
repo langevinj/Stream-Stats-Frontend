@@ -133,9 +133,6 @@ function ChartData(){
         }
     }
     
-
-    
-
     const checkEmpty = (obj) => {
         const isEmpty = true;
         for(let el of ['distrokid', 'bandcamp_alltime', 'bandcamp_month', 'spotify_alltime', 'spotify_month']){
@@ -143,11 +140,7 @@ function ChartData(){
         }
         return isEmpty;
     }
-    
 
-    console.log(`Graph items are ${graphItems.map(item => console.log(item))}`)
-
-    
     return(
         <div className="container-fluid" id="main-container">
             <div className="row">

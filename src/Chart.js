@@ -63,6 +63,13 @@ function ChartData(){
         getUserData()
     }, [chartRange, currUser.username]);
 
+    if(!localData){ 
+        setLocalData({ distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: [] });
+    }
+
+
+    
+
     //if there is no alltime data to load, automatically check if there is any in the 30day chart
     if(tryCount === 0 && !localData['distrokid'] && !localData['spotify_alltime'] && !localData['bandcamp_alltime']){
         setTryCount(tryCount => tryCount + 1);
@@ -136,6 +143,10 @@ function ChartData(){
         }
         return isEmpty;
     }
+    
+
+    console.log(`Graph items are ${graphItems.map(item => console.log(item))}`)
+
     
     return(
         <div className="container-fluid" id="main-container">

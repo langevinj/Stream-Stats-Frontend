@@ -39,7 +39,7 @@ function App() {
   const logOut = () => {
     setCurrUser(null);
     setToken(null);
-    setLocalData(null);
+    setLocalData({ distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: [] });
   }
 
   //if the users data is not loaded, present a loading screen

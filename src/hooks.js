@@ -8,7 +8,12 @@ function useLocalStorage(key, startingValue = null) {
 
     useEffect(() => {
         if (!value) {
-            localStorage.removeItem(key);
+            if(key === "data"){
+                localStorage.setItem(key, { distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: [] })
+            } else {
+                localStorage.removeItem(key);
+            }
+            
         } else {
             localStorage.setItem(key, value)
         }

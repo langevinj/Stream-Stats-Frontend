@@ -90,7 +90,7 @@ function Login({ setToken }) {
             <input name="email" value={formData.email} id="email" onChange={handleChange} type="text" className="form-control"></input>
         </div>
         <div className="form-group">
-            <label htmlFor="band_name">Band Name:</label>
+            <label htmlFor="band_name">Band Name: <small className="text-muted">(Optional)</small></label>
             <input name="band_name" value={formData.band_name} id="band_name" onChange={handleChange} type="text" className="form-control"></input>
         </div>
         {formData.errors ? <Alert type="danger" messages={formData.errors} /> : null}

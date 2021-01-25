@@ -8,6 +8,7 @@ function DataInput(){
     const { currUser } = useContext(UserContext)
     const [isLoading, setIsLoading] = useState(false);
     const [loadedVal, setLoadedVal] = useState(0);
+    const [spotifyPaste, setSpotifyPaste] = useState(false);
     //set intiail state of the form
     const [formData, setFormData] = useState({
         distrokid: "",
@@ -107,28 +108,39 @@ function DataInput(){
         }
     }
 
+    const toggleSpotifyView = (evt) => {
+        setSpotifyPaste(s => !s);
+    }
+
 
     // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (
         <div className="container">
             <div className="form-container">
                 <form className="form-container" onSubmit={(evt) => handleSubmit(evt)}>
-                    <h4 id="prompt">Want to import some stats?</h4>
-                    <div className="form-group">
-                        <label htmlFor="spotifyEmail">Email:</label>
-                        <input name="spotifyEmail" value={formData.spotifyEmail} id="spotifyEmail" onChange={handleChange} type="text" className="form-control"></input>
-                        <label htmlFor="spotifyPwd">Password:</label>
-                        <input name="spotifyPwd" value={formData.spotifyPwd} id="spotifyPwd" type="password" onChange={handleChange} className="form-control"></input>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="spotifyRawMonth">Paste the "Last 28 days" Spotify page here:
-                        <textarea name="spotifyRawMonth" value={formData.spotifyRawMonth} id="spotifyRawMonth" onChange={(evt) => handleChange(evt)}  onPaste={handleChange} className="form-control"></textarea>
-                        </label>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="spotifyRawAll">Paste the "All time" Spotify page here:</label>
-                        <textarea name="spotifyRawAll" value={formData.spotifyRawAll} id="spotifyRawAll" onChange={(evt) => handleChange(evt)}  onPaste={handleChange} className="form-control"></textarea>
-                    </div>
+                    <h3 id="prompt">Want to add some stats?</h3>
+                        {!spotifyPaste ? 
+                        <div className="form-group">
+                        <div id="spotifyForArtists">
+                            <h5>Add your login info for Spotify for Artists:</h5> 
+                            
+                            <label htmlFor="spotifyEmail">Email:</label>
+                            <input name="spotifyEmail" value={formData.spotifyEmail} id="spotifyEmail" onChange={handleChange} type="text" className="form-control"></input>
+                            <label htmlFor="spotifyPwd">Password:</label>
+                            <input name="spotifyPwd" value={formData.spotifyPwd} id="spotifyPwd" type="password" onChange={handleChange} className="form-control"></input>
+                        </div> 
+                        </div>: <>
+                        <div className="form-group">
+                            <label htmlFor="spotifyRawMonth">Paste the "Last 28 days" Spotify page here:
+                            <textarea name="spotifyRawMonth" value={formData.spotifyRawMonth} id="spotifyRawMonth" onChange={(evt) => handleChange(evt)}  onPaste={handleChange} className="form-control"></textarea>
+                            </label>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="spotifyRawAll">Paste the "All time" Spotify page here:</label>
+                            <textarea name="spotifyRawAll" value={formData.spotifyRawAll} id="spotifyRawAll" onChange={(evt) => handleChange(evt)}  onPaste={handleChange} className="form-control"></textarea>
+                        </div> </>}
+
+                    <button onClick={toggleSpotifyView} className="btn-primary rounded mb-5">{!spotifyPaste ? "I prefer to paste my spotify data" : "I'll login with my username/password"}</button>
                     <div className="form-group">
                         <label htmlFor="distrokid">Paste the Distrokid page here:</label>
                         <textarea name="distrokid" value={formData.distrokid} id="distrokid" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>

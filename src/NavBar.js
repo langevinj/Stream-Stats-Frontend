@@ -12,7 +12,7 @@ function NavBar({ logOut }) {
     //navbar view if a user is logged in
     const loggedInView = (
         <nav className="navbar navbar-expand-sm navbar-light">
-            <NavLink exact to="/" className="navbar-brand">Stream Stats</NavLink>
+            <NavLink to="/" className="navbar-brand">Stream Stats</NavLink>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target='#navbarNavDropdown' aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
@@ -30,9 +30,9 @@ function NavBar({ logOut }) {
     //navbar view if a user is logged out
     const loggedOutView = (
         <nav className="navbar navbar-expand-sm navbar-light">
-            <NavLink exact to="/" className="navbar-brand">Stream Stats</NavLink>
+            <NavLink to="/" className="navbar-brand">Stream Stats</NavLink>
             <div className="navbar-nav ml-auto">
-                <Link exact to="/login" className="nav-link nav-item">Login</Link>
+                <Link to="/login" className="nav-link nav-item">Login</Link>
             </div>
         </nav>
     )

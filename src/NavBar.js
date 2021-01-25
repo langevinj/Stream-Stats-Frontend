@@ -18,9 +18,6 @@ function NavBar({ logOut }) {
             </button>
             <div className="collapse navbar-collapse" id="navbarNavDropdown">
                 <div className="navbar-nav ml-auto">
-                    {/* <NavLink exact to="/companies" className="nav-item nav-link">Companies</NavLink>
-                    <NavLink exact to="/jobs" className="nav-link nav-item">Jobs</NavLink>
-                    <NavLink exact to="/profile" className="nav-link nav-item">Profile</NavLink> */}
                     <Link to="/chartdata" className="nav-link nav-item" data-toggle="collapse" data-target='#navbarNavDropdown'>Chart</Link>
                     {/* <Link to="/table" className="nav-link nav-item">Table</Link> */}
                     <Link to="/input" className="nav-link nav-item" data-toggle="collapse" data-target='#navbarNavDropdown'>Import Data</Link>

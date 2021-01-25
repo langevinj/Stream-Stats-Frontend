@@ -32,13 +32,11 @@ function NavBar({ logOut }) {
 
     //navbar view if a user is logged out
     const loggedOutView = (
-        <nav className="navbar navbar-expand-lg bg-white">
-            <NavLink exact to="/" className="Navbar-link navbar-brand">Stream Stats</NavLink>
-            <ul className="navbar-nav ml-auto">
-                <li className="nav-item active">
-                    <NavLink exact to="/login" className="Navbar-link">Login</NavLink>
-                </li>
-            </ul>
+        <nav className="navbar navbar-expand-sm navbar-light">
+            <NavLink exact to="/" className="navbar-brand">Stream Stats</NavLink>
+            <div className="navbar-nav ml-auto">
+                <Link exact to="/login" className="nav-link nav-item">Login</Link>
+            </div>
         </nav>
     )
 

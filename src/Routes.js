@@ -5,7 +5,6 @@ import Login from './Login'
 import DataInput from './DataInput'
 import ChartData from './Chart'
 import Table from './Table'
-// import Profile from './Profile'
 import UserContext from './UserContext'
 
 function Routes({ setToken }) {
@@ -21,7 +20,6 @@ function Routes({ setToken }) {
 
     const loggedInRoutes = (
         <Switch>
-            {/* <Route exact path="/profile"><Profile /></Route> */}
             <Route exact path="/chartdata"><ChartData /></Route>
             {/* <Route exact path="/table"><Table /></Route> */}
             <Route exact path="/input"><DataInput /></Route>

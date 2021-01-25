@@ -1,3 +1,5 @@
+//run tests like "npm test Home"
+
 import React from 'react'
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom'

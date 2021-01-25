@@ -114,7 +114,7 @@ function Login({ setToken }) {
 
     return (
         <div className="container">
-            <div className="toggle-container mb-3 mt-2">
+            <div className="toggle-container mb-3 mt-3">
                 {formView === "login" ? <button id="signup-toggle" value="signup" onClick={signupView} className="btn-primary rounded ml-1">Sign-Up</button> : <button id="login-toggle" value="login" onClick={loginView} className="btn-primary mr-1 rounded">Login</button>}
             </div>
             <div className="form-container">

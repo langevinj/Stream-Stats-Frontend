@@ -9,6 +9,7 @@ function DataInput(){
     const [isLoading, setIsLoading] = useState(false);
     const [loadedVal, setLoadedVal] = useState(0);
     const [spotifyPaste, setSpotifyPaste] = useState(false);
+
     //set intiail state of the form
     const [formData, setFormData] = useState({
         distrokid: "",
@@ -90,24 +91,26 @@ function DataInput(){
         }
         unloadVal()
     }, [loadedVal]);
-    
-    async function handleSpotifyCredentials() {
-        //if spotify credentials are passed, process them
-        if (formData.spotifyEmail && formData.spotifyPwd) {
-            //send pre-hashed password and email for spotify credentials to be saved
-            let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
 
-            try {
-                // let res = await StreamingApi.saveUserSpotifyCredentials(data);
-                let res = await StreamingApi.gatherSpotifyData(data, currUser.username)
-                //add response to response list
-                responses.push(res);
-            } catch (errors) {
-                return setFormData(f => ({ ...f, errors }));
-            }
-        }
-    }
+    //currently not in use **** function to save a user's spotify credentials
+    // async function handleSpotifyCredentials() {
+    //     //if spotify credentials are passed, process them
+    //     if (formData.spotifyEmail && formData.spotifyPwd) {
+    //         //send pre-hashed password and email for spotify credentials to be saved
+    //         let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
 
+    //         try {
+    //             // let res = await StreamingApi.saveUserSpotifyCredentials(data);
+    //             let res = await StreamingApi.gatherSpotifyData(data, currUser.username)
+    //             //add response to response list
+    //             responses.push(res);
+    //         } catch (errors) {
+    //             return setFormData(f => ({ ...f, errors }));
+    //         }
+    //     }
+    // }
+
+    //switch between the methods of importing spotify data
     const toggleSpotifyView = (evt) => {
         setSpotifyPaste(s => !s);
     }

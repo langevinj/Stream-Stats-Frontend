@@ -14,3 +14,9 @@
 Link {
     z-index: 10;
 }
+
+
+#navbarNavDropdown > .navbar-nav > .nav-link {
+    z-index: 1000;
+    background: url('./images/cork-wallet/cork-wallet-60.png') repeat 0 0;
+}

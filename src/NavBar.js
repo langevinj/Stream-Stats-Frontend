@@ -21,10 +21,10 @@ function NavBar({ logOut }) {
                     {/* <NavLink exact to="/companies" className="nav-item nav-link">Companies</NavLink>
                     <NavLink exact to="/jobs" className="nav-link nav-item">Jobs</NavLink>
                     <NavLink exact to="/profile" className="nav-link nav-item">Profile</NavLink> */}
-                    <Link to="/chartdata" className="nav-link nav-item">Chart</Link>
+                    <Link to="/chartdata" className="nav-link nav-item" data-toggle="collapse" data-target='#navbarNavDropdown'>Chart</Link>
                     {/* <Link to="/table" className="nav-link nav-item">Table</Link> */}
-                    <Link to="/input" className="nav-link nav-item">Import Data</Link>
-                    <Link to="/" className="nav-link nav-item" onClick={logOut}>Logout</Link>
+                    <Link to="/input" className="nav-link nav-item" data-toggle="collapse" data-target='#navbarNavDropdown'>Import Data</Link>
+                    <Link to="/" className="nav-link nav-item" onClick={logOut} data-toggle="collapse" data-target='#navbarNavDropdown'>Logout</Link>
                 </div>
             </div>
         </nav>

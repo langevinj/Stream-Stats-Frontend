@@ -69,7 +69,6 @@ function DataInput(){
                     try {
                         let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
                         let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
-                        console.log(res)
                         responses.push(res);
                     } catch (errors) {
                         console.log(`ERRORS ARE : ${errors}`)
@@ -143,6 +142,7 @@ function DataInput(){
                         <textarea name="bandcampMonth" value={formData.bandcampMonth} id="bandcampMonth" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
                     </div>
                     {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
+                    {/* <Alert type="success" message="Data imported sucessfully!" /> */}
                     {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded" type="submit">Submit</button> : <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div>}
                 </form>

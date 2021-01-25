@@ -23,7 +23,7 @@ function Routes({ setToken }) {
         <Switch>
             {/* <Route exact path="/profile"><Profile /></Route> */}
             <Route exact path="/chartdata"><ChartData /></Route>
-            <Route exact path="/table"><Table /></Route>
+            {/* <Route exact path="/table"><Table /></Route> */}
             <Route exact path="/input"><DataInput /></Route>
             <Route exact path="/"><Home /></Route>
             <Redirect to="/"></Redirect>

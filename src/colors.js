@@ -1,3 +1,4 @@
+//map of coors for each brand distrokid can pull data from
 const colorsMap = new Map();
 
 colorsMap.set("Amazon", '#FF9900');

@@ -42,7 +42,6 @@ function DataInput(){
             let res = await StreamingApi.dataImport(data, username);
             setResponses(r => [...r, res]);
         } catch (errs) {
-            console.log(`THEE ERROR WAS ${errs}`)
             errorHolder.push(errs)
         }
     }
@@ -54,9 +53,7 @@ function DataInput(){
     const handleSubmit = async (evt) => {
         evt.preventDefault();
         setResponses(r => [])
-        console.log(formData['spotifyRawMonth'])
         // setIsLoading(true);
-        console.log(`SPOTIFY PASTE IS NOW ${spotifyPaste}`)
 
         const dataToSend = ['distrokid', 'bandcampAlltime', 'bandcampMonth', 'spotifyRawMonth', 'spotifyRawAll'];
         setTimeout(async () => {
@@ -74,7 +71,6 @@ function DataInput(){
                 //format the data in an object
                 if(formData[dataset] !== undefined){
                     let data = { page: formData[dataset], endpoint: endpoint, range: range };
-                    console.log(`DATA IS ${data.page}`)
                     await dataImport(data, currUser.username);
                 }
                 

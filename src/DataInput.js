@@ -24,6 +24,7 @@ function DataInput(){
     });
 
     const handleChange = (evt) => {
+        evt.preventDefault();
         const { name, value } = evt.target;
         setFormData(f => ({
             ...f,
@@ -42,13 +43,20 @@ function DataInput(){
             let res = await StreamingApi.dataImport(data, username);
             responses.push(res);
         } catch (errs) {
+            console.log(`THEE ERROR WAS ${errs}`)
             errorHolder.push(errs)
         }
     }
 
+    async function setErrors(){
+        setFormData(f => ({ ...f, errors: [...errorHolder] }));
+    }
+
     const handleSubmit = async (evt) => {
         evt.preventDefault();
+        console.log(formData['spotifyRawMonth'])
         // setIsLoading(true);
+        console.log(`SPOTIFY PASTE IS NOW ${spotifyPaste}`)
 
         const dataToSend = ['distrokid', 'bandcampAlltime', 'bandcampMonth', 'spotifyRawMonth', 'spotifyRawAll'];
         setTimeout(async () => {
@@ -64,16 +72,20 @@ function DataInput(){
                 let range = dataset.includes('Month') ? 'month' : 'alltime';
 
                 //format the data in an object
-                let data = { page: formData[dataset], endpoint: endpoint, range: range };
-                await dataImport(data, currUser.username);
+                if(formData[dataset] !== undefined){
+                    let data = { page: formData[dataset], endpoint: endpoint, range: range };
+                    console.log(`DATA IS ${data.page}`)
+                    await dataImport(data, currUser.username);
+                }
+                
                 
             }
 
             //set the form errors to all errors received during importing of data
-            setFormData(f => ({ ...f, errors: [...errorHolder] }));
+            await setErrors();
         }, 1000);
 
-                //send credentials for spotify scrape off
+                // send credentials for spotify scrape off
                 if(formData.spotifyEmail || formData.spotifyPwd){
                     try {
                         let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
@@ -118,6 +130,7 @@ function DataInput(){
 
     //switch between the methods of importing spotify data
     const toggleSpotifyView = (evt) => {
+        evt.preventDefault();
         setSpotifyPaste(s => !s);
     }
 

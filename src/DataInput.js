@@ -53,16 +53,13 @@ function DataInput(){
 
                 //format the data in an object
                 let data = { page: formData[dataset], endpoint: endpoint, range: range };
-
                 try {
                     //send the data to the import endpoint
-                    let res = StreamingApi.dataImport(data, currUser.username);
+                    let res = await StreamingApi.dataImport(data, currUser.username);
                     responses.push(res);
                 } catch (errors) {
                     return setFormData(f => ({ ...f, errors }));
                 }
-                
-                
             }
         }, 1000);
 
@@ -73,7 +70,6 @@ function DataInput(){
                         let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
                         responses.push(res);
                     } catch (errors) {
-                        console.log(`ERRORS ARE : ${errors}`)
                         return setFormData(f => ({ ...f, errors }));
                     }
                 }

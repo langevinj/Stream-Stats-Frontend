@@ -9,6 +9,7 @@ function DataInput(){
     const [isLoading, setIsLoading] = useState(false);
     const [loadedVal, setLoadedVal] = useState(0);
     const [spotifyPaste, setSpotifyPaste] = useState(false);
+    const errorHolder = [];
 
     //set intiail state of the form
     const [formData, setFormData] = useState({
@@ -34,6 +35,17 @@ function DataInput(){
 
 /********************************************* */
 
+    //send the API call to import data, if an error is received store it
+    async function dataImport(data, username){
+        try {
+            //send the data to the import endpoint
+            let res = await StreamingApi.dataImport(data, username);
+            responses.push(res);
+        } catch (errs) {
+            errorHolder.push(errs)
+        }
+    }
+
     const handleSubmit = async (evt) => {
         evt.preventDefault();
         // setIsLoading(true);
@@ -53,14 +65,12 @@ function DataInput(){
 
                 //format the data in an object
                 let data = { page: formData[dataset], endpoint: endpoint, range: range };
-                try {
-                    //send the data to the import endpoint
-                    let res = await StreamingApi.dataImport(data, currUser.username);
-                    responses.push(res);
-                } catch (errors) {
-                    return setFormData(f => ({ ...f, errors }));
-                }
+                await dataImport(data, currUser.username);
+                
             }
+
+            //set the form errors to all errors received during importing of data
+            setFormData(f => ({ ...f, errors: [...errorHolder] }));
         }, 1000);
 
                 //send credentials for spotify scrape off

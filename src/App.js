@@ -50,7 +50,7 @@ function App() {
   return (
       <BrowserRouter>
       <UserContext.Provider value={{ currUser, setCurrUser }}>
-        <div className="App">
+        <div className="App" id="App">
           <div className="container container-narrow">
               <NavBar logOut={logOut} />
               <Routes setToken={setToken} />

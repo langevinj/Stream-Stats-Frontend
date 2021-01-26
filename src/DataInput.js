@@ -10,6 +10,7 @@ function DataInput(){
     const [loadedVal, setLoadedVal] = useState(0);
     const [spotifyPaste, setSpotifyPaste] = useState(false);
     const errorHolder = [];
+    const [responses, setResponses] = useState([])
 
     //set intiail state of the form
     const [formData, setFormData] = useState({
@@ -24,15 +25,13 @@ function DataInput(){
     });
 
     const handleChange = (evt) => {
-        evt.preventDefault();
+        // evt.preventDefault();
         const { name, value } = evt.target;
         setFormData(f => ({
             ...f,
             [name]: value
         }));
     }
-    
-    let responses = [];
 
 /********************************************* */
 
@@ -41,7 +40,7 @@ function DataInput(){
         try {
             //send the data to the import endpoint
             let res = await StreamingApi.dataImport(data, username);
-            responses.push(res);
+            setResponses(r => [...r, res]);
         } catch (errs) {
             console.log(`THEE ERROR WAS ${errs}`)
             errorHolder.push(errs)
@@ -54,6 +53,7 @@ function DataInput(){
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
+        setResponses(r => [])
         console.log(formData['spotifyRawMonth'])
         // setIsLoading(true);
         console.log(`SPOTIFY PASTE IS NOW ${spotifyPaste}`)
@@ -90,13 +90,14 @@ function DataInput(){
                     try {
                         let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
                         let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
-                        responses.push(res);
+                        setResponses(r => [...r, res])
                     } catch (errors) {
-                        return setFormData(f => ({ ...f, errors }));
+                        errorHolder.push(errors);
                     }
+
+                    await setErrors();
                 }
                 
-            
     }
 
     useEffect(() => {
@@ -176,7 +177,10 @@ function DataInput(){
                         <textarea name="bandcampMonth" value={formData.bandcampMonth} id="bandcampMonth" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
                     </div>
                     {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
-                    {/* <Alert type="success" message="Data imported sucessfully!" /> */}
+
+                    {/* {responses.length ? <Alert type="success" messages={[`Successfully imported data for: ${responses.forEach((el) => { el.length > 1 ? `-${el}` : ""})`]} */}
+                    {responses.length ? <Alert type="success" messages={['importSuccesses', ...responses]} /> : null}
+
                     {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded mb-3" type="submit">Submit</button> : <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div>}
                 </form>

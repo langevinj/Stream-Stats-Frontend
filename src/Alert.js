@@ -12,7 +12,7 @@ function Alert({ type, messages=[] }) {
             return (
                 <div className={`alert alert-${type}`} key={1}>
                     Successfully imported data for:
-                    <ul>
+                    <ul id="successMessages">
                         {justMessages.map(message => <li key={uuid()} className="success-message">{message}</li>)}
                     </ul>
                 </div>

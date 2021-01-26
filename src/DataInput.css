@@ -5,17 +5,7 @@
 
 .success-message {
     font-size: 1.75vh;
-}
-
-ul {
     list-style: circle;
-}
-
-ul li {
-  word-spacing: 'parent-width';
-}
-
-li {
     white-space: nowrap;
     position: relative;
     left: -10vw;

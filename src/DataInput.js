@@ -40,6 +40,7 @@ function DataInput(){
         try {
             //send the data to the import endpoint
             let res = await StreamingApi.dataImport(data, username);
+            console.log(res)
             setResponses(r => [...r, res]);
         } catch (errs) {
             errorHolder.push(errs)
@@ -175,7 +176,7 @@ function DataInput(){
                     {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
 
                     {/* {responses.length ? <Alert type="success" messages={[`Successfully imported data for: ${responses.forEach((el) => { el.length > 1 ? `-${el}` : ""})`]} */}
-                    {responses.length ? <Alert type="success" messages={['importSuccesses', ...responses]} /> : null}
+                    {!responses.every((el) => el === undefined) ? <Alert type="success" messages={['importSuccesses', ...responses]} /> : null}
 
                     {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded mb-3" type="submit">Submit</button> : <div className="progress mt-5">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div>}

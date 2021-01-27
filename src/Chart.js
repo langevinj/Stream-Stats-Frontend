@@ -7,9 +7,6 @@ import { colorsMap } from './colors.js'
 import './style.css';
 import './Chart.css'
 import useLocalStorage from './hooks'
-import Chart from 'chart.js'
-import BarGraph from './BarGraph'
-import BarChart from './BarChart'
 import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 
 function ChartData(){

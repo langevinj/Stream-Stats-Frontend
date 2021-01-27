@@ -10,9 +10,7 @@ function DataInput(){
     const [spotifyPaste, setSpotifyPaste] = useState(false);
     const errorHolder = [];
     const [responses, setResponses] = useState([])
-
-    //set intiail state of the form
-    const [formData, setFormData] = useState({
+    const INITIAL_STATE = {
         distrokid: "",
         bandcampAlltime: "",
         bandcampMonth: "",
@@ -20,8 +18,10 @@ function DataInput(){
         spotifyPwd: "",
         spotifyRawMonth: "",
         spotifyRawAll: "",
-        errors: []
-    });
+        errors: [] 
+    }
+    //set intiail state of the form
+    const [formData, setFormData] = useState({...INITIAL_STATE});
 
     const handleChange = (evt) => {
         // evt.preventDefault();
@@ -74,7 +74,7 @@ function DataInput(){
                 }
 
                 setTimeout(() => {
-                    setLoadedVal(l => l + 12);
+                    setLoadedVal(l => l + 15);
                 }, 1000);
                 
                 
@@ -92,14 +92,23 @@ function DataInput(){
                         let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
                         console.log(`SPOTIFY RESPONSE IS: ${res}`)
                         setResponses(r => [...r, res]);
-                        setLoadedVal(100);
+                        setLoadedVal(l => l + 15);
                     } catch (errors) {
-                        setLoadedVal(100);
+                        setLoadedVal(l => l + 15);
                         errorHolder.push(errors);
                     }
 
                     await setErrors();
+                    setFormData(f => ({ ...INITIAL_STATE, errors: f.errors }));
+                } else {
+                    setTimeout(() => {
+                        setLoadedVal(l => l + 15);
+                        setFormData(f => ({ ...INITIAL_STATE, errors: f.errors }));
+                    }, 1000)
+                   
                 }
+
+        
                 
     }
 

@@ -40,7 +40,6 @@ function DataInput(){
         try {
             //send the data to the import endpoint
             let res = await StreamingApi.dataImport(data, username);
-            console.log(res)
             setResponses(r => [...r, res]);
         } catch (errs) {
             errorHolder.push(errs)
@@ -87,7 +86,8 @@ function DataInput(){
                     try {
                         let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
                         let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
-                        setResponses(r => [...r, res])
+                        console.log(`SPOTIFY RESPONSE IS: ${res}`)
+                        setResponses(r => [...r, res]);
                     } catch (errors) {
                         errorHolder.push(errors);
                     }
@@ -131,7 +131,6 @@ function DataInput(){
         evt.preventDefault();
         setSpotifyPaste(s => !s);
     }
-
 
     // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (

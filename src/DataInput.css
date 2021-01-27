@@ -3,10 +3,7 @@
     padding: 2vh;
 }
 
+
 .success-message {
-    font-size: 1.75vh;
-    list-style: circle;
-    white-space: nowrap;
-    position: relative;
-    left: -10vw;
+    font-size: 1.5vh;
 }

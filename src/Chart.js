@@ -150,6 +150,7 @@ function ChartData(){
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div>
                     </div> : <>{!isLoading && checkEmpty(localData) ? <><h1>Looks like you haven't imported any data yet!</h1></> : <>
                             <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
+                            <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2>
                     <FlexibleXYPlot xType="ordinal" margin={{ bottom: 200 }}>
                         <DiscreteColorLegend
                             style={{ position: 'absolute', right: '1rem', top: '10px' }}

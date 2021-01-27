@@ -150,6 +150,7 @@ function ChartData(){
 
 
     return(
+        <div className="container-narrow">
         <div className="container-fluid" id="main-container">
             <div className="row">
                 <div className="col-1"></div>
@@ -175,6 +176,7 @@ function ChartData(){
                 </div>
             </div>
                 <div className="col-1"></div>
+            </div>
             </div>
         
     )

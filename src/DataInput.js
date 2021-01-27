@@ -149,6 +149,7 @@ function DataInput(){
 
     // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (
+        <div className="container-narrow">
         <div className="container">
             <div className="form-container">
                 <form className="form-container" onSubmit={(evt) => handleSubmit(evt)}>
@@ -198,6 +199,7 @@ function DataInput(){
                     
                 </form>
             </div>
+        </div>
         </div>
     )
 }

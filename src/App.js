@@ -52,11 +52,10 @@ function App() {
       <BrowserRouter>
       <UserContext.Provider value={{ currUser, setCurrUser }}>
         <div className="App" id="App">
-          <div className="container container-narrow">
+          <div className="container">
               <NavBar logOut={logOut} />
               <Routes setToken={setToken} />
           </div>
-          <Route path="/"><Home /></Route>
         </div>
       </UserContext.Provider>
       </BrowserRouter>

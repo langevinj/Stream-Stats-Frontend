@@ -38,7 +38,8 @@ function NavBar({ logOut }) {
     )
 
     return (
-        <>{!currUser ? loggedOutView : loggedInView}</>
+        <>
+        <div className="container-narrow">{!currUser ? loggedOutView : loggedInView}</div></>
     )
 }
 

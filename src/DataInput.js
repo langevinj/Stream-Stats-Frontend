@@ -6,7 +6,6 @@ import './DataInput.css'
 
 function DataInput(){
     const { currUser } = useContext(UserContext)
-    const [isLoading, setIsLoading] = useState(false);
     const [loadedVal, setLoadedVal] = useState(0);
     const [spotifyPaste, setSpotifyPaste] = useState(false);
     const errorHolder = [];
@@ -52,8 +51,8 @@ function DataInput(){
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
-        setResponses(r => [])
-        // setIsLoading(true);
+        setResponses(r => []);
+        setLoadedVal(10);
 
         const dataToSend = ['distrokid', 'bandcampAlltime', 'bandcampMonth', 'spotifyRawMonth', 'spotifyRawAll'];
         setTimeout(async () => {
@@ -73,6 +72,11 @@ function DataInput(){
                     let data = { page: formData[dataset], endpoint: endpoint, range: range };
                     await dataImport(data, currUser.username);
                 }
+
+                setTimeout(() => {
+                    setLoadedVal(l => l + 12);
+                }, 1000);
+                
                 
                 
             }
@@ -88,7 +92,9 @@ function DataInput(){
                         let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
                         console.log(`SPOTIFY RESPONSE IS: ${res}`)
                         setResponses(r => [...r, res]);
+                        setLoadedVal(100);
                     } catch (errors) {
+                        setLoadedVal(100);
                         errorHolder.push(errors);
                     }
 
@@ -175,10 +181,12 @@ function DataInput(){
                     {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
 
                     {/* {responses.length ? <Alert type="success" messages={[`Successfully imported data for: ${responses.forEach((el) => { el.length > 1 ? `-${el}` : ""})`]} */}
+                    {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded mb-3" type="submit">Submit</button> : <><small>Loading your data, this may take a minute...</small> <div className="progress mt-2 mb-3">
+                        
+                        <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div></>}
                     {!responses.every((el) => el === undefined) ? <Alert type="success" messages={['importSuccesses', ...responses]} /> : null}
 
-                    {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded mb-3" type="submit">Submit</button> : <div className="progress mt-5">
-                        <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div>}
+                    
                 </form>
             </div>
         </div>

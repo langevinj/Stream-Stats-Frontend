@@ -7,7 +7,7 @@ import { colorsMap } from './colors.js'
 import './style.css';
 import './Chart.css'
 import useLocalStorage from './hooks'
-import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
+import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup } from 'victory';
 
 function ChartData(){
     const myChart = useRef(null);
@@ -80,7 +80,7 @@ function ChartData(){
     
     //go through the bandcamp data and format it correctly, then push into main data area
     if (localData[`bandcamp_${chartRange}`]){
-        let temp = localData[`bandcamp_${chartRange}`].map(d => ({ x: d.plays, y: d.title }));
+        let temp = localData[`bandcamp_${chartRange}`].map(d => ({ x: d.title, y: d.plays }));
         graphItems.push(temp);
     }
 
@@ -142,7 +142,7 @@ function ChartData(){
         }
         return isEmpty;
     }
-    graphItems.splice(0, 1)
+    // graphItems.splice(0, 1)
     console.log(graphItems)
     const labels = graphItems.map(g => g.y);
     const amounts = graphItems.map(g => g.x)
@@ -159,17 +159,19 @@ function ChartData(){
                     </div> : <>{!isLoading && checkEmpty(localData) ? <><h1>Looks like you haven't imported any data yet!</h1></> : <>
                             <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
                             <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2>
-                            <div className="chart-container" style={{"position": "relative", "height" : "40vh", "width": "80vw" }}>
+                            {/* <div className="chart-container" style={{"position": "relative", "height" : "40vh", "width": "80vw" }}> */}
                                 {/* <BarGraph data={dataForGraph} /> */}
                                 <div>
                                     <VictoryChart theme={VictoryTheme.material}>
+                                        <VictoryGroup horiztonal offset={10} style={{ data: { width: 6 } }}
+                                            colorScale={["brown", "tomato", "gold"]}>
                                         {/* {graphItems[0].map(g => <VictoryBar y={g.y} data={[g]}/>)} */}
                                         {graphItems.map(g => <VictoryBar horizontal data={g} labels={g.map(el => el.y)} />)}
-                                        
+                                        </VictoryGroup>
                                     </VictoryChart>
                                 </div>
                                     
-                            </div></>}</>}
+                        </>}</>}
                 </div>
             </div>
                 <div className="col-1"></div>

@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext';
 import { v4 as uuid} from 'uuid'
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint, makeVisFlexible } from 'react-vis';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint, makeVisFlexible, HorizontalBarSeries, HorizontalBarSeriesCanvas} from 'react-vis';
 import { colorsMap } from './colors.js'
 import './style.css';
 import './Chart.css'
@@ -125,7 +125,7 @@ function ChartData(){
     //iterate through distrokid stores, applying correct color to each
     if(chartRange === "alltime"){
         for (let [store, songs] of Object.entries(masterObj)) {
-            if (store !== "Spotify") {
+            if (store !== "spotify") {
                 let foundColor = colorsMap.get(store)
                 colorItems.push({ title: store, color: foundColor });
                 graphItems.push(songs);
@@ -164,9 +164,9 @@ function ChartData(){
                         </Hint>
                         <VerticalGridLines />
                         <HorizontalGridLines />
-                        <XAxis tickLabelAngle={-45} style={{ text: { stroke: 'none', fill: 'black' } }} />
+                        <XAxis title="songs" tickLabelAngle={-45} style={{ text: { stroke: 'none', fill: 'black' } }} />
                         <YAxis />
-                        {graphItems.map((service, idx) => <VerticalBarSeries data={service} key={uuid()} className="vertical-bar-series" barWidth={1} onValueMouseOver={_onNearestX} color={colorItems[idx].color}/>)}
+                        {graphItems.map((service, idx) => <HorizontalBarSeries data={service} key={uuid()} className="horizontal-bar-series" barWidth={1} onValueMouseOver={_onNearestX} color={colorItems[idx].color}/>)}
                     </FlexibleXYPlot></>}</>}
                 </div>
             </div>

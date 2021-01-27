@@ -13,7 +13,7 @@ function Routes({ setToken }) {
     const loggedOutRoutes = (
         <Switch>
             <Route exact path="/login"><Login setToken={setToken} /></Route>
-            <Route exact path="/"><Home /></Route>
+            {/* <Route exact path="/"><Home /></Route> */}
             <Redirect to="/"></Redirect>
         </Switch>
     )
@@ -23,7 +23,7 @@ function Routes({ setToken }) {
             <Route exact path="/chartdata"><ChartData /></Route>
             {/* <Route exact path="/table"><Table /></Route> */}
             <Route exact path="/input"><DataInput /></Route>
-            <Route exact path="/"><Home /></Route>
+            {/* <Route exact path="/"><Home /></Route> */}
             <Redirect to="/"></Redirect>
         </Switch>
     )

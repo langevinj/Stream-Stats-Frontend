@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react"
-import { BrowserRouter } from "react-router-dom"
+import { BrowserRouter, Route } from "react-router-dom"
 import { decode } from "jsonwebtoken"
 import useLocalStorage from './hooks'
+import Home from './Home'
 
 import NavBar from './NavBar'
 import Routes from './Routes'
@@ -55,6 +56,7 @@ function App() {
               <NavBar logOut={logOut} />
               <Routes setToken={setToken} />
           </div>
+          <Route path="/"><Home /></Route>
         </div>
       </UserContext.Provider>
       </BrowserRouter>

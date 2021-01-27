@@ -1,14 +1,19 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect, useContext, useRef} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext';
 import { v4 as uuid} from 'uuid'
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint, makeVisFlexible, HorizontalBarSeries, HorizontalBarSeriesCanvas} from 'react-vis';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint, makeVisFlexible, HorizontalBarSeries, HorizontalBarSeriesCanvas, FlexibleHeightXYPlot} from 'react-vis';
 import { colorsMap } from './colors.js'
 import './style.css';
 import './Chart.css'
 import useLocalStorage from './hooks'
+import Chart from 'chart.js'
+import BarGraph from './BarGraph'
+import BarChart from './BarChart'
+import { VictoryBar, VictoryChart, VictoryTheme } from 'victory';
 
 function ChartData(){
+    const myChart = useRef(null);
     const { currUser } = useContext(UserContext);
     const [chartRange, setChartRange] = useState("alltime");
     const [isLoading, setIsLoading] = useState(false);
@@ -78,13 +83,13 @@ function ChartData(){
     
     //go through the bandcamp data and format it correctly, then push into main data area
     if (localData[`bandcamp_${chartRange}`]){
-        let temp = localData[`bandcamp_${chartRange}`].map(d => ({ x: d.title, y: d.plays }));
+        let temp = localData[`bandcamp_${chartRange}`].map(d => ({ x: d.plays, y: d.title }));
         graphItems.push(temp);
     }
 
     //iterate through spotify data, add it to the main items array
     if (localData[`spotify_${chartRange}`]) {
-        const temp = localData[`spotify_${chartRange}`].map(d => ({ x: d.title, y: d.streams }))
+        const temp = localData[`spotify_${chartRange}`].map((d) => ({ x: d.title, y: d.streams  }))
         graphItems.push(temp);
     }
 
@@ -106,7 +111,7 @@ function ChartData(){
     for (let [name, songs] of Object.entries(allStoreData)) {
         let temp = [];
         for(let song of songs){
-            temp.push({x: song.title, y: parseInt(song.plays)})
+            temp.push({ y: parseInt(song.plays) , x: song.title})
         }
         masterObj[name] = temp;
     }
@@ -116,11 +121,11 @@ function ChartData(){
 
     //set the hint when a bar is hovered over
     const [hintValue, setHintValue] = useState({});
-    const _onNearestX = (value, {index}) => {
-        if(hintValue !== value){
-            setHintValue(value)
-        }
-    }
+    // const _onNearestX = (value, {index}) => {
+    //     if(hintValue !== value){
+    //         setHintValue(value)
+    //     }
+    // }
 
     //iterate through distrokid stores, applying correct color to each
     if(chartRange === "alltime"){
@@ -140,6 +145,12 @@ function ChartData(){
         }
         return isEmpty;
     }
+    graphItems.splice(0, 1)
+    console.log(graphItems)
+    const labels = graphItems.map(g => g.y);
+    const amounts = graphItems.map(g => g.x)
+    const dataForGraph = {"labels": labels, "datasets": [{"data": amounts}]}
+
 
     return(
         <div className="container-fluid" id="main-container">
@@ -151,23 +162,17 @@ function ChartData(){
                     </div> : <>{!isLoading && checkEmpty(localData) ? <><h1>Looks like you haven't imported any data yet!</h1></> : <>
                             <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
                             <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2>
-                    <FlexibleXYPlot xType="ordinal" margin={{ bottom: 200 }}>
-                        <DiscreteColorLegend
-                            style={{ position: 'absolute', right: '1rem', top: '10px' }}
-                            orientation="vertical"
-                            items={colorItems}
-                        />
-                        <Hint value={hintValue}>
-                            {hintValue ? <div style={{ background: 'black' }}>
-                                <p>{hintValue.y}</p>
-                            </div> : <></>}
-                        </Hint>
-                        <VerticalGridLines />
-                        <HorizontalGridLines />
-                        <XAxis title="songs" tickLabelAngle={-45} style={{ text: { stroke: 'none', fill: 'black' } }} />
-                        <YAxis />
-                        {graphItems.map((service, idx) => <HorizontalBarSeries data={service} key={uuid()} className="horizontal-bar-series" barWidth={1} onValueMouseOver={_onNearestX} color={colorItems[idx].color}/>)}
-                    </FlexibleXYPlot></>}</>}
+                            <div className="chart-container" style={{"position": "relative", "height" : "40vh", "width": "80vw" }}>
+                                {/* <BarGraph data={dataForGraph} /> */}
+                                <div>
+                                    <VictoryChart theme={VictoryTheme.material}>
+                                        {/* {graphItems[0].map(g => <VictoryBar y={g.y} data={[g]}/>)} */}
+                                        {graphItems.map(g => <VictoryBar horizontal data={g} labels={g.map(el => el.y)} />)}
+                                        
+                                    </VictoryChart>
+                                </div>
+                                    
+                            </div></>}</>}
                 </div>
             </div>
                 <div className="col-1"></div>

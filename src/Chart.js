@@ -54,7 +54,7 @@ function ChartData(){
                 setLoadedVal(75);
                 
                 const songs = await StreamingApi.getAllSongs(currUser.username);
-                setAllSongs([...songs]);
+                setAllSongs(songs.map(s => s.title));
                 setLoadedVal(100);
             } catch (err) {
                 throw err;
@@ -115,7 +115,7 @@ function ChartData(){
     //set the array of color indicators up for the legend
     const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];
 
-    const allSongs = [];
+    
     
     //iterate through distrokid stores, applying correct color to each
     if(chartRange === "alltime"){
@@ -137,13 +137,13 @@ function ChartData(){
     }
 
     //list all of the songs from the data given
-    for(let store of graphItems){
-        for(let song of store){
-            if(!allSongs.includes(song.x)){
-                allSongs.push(song.x);
-            }
-        }
-    }
+    // for(let store of graphItems){
+    //     for(let song of store){
+    //         if(!allSongs.includes(song.x)){
+    //             allSongs.push(song.x);
+    //         }
+    //     }
+    // }
 
     //prep data for service
     const bandcampGraphData = [];
@@ -159,7 +159,7 @@ function ChartData(){
             }
         }
     }
-    console.log(bandcampGraphData)
+    // console.log(bandcampGraphData)
     console.log(allSongs)
 
     return(

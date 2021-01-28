@@ -44,13 +44,13 @@ function Chart2(){
         async function loadUserData() {
             //reset the value of the loading bar
             incrementLoadingVal();
-            console.log("rerendering")
+
             try {
                 //.temp fix for error of hook adding [object Object] to local storage
-                if (localData) setLocalData(old => ({ bandcamp_alltime: old.bandcamp_alltime || [], bandcamp_month: old.bandcamp_month || [], distrokid: old.distrokid || [], spotify_alltime: old.spotify_alltime || [], spotify_month: old.spotify_month || [] }));
+                if (Object.keys(localData).length === 15) setLocalData(old => ({ bandcamp_alltime: old.bandcamp_alltime || [], bandcamp_month: old.bandcamp_month || [], distrokid: old.distrokid || [], spotify_alltime: old.spotify_alltime || [], spotify_month: old.spotify_month || [] }));
 
                 //if the bandcamp data is not in local storage, retrieve and save it
-                if(!localData[`bandcamp_${chartRange}`].length){
+                if (localData[`bandcamp_${chartRange}`] === undefined || !localData[`bandcamp_${chartRange}`].length){
                     let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, username);
 
                     //set the local data for the correct range
@@ -59,7 +59,7 @@ function Chart2(){
                 incrementLoadingVal();
 
                 //if the spotify data is not in local storage, retrieve and save it
-                if(!localData[`spotify_${chartRange}`].length){
+                if (localData[`spotify_${chartRange}`] === undefined || !localData[`spotify_${chartRange}`].length){
                     let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, username);
 
                     //set the local data for the correct range
@@ -68,7 +68,12 @@ function Chart2(){
                 }
                 incrementLoadingVal();
 
-
+                //if the distrokid data is not in local storage, retrieve and save it
+                if(localData[`distrokid`] === undefined || !localData[`distrokid`].length){
+                    let ddata = await StreamingApi.getUserDistrokidData({range: chartRange}, username);
+                    console.log(ddata)
+                    setLocalData(old => ({ ...old, distrokid: ddata}));
+                }
                 incrementLoadingVal();
 
                 //if the state for all songs isn't set, retrieve all songs for the user

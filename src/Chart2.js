@@ -90,6 +90,15 @@ function Chart2(){
         loadUserData()
     }, [chartRange, currUser]);
 
+    function formatDistrokiData(){
+        let masterObj = {amazon: [], apple: [], deezer: [], itunes: [], google: [], tidal: [], tiktok: [], youtube: []};
+        
+        for(let dataset of localData['distrokid']){
+            
+        }
+
+    }
+
     //format the local data into series data for the bargraph
     function setupSeriesData(){
         const toFormat = [`bandcamp_${chartRange}`, `spotify_${chartRange}`,`distrokid`];

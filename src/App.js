@@ -9,6 +9,7 @@ import Routes from './Routes'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
 import './App.css';
+import { servicePicker } from "./helpers"
 
 export const TOKEN_KEY = "stream-stat-token"
 
@@ -54,7 +55,7 @@ function App() {
         <div className="App" id="App">
           <div className="container">
               <NavBar logOut={logOut} />
-              <Routes setToken={setToken} />
+              <Routes setToken={setToken}/>
           </div>
         </div>
       </UserContext.Provider>

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import Alert from './Alert'
 import StreamingApi from './Api'
 import './Forms.css'
+import './Login.css'
 
 function Login({ setToken }) {
     const history = useHistory();
@@ -90,7 +91,7 @@ function Login({ setToken }) {
             <input name="email" value={formData.email} id="email" onChange={handleChange} type="text" className="form-control"></input>
         </div>
         <div className="form-group">
-            <label htmlFor="band_name">Band Name: <small className="text-muted">(Optional)</small></label>
+            <label htmlFor="band_name">Band Name: <small className="text-white">(Optional)</small></label>
             <input name="band_name" value={formData.band_name} id="band_name" onChange={handleChange} type="text" className="form-control"></input>
         </div>
         {formData.errors ? <Alert type="danger" messages={formData.errors} /> : null}
@@ -112,7 +113,7 @@ function Login({ setToken }) {
     </form>)
 
     return (
-        <div className="container">
+        <div className="container login-container">
             <div className="toggle-container mb-3 mt-3">
                 {formView === "login" ? <button id="signup-toggle" value="signup" onClick={signupView} className="btn-primary rounded ml-1">Sign-Up</button> : <button id="login-toggle" value="login" onClick={loginView} className="btn-primary mr-1 rounded">Login</button>}
             </div>

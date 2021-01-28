@@ -3,26 +3,24 @@ import ReactApexChart from 'react-apexcharts'
 import ApexCharts from 'apexcharts'
 
 function BarGraph({seriesData, songs, range}){
-    const series = range === "alltime" ? [seriesData.bandcamp_alltime, seriesData.spotify_alltime, seriesData.distrokid] : [seriesData.bandcamp_month, seriesData.spotify_month]
+    const series = range === "alltime" ? [seriesData.bandcamp_alltime, seriesData.spotify_alltime, seriesData.amazon, seriesData.apple, seriesData.deezer, seriesData.itunes, seriesData.google, seriesData.tidal, seriesData.tiktok, seriesData.youtube] : [seriesData.bandcamp_month, seriesData.spotify_month]
 
-        // [{
-        //     data: [44, 55, 41, 64, 22, 43, 21]
-        // }, {
-        //         data: [53, 32, 33, 52, 13, 44, 32]
-        //     }];
     const options = {
         chart: {
             type: 'bar',
-            height: 430
+            height: '100%',
+            stacked: true
         },
         plotOptions: {
             bar: {
                 horizontal: true,
+                barHeight: '100%', 
                 dataLabels: {
                     position: 'top',
                 },
             }
         },
+        colors: ['#12939A', '#1DB954', '#FF9900', '#f285ca', '#c1f1fc', '#EA4CC0', '#3bccff', '#2ed1a3', '#EE1D52', '#FF0000'],
         dataLabels: {
             enabled: true,
             offsetX: -6,

@@ -3,31 +3,32 @@ import StreamingApi from './Api';
 import UserContext from './UserContext';
 import useLocalStorage from './hooks';
 import BarGraph from './BarGraph'
+import { servicePicker } from './helpers'
 
 function Chart2(){
     //get the username for the current user
     const { currUser } = useContext(UserContext);
     const username = currUser.username;
-
-    //use local storage to set a save the chart data so it doesn't need to be completely loaded again
     const [localData, setLocalData] = useLocalStorage("data");
-
-    //state object to store a list of all of a user's songs in
     const [allSongs, setAllSongs] = useState([]);
-
-    // const [seriesData, setSeriesData] = useState({});
     let seriesData = {};
-
-    //set the range the chart should display
     const [chartRange, setChartRange] = useState("alltime");
-
-    //the state object for holding the value for the loader
     const [loadedVal, setLoadedVal] = useState(0);
     
     //helper function for incrementing the loader
     function incrementLoadingVal(){
         loadedVal === 100 ? setLoadedVal(0) : setLoadedVal(old => old + 25);
+    }
 
+    function formatDistrokidData(data) {
+        let masterObj = { 'amazon': [], 'apple': [], 'deezer': [], 'itunes': [], 'google': [], 'tidal': [], 'tiktok': [], 'youtube': [] };
+
+        for (let dataset of data) {
+            let store = servicePicker(dataset);
+            if (store) masterObj[store].push({ title: dataset.title, plays: parseInt(dataset.plays) })
+        }
+
+        return masterObj;
     }
 
     //toggle between view ranges
@@ -42,6 +43,7 @@ function Chart2(){
     //Get all streaming data for a user when the page loads
     useEffect(() => {
         async function loadUserData() {
+            console.log('rerunning')
             //reset the value of the loading bar
             incrementLoadingVal();
 
@@ -71,8 +73,8 @@ function Chart2(){
                 //if the distrokid data is not in local storage, retrieve and save it
                 if(localData[`distrokid`] === undefined || !localData[`distrokid`].length){
                     let ddata = await StreamingApi.getUserDistrokidData({range: chartRange}, username);
-                    console.log(ddata)
-                    setLocalData(old => ({ ...old, distrokid: ddata}));
+                    let formatted = formatDistrokidData(ddata);
+                    setLocalData(old => ({ ...old, distrokid: formatted}));
                 }
                 incrementLoadingVal();
 
@@ -88,36 +90,36 @@ function Chart2(){
             }
         }
         loadUserData()
-    }, [chartRange, currUser]);
-
-    function formatDistrokiData(){
-        let masterObj = {amazon: [], apple: [], deezer: [], itunes: [], google: [], tidal: [], tiktok: [], youtube: []};
-        
-        for(let dataset of localData['distrokid']){
-            
-        }
-
-    }
+    }, [username, chartRange]);
 
     //format the local data into series data for the bargraph
     function setupSeriesData(){
-        const toFormat = [`bandcamp_${chartRange}`, `spotify_${chartRange}`,`distrokid`];
-
+        const toFormat = chartRange === "alltime" ? [`bandcamp_${chartRange}`, `spotify_${chartRange}`, 'amazon', 'apple', 'deezer', 'itunes', 'google', 'tidal', 'tiktok', 'youtube'] :
+        [`bandcamp_${chartRange}`, `spotify_${chartRange}`]
         //iterate through each service
         for(let service of toFormat){
-
+            let serviceData;
             //set the name for each service
             let name;
-            if(service.includes('bandcamp')) name = "Bandcamp";
-            if(service.includes('spotify')) name = "Spotify";
-            if(service.includes('distrokid')) name = "Distrokid";
+            if(service.includes('bandcamp')){
+                name = "Bandcamp";
+                serviceData = localData[service];
+            } else if (service.includes('spotify')){
+                name = "Spotify";
+                serviceData = localData[service];
+            } else {
+                serviceData = (localData.distrokid)[service]
+                name = service.charAt(0).toUpperCase() + service.slice(1);
+            }
+
+
 
             let temp = [];
             //account for all songs
-            if(localData[service]){
+            if(serviceData){
                 for (let song of allSongs) {
                     //find if the service has a record of the song
-                    let found = localData[service].filter(s => s.title === song);
+                    let found = serviceData.filter(s => s.title === song);
 
                     if (found.length) {
                         temp.push(found[0].plays || found[0].streams);
@@ -133,13 +135,26 @@ function Chart2(){
         }
     }
 
-    //format the data for the BarGraph component
-    setupSeriesData();
+    if (localData[`distrokid`]) {
+        setupSeriesData();
+    }
+
+    const checkEmpty = (obj) => {
+        const isEmpty = true;
+        for (let el of ['distrokid', 'bandcamp_alltime', 'bandcamp_month', 'spotify_alltime', 'spotify_month']) {
+            if (obj[el] !== undefined && obj[el].length) return false
+        }
+        return true;
+    }
 
     return(
         <div className="container-narrow">
-            <button onClick={toggleView}>Toggle</button>
-            <BarGraph songs={allSongs} seriesData={seriesData} range={chartRange}/>
+            <div className="container" style={{height: "75vh", paddingRight: "2vw"}}>
+                {loadedVal > 0 && loadedVal < 100 ? <div className="progress"><div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div> : <>{checkEmpty(localData) ? <><h1>Looks like you haven't imported any data yet!</h1></> : <>
+                <button className="btn btn-primary round mt-3 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
+                <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2>
+                {seriesData ? <BarGraph songs={allSongs} seriesData={seriesData} range={chartRange} /> : <></>}</>}</>}
+            </div>
         </div>
     )
 }

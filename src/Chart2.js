@@ -40,7 +40,7 @@ function Chart2(){
                 //.temp fix for error of hook adding [object Object] to local storage
                 if (localData) setLocalData(old => ({ bandcamp_alltime: old.bandcamp_alltime || [], bandcamp_month: old.bandcamp_month || [], distrokid: old.distrokid || [], spotify_alltime: old.spotify_alltime || [], spotify_month: old.spotify_month || [] }));
 
-                //if the bandcamp data is not in local store, retrieve and save it
+                //if the bandcamp data is not in local storage, retrieve and save it
                 if(!localData[`bandcamp_${chartRange}`]){
                     let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, username);
 
@@ -48,6 +48,15 @@ function Chart2(){
                     chartRange === "alltime" ? setLocalData(old => ({ ...old, bandcamp_alltime: bdata})) : setLocalData(old => ({ ...old, bandcamp_month: bdata}));
                 }
                 incrementLoadingVal();
+
+                //if the spotify data is not in local storage, retrieve and save it
+                if(!localData[`spotify_${chartRange}`]){
+                    let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, username);
+
+                    //set the local data for the correct range
+                    chartRange === "alltime" ? setLocalData(old => ({ ...old, spotify_alltime: sdata})) :
+                    setLocalData(old => ({ ...old, spotify_month: sdata}));
+                }
                 incrementLoadingVal();
                 incrementLoadingVal();
 
@@ -64,8 +73,6 @@ function Chart2(){
         }
         loadUserData()
     }, [chartRange, currUser]);
-
-    console.log(localData)
 
     //format the local data into series data for the bargraph
     function setupSeriesData(){
@@ -101,8 +108,8 @@ function Chart2(){
         }
     }
 
+    //format the data for the BarGraph component
     setupSeriesData();
-    console.log(seriesData)
 
     return(
         <div className="container-narrow">

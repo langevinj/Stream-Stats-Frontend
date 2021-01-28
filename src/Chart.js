@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext, useRef} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext';
 import { v4 as uuid} from 'uuid'
@@ -6,8 +6,6 @@ import { colorsMap } from './colors.js'
 import './style.css';
 import './Chart.css'
 import useLocalStorage from './hooks'
-import ApexCharts from 'apexcharts'
-import ReactApexChart from 'react-apexcharts'
 import BarGraph from './BarGraph';
 
 
@@ -19,6 +17,7 @@ function ChartData(){
     const [loadedVal, setLoadedVal] = useState(0);
     const [localData, setLocalData] = useLocalStorage("data");
     const [tryCount, setTryCount] = useState(0);
+    const [allSongs, setAllSongs] = useState([]);
     const graphItems = []
 
     //toggle between the two date ranges
@@ -26,11 +25,11 @@ function ChartData(){
         if (chartRange === "alltime") {
             setChartRange("month");
         } else {
-            setChartRange("alltime")
+            setChartRange("alltime");
         }
     }
 
-    //get streaming data for user upon loading page
+    //get streaming data for user when page loads
     useEffect(() => {
         async function getUserData() {
             setIsLoading(true);
@@ -53,6 +52,9 @@ function ChartData(){
                     chartRange === "alltime" ? setLocalData(old => ({ ...old, spotify_alltime: [...sdata] })) : setLocalData(old => ({ ...old, spotify_month: sdata }));
                 }
                 setLoadedVal(75);
+                
+                const songs = await StreamingApi.getAllSongs(currUser.username);
+                setAllSongs([...songs]);
                 setLoadedVal(100);
             } catch (err) {
                 throw err;
@@ -65,6 +67,7 @@ function ChartData(){
         getUserData()
     }, [chartRange, currUser.username]);
 
+    //if local isn't present, set it to the default, not sure if this is needed
     if(!localData){ 
         setLocalData({ distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: [] });
     }
@@ -133,6 +136,32 @@ function ChartData(){
         return isEmpty;
     }
 
+    //list all of the songs from the data given
+    for(let store of graphItems){
+        for(let song of store){
+            if(!allSongs.includes(song.x)){
+                allSongs.push(song.x);
+            }
+        }
+    }
+
+    //prep data for service
+    const bandcampGraphData = [];
+    if(localData[`bandcamp_${chartRange}`]){
+        for(let song of allSongs){
+            if (localData[`bandcamp_${chartRange}`].filter(el => el.title === song).length===0){
+
+            }
+            if(allSongs.includes(song.title)){
+                bandcampGraphData.push(song.plays)
+            } else {
+                bandcampGraphData.push(0)
+            }
+        }
+    }
+    console.log(bandcampGraphData)
+    console.log(allSongs)
+
     return(
         <div className="container-narrow">
         <div className="container-fluid" id="main-container">
@@ -146,7 +175,7 @@ function ChartData(){
                             <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
                             <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2>
                             <div>
-                                    <BarGraph />
+                                    <BarGraph songs={allSongs} seriesData={bandcampGraphData}/>
                             </div>  
                         </>}</>}
                 </div>

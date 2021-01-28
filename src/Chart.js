@@ -2,15 +2,17 @@ import React, {useState, useEffect, useContext, useRef} from 'react'
 import StreamingApi from './Api'
 import UserContext from './UserContext';
 import { v4 as uuid} from 'uuid'
-import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, VerticalBarSeries, DiscreteColorLegend, Hint, makeVisFlexible, HorizontalBarSeries, HorizontalBarSeriesCanvas, FlexibleHeightXYPlot} from 'react-vis';
 import { colorsMap } from './colors.js'
 import './style.css';
 import './Chart.css'
 import useLocalStorage from './hooks'
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryGroup } from 'victory';
+import ApexCharts from 'apexcharts'
+import ReactApexChart from 'react-apexcharts'
+import BarGraph from './BarGraph';
+
+
 
 function ChartData(){
-    const myChart = useRef(null);
     const { currUser } = useContext(UserContext);
     const [chartRange, setChartRange] = useState("alltime");
     const [isLoading, setIsLoading] = useState(false);
@@ -18,8 +20,6 @@ function ChartData(){
     const [localData, setLocalData] = useLocalStorage("data");
     const [tryCount, setTryCount] = useState(0);
     const graphItems = []
-    const FlexibleXYPlot = makeVisFlexible(XYPlot);
-    
 
     //toggle between the two date ranges
     const toggleView = (evt) => {
@@ -69,9 +69,6 @@ function ChartData(){
         setLocalData({ distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: [] });
     }
 
-
-    
-
     //if there is no alltime data to load, automatically check if there is any in the 30day chart
     if(tryCount === 0 && !localData['distrokid'] && !localData['spotify_alltime'] && !localData['bandcamp_alltime']){
         setTryCount(tryCount => tryCount + 1);
@@ -102,7 +99,6 @@ function ChartData(){
         }
     }
   
-
     //format an option where keys are the name of the store and values are an array of objects formatted for the chart
     let masterObj = {}
     for (let [name, songs] of Object.entries(allStoreData)) {
@@ -116,14 +112,8 @@ function ChartData(){
     //set the array of color indicators up for the legend
     const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];
 
-    //set the hint when a bar is hovered over
-    const [hintValue, setHintValue] = useState({});
-    // const _onNearestX = (value, {index}) => {
-    //     if(hintValue !== value){
-    //         setHintValue(value)
-    //     }
-    // }
-
+    const allSongs = [];
+    
     //iterate through distrokid stores, applying correct color to each
     if(chartRange === "alltime"){
         for (let [store, songs] of Object.entries(masterObj)) {
@@ -142,36 +132,22 @@ function ChartData(){
         }
         return isEmpty;
     }
-    // graphItems.splice(0, 1)
-    console.log(graphItems)
-    const labels = graphItems.map(g => g.y);
-    const amounts = graphItems.map(g => g.x)
-    const dataForGraph = {"labels": labels, "datasets": [{"data": amounts}]}
-
 
     return(
         <div className="container-narrow">
         <div className="container-fluid" id="main-container">
+            
             <div className="row">
                 <div className="col-1"></div>
-                <div className="col-10" id="chart-container">
-                    {isLoading ? <div className="progress mt-5">
+                <div className="col-10 pt-4 pl-2 pr-2" id="chart-container">
+                    {isLoading ? <div className="progress">
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div>
                     </div> : <>{!isLoading && checkEmpty(localData) ? <><h1>Looks like you haven't imported any data yet!</h1></> : <>
                             <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
                             <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2>
-                            {/* <div className="chart-container" style={{"position": "relative", "height" : "40vh", "width": "80vw" }}> */}
-                                {/* <BarGraph data={dataForGraph} /> */}
-                                <div>
-                                    <VictoryChart theme={VictoryTheme.material}>
-                                        <VictoryGroup horiztonal offset={10} style={{ data: { width: 6 } }}
-                                            colorScale={["brown", "tomato", "gold"]}>
-                                        {/* {graphItems[0].map(g => <VictoryBar y={g.y} data={[g]}/>)} */}
-                                        {graphItems.map(g => <VictoryBar horizontal data={g} labels={g.map(el => el.y)} />)}
-                                        </VictoryGroup>
-                                    </VictoryChart>
-                                </div>
-                                    
+                            <div>
+                                    <BarGraph />
+                            </div>  
                         </>}</>}
                 </div>
             </div>

@@ -30,18 +30,27 @@ function Chart2(){
 
     }
 
+    //toggle between view ranges
+    const toggleView = (evt) => {
+        if (chartRange === "alltime") {
+            setChartRange("month");
+        } else {
+            setChartRange("alltime");
+        }
+    }
+
     //Get all streaming data for a user when the page loads
     useEffect(() => {
         async function loadUserData() {
             //reset the value of the loading bar
             incrementLoadingVal();
-
+            console.log("rerendering")
             try {
                 //.temp fix for error of hook adding [object Object] to local storage
                 if (localData) setLocalData(old => ({ bandcamp_alltime: old.bandcamp_alltime || [], bandcamp_month: old.bandcamp_month || [], distrokid: old.distrokid || [], spotify_alltime: old.spotify_alltime || [], spotify_month: old.spotify_month || [] }));
 
                 //if the bandcamp data is not in local storage, retrieve and save it
-                if(!localData[`bandcamp_${chartRange}`]){
+                if(!localData[`bandcamp_${chartRange}`].length){
                     let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, username);
 
                     //set the local data for the correct range
@@ -50,7 +59,7 @@ function Chart2(){
                 incrementLoadingVal();
 
                 //if the spotify data is not in local storage, retrieve and save it
-                if(!localData[`spotify_${chartRange}`]){
+                if(!localData[`spotify_${chartRange}`].length){
                     let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, username);
 
                     //set the local data for the correct range
@@ -58,6 +67,8 @@ function Chart2(){
                     setLocalData(old => ({ ...old, spotify_month: sdata}));
                 }
                 incrementLoadingVal();
+
+
                 incrementLoadingVal();
 
                 //if the state for all songs isn't set, retrieve all songs for the user
@@ -113,6 +124,7 @@ function Chart2(){
 
     return(
         <div className="container-narrow">
+            <button onClick={toggleView}>Toggle</button>
             <BarGraph songs={allSongs} seriesData={seriesData} range={chartRange}/>
         </div>
     )

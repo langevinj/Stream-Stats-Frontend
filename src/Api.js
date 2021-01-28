@@ -81,6 +81,12 @@ class StreamingApi {
         let res = await this.request(`${data.endpoint}/import/${username}`, data, "post");
         return res.response;
     }
+
+    //get an array of all songs the user has in their data
+    static async getAllSongs(username){
+        const res = await this.request(`users/allSongs/${username}`);
+        return res.response;
+    }
 }
 
 export default StreamingApi;

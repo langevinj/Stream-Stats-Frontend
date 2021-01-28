@@ -2,11 +2,9 @@ import React from 'react'
 import ReactApexChart from 'react-apexcharts'
 import ApexCharts from 'apexcharts'
 
-function BarGraph({seriesData, songs}){
+function BarGraph({seriesData, songs, range}){
     console.log(songs)
-    const series = [{
-        data: seriesData
-    }]
+    const series = range === "alltime" ? [seriesData.bandcamp_alltime, seriesData.spotify_alltime, seriesData.distrokid] : [seriesData.bandcamp_month, seriesData.spotify_month]
 
         // [{
         //     data: [44, 55, 41, 64, 22, 43, 21]

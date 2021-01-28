@@ -18,7 +18,7 @@ function ChartData(){
     const [localData, setLocalData] = useLocalStorage("data");
     const [tryCount, setTryCount] = useState(0);
     const [allSongs, setAllSongs] = useState([]);
-    const graphItems = []
+    const [seriesData, setSeriesData] = useState([]);
 
     //toggle between the two date ranges
     const toggleView = (evt) => {
@@ -53,8 +53,11 @@ function ChartData(){
                 }
                 setLoadedVal(75);
                 
-                const songs = await StreamingApi.getAllSongs(currUser.username);
-                setAllSongs(songs.map(s => s.title));
+                if(!allSongs){
+                    const songs = await StreamingApi.getAllSongs(currUser.username);
+                    setAllSongs(songs.map(s => s.title));
+                }
+                
                 setLoadedVal(100);
             } catch (err) {
                 throw err;
@@ -80,53 +83,57 @@ function ChartData(){
     
     //go through the bandcamp data and format it correctly, then push into main data area
     if (localData[`bandcamp_${chartRange}`]){
-        let temp = localData[`bandcamp_${chartRange}`].map(d => ({ x: d.title, y: d.plays }));
-        graphItems.push(temp);
+        let temp = [];
+        for(let song of allSongs){
+            let found = localData[`bandcamp_${chartRange}`].filter(s => s.title === song);
+            found.length ? temp.push(found[0].plays) : temp.push(0);
+        }
+        setSeriesData(s => [...s, {data: temp}]);
     }
 
     //iterate through spotify data, add it to the main items array
-    if (localData[`spotify_${chartRange}`]) {
-        const temp = localData[`spotify_${chartRange}`].map((d) => ({ x: d.title, y: d.streams  }))
-        graphItems.push(temp);
-    }
+    // if (localData[`spotify_${chartRange}`]) {
+    //     const temp = localData[`spotify_${chartRange}`].map((d) => ({ x: d.title, y: d.streams  }))
+    //     graphItems.push(temp);
+    // }
 
     //parse the distrokid data and set it up as an array of songs per store
-    let allStoreData = {};
-    if(localData[`distrokid`]){
-        for (let dataset of localData[`distrokid`]) {
-            if (allStoreData[dataset.store]) {
-                allStoreData[dataset.store] = [...allStoreData[dataset.store], { title: dataset.title, plays: dataset.plays }]
-            } else {
-                allStoreData[dataset.store] = [{ title: dataset.title, plays: dataset.plays }]
-            }
-        }
-    }
+    // let allStoreData = {};
+    // if(localData[`distrokid`]){
+    //     for (let dataset of localData[`distrokid`]) {
+    //         if (allStoreData[dataset.store]) {
+    //             allStoreData[dataset.store] = [...allStoreData[dataset.store], { title: dataset.title, plays: dataset.plays }]
+    //         } else {
+    //             allStoreData[dataset.store] = [{ title: dataset.title, plays: dataset.plays }]
+    //         }
+    //     }
+    // }
   
     //format an option where keys are the name of the store and values are an array of objects formatted for the chart
-    let masterObj = {}
-    for (let [name, songs] of Object.entries(allStoreData)) {
-        let temp = [];
-        for(let song of songs){
-            temp.push({ y: parseInt(song.plays) , x: song.title})
-        }
-        masterObj[name] = temp;
-    }
+    // let masterObj = {}
+    // for (let [name, songs] of Object.entries(allStoreData)) {
+    //     let temp = [];
+    //     for(let song of songs){
+    //         temp.push({ y: parseInt(song.plays) , x: song.title})
+    //     }
+    //     masterObj[name] = temp;
+    // }
     
     //set the array of color indicators up for the legend
-    const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];
+    // const colorItems = [{ title: 'Bandcamp', color: '#12939A' }, { title: 'Spotify', color: '#1DB954' }];
 
     
     
     //iterate through distrokid stores, applying correct color to each
-    if(chartRange === "alltime"){
-        for (let [store, songs] of Object.entries(masterObj)) {
-            if (store !== "spotify") {
-                let foundColor = colorsMap.get(store)
-                colorItems.push({ title: store, color: foundColor });
-                graphItems.push(songs);
-            }
-        }
-    }
+    // if(chartRange === "alltime"){
+    //     for (let [store, songs] of Object.entries(masterObj)) {
+    //         if (store !== "spotify") {
+    //             let foundColor = colorsMap.get(store)
+    //             colorItems.push({ title: store, color: foundColor });
+    //             graphItems.push(songs);
+    //         }
+    //     }
+    // }
     
     const checkEmpty = (obj) => {
         const isEmpty = true;
@@ -136,31 +143,21 @@ function ChartData(){
         return isEmpty;
     }
 
-    //list all of the songs from the data given
-    // for(let store of graphItems){
-    //     for(let song of store){
-    //         if(!allSongs.includes(song.x)){
-    //             allSongs.push(song.x);
+    //prep data for service
+    // const bandcampGraphData = [];
+    // if(localData[`bandcamp_${chartRange}`]){
+    //     for(let song of allSongs){
+    //         if (localData[`bandcamp_${chartRange}`].filter(el => el.title === song).length===0){
+
+    //         }
+    //         if(allSongs.includes(song.title)){
+    //             bandcampGraphData.push(song.plays)
+    //         } else {
+    //             bandcampGraphData.push(0)
     //         }
     //     }
     // }
-
-    //prep data for service
-    const bandcampGraphData = [];
-    if(localData[`bandcamp_${chartRange}`]){
-        for(let song of allSongs){
-            if (localData[`bandcamp_${chartRange}`].filter(el => el.title === song).length===0){
-
-            }
-            if(allSongs.includes(song.title)){
-                bandcampGraphData.push(song.plays)
-            } else {
-                bandcampGraphData.push(0)
-            }
-        }
-    }
     // console.log(bandcampGraphData)
-    console.log(allSongs)
 
     return(
         <div className="container-narrow">
@@ -175,7 +172,7 @@ function ChartData(){
                             <button className="btn btn-primary round m-1 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
                             <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2>
                             <div>
-                                    <BarGraph songs={allSongs} seriesData={bandcampGraphData}/>
+                                    <BarGraph songs={allSongs} seriesData={seriesData}/>
                             </div>  
                         </>}</>}
                 </div>

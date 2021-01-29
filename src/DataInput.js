@@ -7,9 +7,10 @@ import './DataInput.css'
 function DataInput(){
     const { currUser } = useContext(UserContext)
     const [loadedVal, setLoadedVal] = useState(0);
+    const [videoView, setVideoView] = useState(false);
     const [spotifyPaste, setSpotifyPaste] = useState(false);
     const errorHolder = [];
-    const [responses, setResponses] = useState([])
+    const [responses, setResponses] = useState([]);
     const INITIAL_STATE = {
         distrokid: "",
         bandcampAlltime: "",
@@ -147,17 +148,29 @@ function DataInput(){
         setSpotifyPaste(s => !s);
     }
 
+    const toggleHowToVideo = (evt) => {
+        evt.preventDefault();
+        setVideoView(v => !v);
+    }
+
     // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (
         <div className="container-narrow">
         <div className="container">
+            <div>
+                <h3 id="prompt">Want to add some stats?</h3>
+                {videoView ? 
+                <>
+                <button className="btn-primary rounded mb-4" onClick={toggleHowToVideo}>Hide Video</button>
+                <div className="media">
+                    <div className="embed-responsive embed-responsive-16by9 text-center align-self-center" id="howtovid">
+                            <iframe className="embed-responsive-item align-self-center" src="https://www.youtube.com/embed/5bGsiBzUQ5U" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    </div></> : < button className="btn-primary rounded mb-4" onClick={toggleHowToVideo}>View how-to video</button>}
+                    </div>
             <div className="form-container">
-                    {/* <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="../images/Stream-Stats-Demo-1.mov" allowfullscreen></iframe>
-                    </div> */}
                 <form className="form-container" onSubmit={(evt) => handleSubmit(evt)}>
-                    <h3 id="prompt">Want to add some stats?</h3>
-                       
+        
                         {!spotifyPaste ? 
                         <div className="form-group">
                         <div id="spotifyForArtists">

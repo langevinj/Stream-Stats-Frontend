@@ -11,3 +11,10 @@
 Alert {
     font-size: 1vw;
 }
+
+#howtovid{
+    width: 45vw;
+    height: 50vh;
+    display: block;
+   margin: 0 auto;
+}

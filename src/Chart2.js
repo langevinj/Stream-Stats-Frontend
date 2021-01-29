@@ -65,7 +65,7 @@ function Chart2(){
 
                 //if the bandcamp data is not in local storage, retrieve and save it
                 if (localData[`bandcamp_${chartRange}`] === undefined || !localData[`bandcamp_${chartRange}`].length){
-                    let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, username);
+                    let bdata = await StreamingApi.getUserBandcampDat(username, { range: chartRange });
 
                     //set the local data for the correct range
                     chartRange === "alltime" ? setLocalData(old => ({ ...old, bandcamp_alltime: bdata})) : setLocalData(old => ({ ...old, bandcamp_month: bdata}));

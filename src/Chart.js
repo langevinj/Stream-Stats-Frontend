@@ -36,7 +36,7 @@ function ChartData(){
             setLoadedVal(0);
             try {
                 if(!localData[`bandcamp_${chartRange}`]){
-                    let bdata = await StreamingApi.getUserBandcampData({ range: chartRange }, currUser.username);
+                    let bdata = await StreamingApi.getUserBandcampData(currUser.username, { range: chartRange });
                     chartRange === "alltime" ? setLocalData(old => ({ ...localData, bandcamp_alltime: [...bdata] })) : setLocalData(old => ({ ...old, bandcamp_month: bdata }));
                 }
                 setLoadedVal(25);

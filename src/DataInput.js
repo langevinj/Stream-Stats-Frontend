@@ -152,8 +152,12 @@ function DataInput(){
         <div className="container-narrow">
         <div className="container">
             <div className="form-container">
+                    {/* <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="../images/Stream-Stats-Demo-1.mov" allowfullscreen></iframe>
+                    </div> */}
                 <form className="form-container" onSubmit={(evt) => handleSubmit(evt)}>
                     <h3 id="prompt">Want to add some stats?</h3>
+                       
                         {!spotifyPaste ? 
                         <div className="form-group">
                         <div id="spotifyForArtists">

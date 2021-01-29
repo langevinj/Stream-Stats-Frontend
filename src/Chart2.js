@@ -24,7 +24,6 @@ function Chart2(){
         let masterObj = { 'amazon': [], 'apple': [], 'deezer': [], 'itunes': [], 'google': [], 'tidal': [], 'tiktok': [], 'youtube': [] };
         
         for (let dataset of data) {
-            console.log(`DATA IS ${dataset}`)
             let store = servicePicker(dataset);
             if (store){
                 //push together similar services
@@ -57,7 +56,6 @@ function Chart2(){
     //Get all streaming data for a user when the page loads
     useEffect(() => {
         async function loadUserData() {
-            console.log('rerunning')
             //reset the value of the loading bar
             incrementLoadingVal();
 

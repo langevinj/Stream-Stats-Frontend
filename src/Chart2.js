@@ -84,7 +84,7 @@ function Chart2(){
 
                 //if the distrokid data is not in local storage, retrieve and save it
                 if(localData[`distrokid`] === undefined || !localData[`distrokid`].length){
-                    let ddata = await StreamingApi.getUserDistrokidData({range: chartRange}, username);
+                    let ddata = await StreamingApi.getUserDistrokidData(username, { range: chartRange });
                     let formatted = formatDistrokidData(ddata);
                     setLocalData(old => ({ ...old, distrokid: formatted}));
                 }

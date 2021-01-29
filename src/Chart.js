@@ -42,7 +42,7 @@ function ChartData(){
                 setLoadedVal(25);
 
                 if(!localData[`distrokid`]){
-                    let ddata = await StreamingApi.getUserDistrokidData({ range: chartRange }, currUser.username);
+                    let ddata = await StreamingApi.getUserDistrokidData(currUser.username, { range: chartRange });
                     setLocalData(old => ({...old, distrokid: ddata}));
                 };
                 setLoadedVal(50);

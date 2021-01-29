@@ -22,10 +22,24 @@ function Chart2(){
 
     function formatDistrokidData(data) {
         let masterObj = { 'amazon': [], 'apple': [], 'deezer': [], 'itunes': [], 'google': [], 'tidal': [], 'tiktok': [], 'youtube': [] };
-
+        
         for (let dataset of data) {
+            console.log(`DATA IS ${dataset}`)
             let store = servicePicker(dataset);
-            if (store) masterObj[store].push({ title: dataset.title, plays: parseInt(dataset.plays) })
+            if (store){
+                //push together similar services
+                if(masterObj[store].length){
+                    let found = masterObj[store].filter(el => el.title === dataset.title);
+                    if(found[0]){
+                        found[0].plays = found[0].plays + parseInt(dataset.plays);
+                    } else {
+                        masterObj[store].push({ title: dataset.title, plays: parseInt(dataset.plays) }) 
+                    }
+                } else {
+                    masterObj[store].push({ title: dataset.title, plays: parseInt(dataset.plays) })
+                }
+                    
+            } 
         }
 
         return masterObj;

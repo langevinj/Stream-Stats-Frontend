@@ -12,12 +12,30 @@ function Chart2(){
     const [localData, setLocalData] = useLocalStorage("data");
     const [allSongs, setAllSongs] = useState([]);
     let seriesData = {};
+    const [tryCount, setTryCount] = useState(0);
     const [chartRange, setChartRange] = useState("alltime");
     const [loadedVal, setLoadedVal] = useState(0);
     
     //helper function for incrementing the loader
     function incrementLoadingVal(){
         loadedVal === 100 ? setLoadedVal(0) : setLoadedVal(old => old + 25);
+    }
+
+    const checkEmpty = (obj) => {
+        if(chartRange === "alltime"){
+            for (let el of ['distrokid', 'bandcamp_alltime', 'spotify_alltime']) {
+                if (obj[el] !== undefined){
+                    if(Array.isArray(obj[el]) && obj[el].length) return false
+                    if(typeof(obj[el]) === 'object' && obj[el] !== null && Object.keys(obj[el]).length) return false;
+                } 
+            }
+            return true
+        } else {
+            for (let el of ['bandcamp_month', 'spotify_month']) {
+                if (obj[el] !== undefined && obj[el].length) return false
+            }
+            return true
+        }
     }
 
     function formatDistrokidData(data) {
@@ -102,7 +120,9 @@ function Chart2(){
             }
         }
         loadUserData()
-    }, [username, chartRange]);
+    }, [chartRange, currUser]);
+
+    
 
     //format the local data into series data for the bargraph
     function setupSeriesData(){
@@ -123,8 +143,6 @@ function Chart2(){
                 serviceData = (localData.distrokid)[service]
                 name = service.charAt(0).toUpperCase() + service.slice(1);
             }
-
-
 
             let temp = [];
             //account for all songs
@@ -151,20 +169,21 @@ function Chart2(){
         setupSeriesData();
     }
 
-    const checkEmpty = (obj) => {
-        const isEmpty = true;
-        for (let el of ['distrokid', 'bandcamp_alltime', 'bandcamp_month', 'spotify_alltime', 'spotify_month']) {
-            if (obj[el] !== undefined && obj[el].length) return false
-        }
-        return true;
+    // if there is no alltime data to load, automatically check if there is any in the 30day chart
+    if (tryCount === 1 && !localData['distrokid'] && !localData['spotify_all_time'] && !localData['bandcamp_all_time']) {
+        setTryCount(tryCount => tryCount + 1);
+        toggleView("something");
+    }
+
+    function renderToggleButton(){
+        return (<button className="btn btn-primary round mt-3 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>)
     }
 
     return(
         <div className="container-narrow">
             <div className="container" style={{height: "75vh", paddingRight: "2vw"}}>
-                {loadedVal > 0 && loadedVal < 100 ? <div className="progress"><div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div> : <>{checkEmpty(localData) ? <><h1>Looks like you haven't imported any data yet!</h1></> : <>
-                <button className="btn btn-primary round mt-3 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
-                <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2>
+                {loadedVal > 0 && loadedVal < 100 ? <div className="progress"><div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div> : <>{checkEmpty(localData) ? <><h1>Looks like you haven't imported any data yet!</h1>{renderToggleButton()}</> : <>
+                <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2><button className="btn btn-primary round mt-3 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
                 {seriesData ? <BarGraph songs={allSongs} seriesData={seriesData} range={chartRange} /> : <></>}</>}</>}
             </div>
         </div>

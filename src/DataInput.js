@@ -7,8 +7,8 @@ import './DataInput.css'
 function DataInput(){
     const { currUser } = useContext(UserContext)
     const [loadedVal, setLoadedVal] = useState(0);
-    const [videoView, setVideoView] = useState(false);
-    const [spotifyPaste, setSpotifyPaste] = useState(false);
+
+    const[toggleData, setToggleData] = useState({"spotifyPaste": false, "videoView": false});
     const errorHolder = [];
     const [responses, setResponses] = useState([]);
     const INITIAL_STATE = {
@@ -21,11 +21,10 @@ function DataInput(){
         spotifyRawAll: "",
         errors: [] 
     }
-    //set intiail state of the form
+    //set intial state of the form
     const [formData, setFormData] = useState({...INITIAL_STATE});
 
     const handleChange = (evt) => {
-        // evt.preventDefault();
         const { name, value } = evt.target;
         setFormData(f => ({
             ...f,
@@ -33,22 +32,27 @@ function DataInput(){
         }));
     }
 
-/********************************************* */
+    const toggler = (evt) => {
+        evt.preventDefault();
+        const { name } = evt.target;
+        setToggleData(s => ({ ...s, [name]: !s[name] }));
+    }
 
     //send the API call to import data, if an error is received store it
-    async function dataImport(data, username){
+    const dataImport = async function (data, username) {
         try {
-            //send the data to the import endpoint
             let res = await StreamingApi.dataImport(data, username);
-            setResponses(r => [...r, res]);
+            return { response: res, passed: true }
         } catch (errs) {
-            errorHolder.push(errs)
+            return { response: errs, passed: false }
         }
     }
 
-    async function setErrors(){
+    const setErrors = async function(){
         setFormData(f => ({ ...f, errors: [...errorHolder] }));
     }
+
+/********************************************* */
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
@@ -71,7 +75,13 @@ function DataInput(){
                 //format the data in an object
                 if(formData[dataset] !== undefined){
                     let data = { page: formData[dataset], endpoint: endpoint, range: range };
-                    await dataImport(data, currUser.username);
+                    let res = await dataImport(data, currUser.username);
+                    if(res.passed){
+                        setResponses(r => [...r, res.response]);
+                    } else {
+                        errorHolder.push(res.response)
+                    }
+                    
                 }
 
                 setTimeout(() => {
@@ -124,54 +134,24 @@ function DataInput(){
         unloadVal()
     }, [loadedVal]);
 
-    //currently not in use **** function to save a user's spotify credentials
-    // async function handleSpotifyCredentials() {
-    //     //if spotify credentials are passed, process them
-    //     if (formData.spotifyEmail && formData.spotifyPwd) {
-    //         //send pre-hashed password and email for spotify credentials to be saved
-    //         let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
-
-    //         try {
-    //             // let res = await StreamingApi.saveUserSpotifyCredentials(data);
-    //             let res = await StreamingApi.gatherSpotifyData(data, currUser.username)
-    //             //add response to response list
-    //             responses.push(res);
-    //         } catch (errors) {
-    //             return setFormData(f => ({ ...f, errors }));
-    //         }
-    //     }
-    // }
-
-    //switch between the methods of importing spotify data
-    const toggleSpotifyView = (evt) => {
-        evt.preventDefault();
-        setSpotifyPaste(s => !s);
-    }
-
-    const toggleHowToVideo = (evt) => {
-        evt.preventDefault();
-        setVideoView(v => !v);
-    }
-
-    // Copy the entire page(MAC: Cmd + A / WIN: Ctrl + A) then paste here:
     return (
         <div className="container-narrow">
         <div className="container">
             <div>
                 <h3 id="prompt">Want to add some stats?</h3>
-                {videoView ? 
+                {toggleData.videoView ? 
                 <>
-                <button className="btn-primary rounded mb-4" onClick={toggleHowToVideo}>Hide Video</button>
+                <button className="btn-primary rounded mb-4" onClick={toggler} name="videoView">Hide Video</button>
                 <div className="media">
                     <div className="embed-responsive embed-responsive-16by9 text-center align-self-center" id="howtovid">
                             <iframe className="embed-responsive-item align-self-center" src="https://www.youtube.com/embed/5bGsiBzUQ5U" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
-                    </div></> : < button className="btn-primary rounded mb-4" onClick={toggleHowToVideo}>View how-to video</button>}
+                    </div></> : < button className="btn-primary rounded mb-4" onClick={toggler} name="videoView">View how-to video</button>}
                     </div>
             <div className="form-container">
                 <form className="form-container" onSubmit={(evt) => handleSubmit(evt)}>
         
-                        {!spotifyPaste ? 
+                        {!toggleData.spotifyPaste ? 
                         <div className="form-group">
                         <div id="spotifyForArtists">
                             <h5>Add your login info for Spotify for Artists:</h5> 
@@ -192,7 +172,7 @@ function DataInput(){
                             <textarea name="spotifyRawAll" value={formData.spotifyRawAll} id="spotifyRawAll" onChange={(evt) => handleChange(evt)}  onPaste={handleChange} className="form-control"></textarea>
                         </div> </>}
 
-                    <button onClick={toggleSpotifyView} className="btn-primary rounded mb-4">{!spotifyPaste ? "I prefer to paste my spotify data" : "I'll login with my username/password"}</button>
+                    <button onClick={toggler} className="btn-primary rounded mb-4" name="spotifyPaste">{!toggleData.spotifyPaste ? "I prefer to paste my spotify data" : "I'll login with my username/password"}</button>
                     <div className="form-group">
                         <label htmlFor="distrokid">Paste the Distrokid page here:</label>
                         <textarea name="distrokid" value={formData.distrokid} id="distrokid" onChange={(evt) => handleChange(evt)} className="form-control" onPaste={handleChange}></textarea>
@@ -207,7 +187,6 @@ function DataInput(){
                     </div>
                     {formData.errors ? <Alert type="danger" messages={formData.errors}/> : null}
 
-                    {/* {responses.length ? <Alert type="success" messages={[`Successfully imported data for: ${responses.forEach((el) => { el.length > 1 ? `-${el}` : ""})`]} */}
                     {loadedVal === 0 || loadedVal === 100 ? <button className="submitButton btn-primary rounded mb-3" type="submit">Submit</button> : <><small>Loading your data, this may take a minute...</small> <div className="progress mt-2 mb-3">
                         
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div></>}

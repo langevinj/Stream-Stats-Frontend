@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+// import { useState, useEffect } from 'react';
+const { useState, useEffect } = require('react');
 
 //custom hook for utilizing localStorage, return a value from storage and a function to set value in storage
 function useLocalStorage(key, startingValue = null) {
@@ -22,4 +23,4 @@ function useLocalStorage(key, startingValue = null) {
     return [value, setValue]
 }
 
-export default useLocalStorage;
+module.exports = { useLocalStorage }

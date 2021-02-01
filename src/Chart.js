@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import StreamingApi from './Api';
 import UserContext from './UserContext';
-import useLocalStorage from './hooks';
+import { useLocalStorage } from './hooks.js';
 import BarGraph from './BarGraph'
 import { checkEmpty, formatDistrokidData, setupSeriesData } from './helpers'
 

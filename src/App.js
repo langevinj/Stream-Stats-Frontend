@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react"
-import { BrowserRouter, Route } from "react-router-dom"
+import { BrowserRouter } from "react-router-dom"
 import { decode } from "jsonwebtoken"
 import useLocalStorage from './hooks'
-import Home from './Home'
 
 import NavBar from './NavBar'
 import Routes from './Routes'
 import StreamingApi from './Api'
 import UserContext from './UserContext'
 import './App.css';
-import { servicePicker } from "./helpers"
 
 export const TOKEN_KEY = "stream-stat-token"
 
@@ -20,13 +18,13 @@ function App() {
   const [token, setToken] = useLocalStorage(TOKEN_KEY);
   const [localData, setLocalData] = useLocalStorage("data");
 
-  //when the app renders, or when the token is set, update the users information and set the token for API calls
+  /**When the app renders, or when the token is set, update the user's information and se the token for API calls */
   useEffect(() => {
     async function getCurrentUser() {
       try {
-        let { username } = decode(token);
+        const { username } = decode(token);
         StreamingApi.token = token;
-        let currentUser = await StreamingApi.getUserInfo(username)
+        const currentUser = await StreamingApi.getUserInfo(username)
         setCurrUser(currentUser);
       } catch (err) {
         setCurrUser(null);
@@ -37,28 +35,28 @@ function App() {
     getCurrentUser();
   }, [token]);
 
-  //function to log a user out and reset localStorage
+  //Log out user: clear local storage.
   const logOut = () => {
     setCurrUser(null);
     setToken(null);
     setLocalData({ distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: [] });
   }
 
-  //if the users data is not loaded, present a loading screen
+  //Loading screen if user is not loaded.
   if (!userLoaded) {
     return <div><h2>Loading...</h2></div>
   }
 
   return (
       <BrowserRouter>
-      <UserContext.Provider value={{ currUser, setCurrUser }}>
-        <div className="App" id="App">
-          <div className="container">
+        <UserContext.Provider value={{ currUser, setCurrUser }}>
+          <div className="App" id="App">
+            <div className="container">
               <NavBar logOut={logOut} />
               <Routes setToken={setToken}/>
+            </div>
           </div>
-        </div>
-      </UserContext.Provider>
+        </UserContext.Provider>
       </BrowserRouter>
   );
 }

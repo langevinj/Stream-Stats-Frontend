@@ -16,3 +16,15 @@ describe("servicePicker", function() {
         expect(servicePicker({ "store": "Napster" })).toEqual(null);
     });
 });
+
+describe("checkEmpty", function() {
+    it("should return true is an object is empty", function() {
+        expect(checkEmpty({"distrokid": {}, "bandcamp_alltime": [], "spotify_alltime": []}, "alltime")).toEqual(true);
+        expect(checkEmpty({}, "alltime")).toEqual(true);
+    });
+
+    it("should return false if an object is not empty", function() {
+        expect(checkEmpty({ "distrokid": {"applemusic": [1, 2, 3]}, "bandcamp_alltime": [], "spotify_alltime": [] }, "alltime")).toEqual(false);
+        expect(checkEmpty({"bandcamp_month": [1,2,3], "spotify_month": [] }, "month")).toEqual(false);
+    });
+});

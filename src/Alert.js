@@ -1,10 +1,10 @@
 import React from 'react'
 import {v4 as uuid} from 'uuid';
 
-//return and alert div for each message received
+//Return an alert div for each message received.
 function Alert({ type, messages=[] }) {
 
-    //handle the import success alert in a specific way
+    //Handle the import success alert in a specific way.
     if(messages[0] === "importSuccesses"){
         if(messages.length > 1){
             messages.splice(0, 1);

@@ -1,10 +1,12 @@
 import React from 'react'
 import ReactApexChart from 'react-apexcharts'
-import ApexCharts from 'apexcharts'
 
 function BarGraph({seriesData, songs, range}){
-    const series = range === "alltime" ? [seriesData.bandcamp_alltime, seriesData.spotify_alltime, seriesData.amazon, seriesData.apple, seriesData.deezer, seriesData.itunes, seriesData.google, seriesData.tidal, seriesData.tiktok, seriesData.youtube] : [seriesData.bandcamp_month, seriesData.spotify_month]
+    //Confirm the correct series data to pass to the graph based on the current range.
+    const series = range === "alltime" ? [seriesData.bandcamp_alltime, seriesData.spotify_alltime, seriesData.amazon, seriesData.apple, seriesData.deezer, seriesData.itunes, seriesData.google, seriesData.tidal, seriesData.tiktok, seriesData.youtube] : [seriesData.bandcamp_month, seriesData.spotify_month];
 
+
+    //Options and settings for graph.
     const options = {
         chart: {
             type: 'bar',
@@ -44,8 +46,6 @@ function BarGraph({seriesData, songs, range}){
             <ReactApexChart options={options} series={series} type="bar" height={430} />
         </>
     )
-
-
 }
 
 export default BarGraph;

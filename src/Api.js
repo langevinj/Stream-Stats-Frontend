@@ -48,7 +48,6 @@ class StreamingApi {
         return res.response;
     }
 
-
     //get user with username's bandcamp data
     static async getUserBandcampData(username, data){
         let res = await this.request(`bandcamp/${username}/${data.range}`);
@@ -61,7 +60,7 @@ class StreamingApi {
     //     return res.token;
     // }
 
-    //crawl Spotify and gather information for user
+    //crawl Spotify for Artists and gather information for user
     static async gatherSpotifyData(data, username){
         let res = await this.request(`spotify/gatherData/${username}`, data, "post");
         return res.response;

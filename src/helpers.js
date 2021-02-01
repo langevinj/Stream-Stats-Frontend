@@ -18,7 +18,7 @@ function servicePicker(obj){
 function checkEmpty(obj, chartRange) {
     if (chartRange === "alltime") {
         for (let el of ['distrokid', 'bandcamp_alltime', 'spotify_alltime']) {
-            if (obj[el] !== undefined) {
+            if (obj[el] !== undefined || obj[el] !== {}) {
                 if (Array.isArray(obj[el]) && obj[el].length) return false
                 if (typeof (obj[el]) === 'object' && obj[el] !== null && Object.keys(obj[el]).length) return false;
             }

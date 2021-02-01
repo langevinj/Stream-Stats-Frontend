@@ -43,7 +43,7 @@ function BarGraph({seriesData, songs, range}){
 
     return(
         <>
-            <ReactApexChart options={options} series={series} type="bar" height={430} />
+            {songs.length ? <ReactApexChart options={options} series={series} type="bar" height={430} /> : <h3>No data has been imported for {range === "month" ? "30 days" : "all time"} yet.</h3>}
         </>
     )
 }

@@ -72,7 +72,7 @@ function Chart(){
                 if(!allSongs.length){
                     let songs = await StreamingApi.getAllSongs(username);
                     setAllSongs(songs.map(s => s.title));
-                }
+                }                
 
                 incrementLoadingVal();
             } catch (err) {
@@ -86,22 +86,26 @@ function Chart(){
         seriesData = setupSeriesData(localData, chartRange, seriesData, allSongs);
     }
 
-    // if there is no alltime data to load, automatically check if there is any in the 30day chart
-    if (tryCount === 1 && !localData['distrokid'] && !localData['spotify_all_time'] && !localData['bandcamp_all_time']) {
-        setTryCount(tryCount => tryCount + 1);
-        toggleView("something");
-    }
+    const chartTitle = chartRange === "alltime" ? "All time" : "30-day";
+
 
     function renderToggleButton(){
-        return (<button className="btn btn-primary round mt-3 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>)
+        return (<><button className="btn btn-primary round mt-3 mb-3 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
+            </>)
     }
 
+    function renderProgressBar(){
+        return (
+            <div className="progress"><div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div>
+        )
+    }
+    
     return(
         <div className="container-narrow">
             <div className="container" style={{height: "75vh", paddingRight: "2vw"}}>
-                {loadedVal > 0 && loadedVal < 100 ? <div className="progress"><div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div> : <>{checkEmpty(localData, chartRange) ? <><h1>Looks like you haven't imported any data yet!</h1>{renderToggleButton()}</> : <>
-                <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2><button className="btn btn-primary round mt-3 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
-                {seriesData ? <BarGraph songs={allSongs} seriesData={seriesData} range={chartRange} /> : <></>}</>}</>}
+                <h2 className="chart-title mt-2">{chartTitle}</h2>
+                <>{renderToggleButton()}</>
+                {loadedVal > 0 && loadedVal < 100 ? renderProgressBar() : seriesData !== {} && allSongs.length ? <BarGraph songs={allSongs} seriesData={seriesData} range={chartRange} className="mt-3" /> : <><h4>No data has been imported for {chartTitle} yet. Wait a few seconds, or import data now.</h4></>}
             </div>
         </div>
     )

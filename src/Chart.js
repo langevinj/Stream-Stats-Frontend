@@ -3,39 +3,23 @@ import StreamingApi from './Api';
 import UserContext from './UserContext';
 import useLocalStorage from './hooks';
 import BarGraph from './BarGraph'
-import { servicePicker } from './helpers'
+import { servicePicker, checkEmpty } from './helpers'
 
 function Chart(){
-    //get the username for the current user
     const { currUser } = useContext(UserContext);
     const username = currUser.username;
+    
     const [localData, setLocalData] = useLocalStorage("data");
     const [allSongs, setAllSongs] = useState([]);
-    let seriesData = {};
     const [tryCount, setTryCount] = useState(0);
     const [chartRange, setChartRange] = useState("alltime");
     const [loadedVal, setLoadedVal] = useState(0);
+
+    let seriesData = {};
     
-    //helper function for incrementing the loader
+    //Helper function for incrementing the loader.
     function incrementLoadingVal(){
         loadedVal === 100 ? setLoadedVal(0) : setLoadedVal(old => old + 25);
-    }
-
-    const checkEmpty = (obj) => {
-        if(chartRange === "alltime"){
-            for (let el of ['distrokid', 'bandcamp_alltime', 'spotify_alltime']) {
-                if (obj[el] !== undefined){
-                    if(Array.isArray(obj[el]) && obj[el].length) return false
-                    if(typeof(obj[el]) === 'object' && obj[el] !== null && Object.keys(obj[el]).length) return false;
-                } 
-            }
-            return true
-        } else {
-            for (let el of ['bandcamp_month', 'spotify_month']) {
-                if (obj[el] !== undefined && obj[el].length) return false
-            }
-            return true
-        }
     }
 
     function formatDistrokidData(data) {
@@ -182,7 +166,7 @@ function Chart(){
     return(
         <div className="container-narrow">
             <div className="container" style={{height: "75vh", paddingRight: "2vw"}}>
-                {loadedVal > 0 && loadedVal < 100 ? <div className="progress"><div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div> : <>{checkEmpty(localData) ? <><h1>Looks like you haven't imported any data yet!</h1>{renderToggleButton()}</> : <>
+                {loadedVal > 0 && loadedVal < 100 ? <div className="progress"><div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div> : <>{checkEmpty(localData, chartRange) ? <><h1>Looks like you haven't imported any data yet!</h1>{renderToggleButton()}</> : <>
                 <h2 className="chart-title mt-2">{chartRange === "alltime" ? "Alltime" : "30-day"}</h2><button className="btn btn-primary round mt-3 btn-sm" onClick={toggleView} id="toggleButton">{chartRange === "month" ? "Alltime" : "30-day"}</button>
                 {seriesData ? <BarGraph songs={allSongs} seriesData={seriesData} range={chartRange} /> : <></>}</>}</>}
             </div>

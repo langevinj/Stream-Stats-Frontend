@@ -5,7 +5,7 @@ import useLocalStorage from './hooks';
 import BarGraph from './BarGraph'
 import { servicePicker } from './helpers'
 
-function Chart2(){
+function Chart(){
     //get the username for the current user
     const { currUser } = useContext(UserContext);
     const username = currUser.username;
@@ -190,4 +190,4 @@ function Chart2(){
     )
 }
 
-export default Chart2;
+export default Chart;

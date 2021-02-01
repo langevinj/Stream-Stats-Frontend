@@ -3,7 +3,7 @@ import StreamingApi from './Api';
 import UserContext from './UserContext';
 import useLocalStorage from './hooks';
 import BarGraph from './BarGraph'
-import { servicePicker, checkEmpty } from './helpers'
+import { servicePicker, checkEmpty, formatDistrokidData } from './helpers'
 
 function Chart(){
     const { currUser } = useContext(UserContext);
@@ -20,30 +20,6 @@ function Chart(){
     //Helper function for incrementing the loader.
     function incrementLoadingVal(){
         loadedVal === 100 ? setLoadedVal(0) : setLoadedVal(old => old + 25);
-    }
-
-    function formatDistrokidData(data) {
-        let masterObj = { 'amazon': [], 'apple': [], 'deezer': [], 'itunes': [], 'google': [], 'tidal': [], 'tiktok': [], 'youtube': [] };
-        
-        for (let dataset of data) {
-            let store = servicePicker(dataset);
-            if (store){
-                //push together similar services
-                if(masterObj[store].length){
-                    let found = masterObj[store].filter(el => el.title === dataset.title);
-                    if(found[0]){
-                        found[0].plays = found[0].plays + parseInt(dataset.plays);
-                    } else {
-                        masterObj[store].push({ title: dataset.title, plays: parseInt(dataset.plays) }) 
-                    }
-                } else {
-                    masterObj[store].push({ title: dataset.title, plays: parseInt(dataset.plays) })
-                }
-                    
-            } 
-        }
-
-        return masterObj;
     }
 
     //toggle between view ranges

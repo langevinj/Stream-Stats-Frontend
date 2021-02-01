@@ -5,24 +5,19 @@ import UserContext from './UserContext'
 import './DataInput.css'
 
 function DataInput(){
-    const { currUser } = useContext(UserContext)
-    const [loadedVal, setLoadedVal] = useState(0);
-
-    const[toggleData, setToggleData] = useState({"spotifyPaste": false, "videoView": false});
-    const errorHolder = [];
-    const [responses, setResponses] = useState([]);
+    const { currUser } = useContext(UserContext);
     const INITIAL_STATE = {
-        distrokid: "",
-        bandcampAlltime: "",
-        bandcampMonth: "",
-        spotifyEmail: "",
-        spotifyPwd: "",
-        spotifyRawMonth: "",
-        spotifyRawAll: "",
-        errors: [] 
-    }
-    //set intial state of the form
+        distrokid: "", bandcampAlltime: "", bandcampMonth: "", spotifyEmail: "",
+        spotifyPwd: "", spotifyRawMonth: "", spotifyRawAll: "", errors: []
+    };
+
+    const [loadedVal, setLoadedVal] = useState(0);
+    const[toggleData, setToggleData] = useState({"spotifyPaste": false, "videoView": false});
+    const [responses, setResponses] = useState([]);
     const [formData, setFormData] = useState({...INITIAL_STATE});
+    const errorHolder = [];
+
+/*************************************************** */
 
     const handleChange = (evt) => {
         const { name, value } = evt.target;
@@ -52,80 +47,9 @@ function DataInput(){
         setFormData(f => ({ ...f, errors: [...errorHolder] }));
     }
 
-/********************************************* */
-
-    const handleSubmit = async (evt) => {
-        evt.preventDefault();
-        setResponses(r => []);
-        setLoadedVal(10);
-
-        const dataToSend = ['distrokid', 'bandcampAlltime', 'bandcampMonth', 'spotifyRawMonth', 'spotifyRawAll'];
-        setTimeout(async () => {
-
-            for(let dataset of dataToSend){
-                //set endpoint for the request
-                let endpoint;
-                if(dataset.includes('distrokid')) endpoint = 'distrokid';
-                if(dataset.includes('bandcamp')) endpoint = 'bandcamp';
-                if(dataset.includes('spotify')) endpoint = 'spotify';
-
-                //set the range of the dataset
-                let range = dataset.includes('Month') ? 'month' : 'alltime';
-
-                //format the data in an object
-                if(formData[dataset] !== undefined){
-                    let data = { page: formData[dataset], endpoint: endpoint, range: range };
-                    let res = await dataImport(data, currUser.username);
-                    if(res.passed){
-                        setResponses(r => [...r, res.response]);
-                    } else {
-                        errorHolder.push(res.response)
-                    }
-                    
-                }
-
-                setTimeout(() => {
-                    setLoadedVal(l => l + 15);
-                }, 1000);
-                
-                
-                
-            }
-
-            //set the form errors to all errors received during importing of data
-            await setErrors();
-        }, 1000);
-
-                // send credentials for spotify scrape off
-                if(formData.spotifyEmail || formData.spotifyPwd){
-                    try {
-                        let data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
-                        let res = await StreamingApi.gatherSpotifyData(data, currUser.username);
-                        console.log(`SPOTIFY RESPONSE IS: ${res}`)
-                        setResponses(r => [...r, res]);
-                        setLoadedVal(l => l + 15);
-                    } catch (errors) {
-                        setLoadedVal(l => l + 15);
-                        errorHolder.push(errors);
-                    }
-
-                    await setErrors();
-                    setFormData(f => ({ ...INITIAL_STATE, errors: f.errors }));
-                } else {
-                    setTimeout(() => {
-                        setLoadedVal(l => l + 15);
-                        setFormData(f => ({ ...INITIAL_STATE, errors: f.errors }));
-                    }, 1000)
-                   
-                }
-
-        
-                
-    }
-
     useEffect(() => {
-        function unloadVal(){
-            if(loadedVal === 100){
+        function unloadVal() {
+            if (loadedVal === 100) {
                 setTimeout(() => {
                     setLoadedVal(loadedVal => 0);
                 }, 1000);
@@ -133,6 +57,67 @@ function DataInput(){
         }
         unloadVal()
     }, [loadedVal]);
+
+/********************************************* */
+
+    const handleSubmit = async (evt) => {
+        evt.preventDefault();
+        setResponses([]);
+        setLoadedVal(10);
+
+        const dataToSend = ['distrokid', 'bandcampAlltime', 'bandcampMonth', 'spotifyRawMonth', 'spotifyRawAll'];
+        setTimeout(async () => {
+
+            for(let dataset of dataToSend){
+                let endpoint;
+                if(dataset.includes('distrokid')) endpoint = 'distrokid';
+                if(dataset.includes('bandcamp')) endpoint = 'bandcamp';
+                if(dataset.includes('spotify')) endpoint = 'spotify';
+
+                //set the range of the dataset
+                const range = dataset.includes('Month') ? 'month' : 'alltime';
+
+                //format the data in an object
+                if(formData[dataset] !== undefined){
+                    const data = { page: formData[dataset], endpoint: endpoint, range: range };
+                    const res = await dataImport(data, currUser.username);
+                    if(res.passed){
+                        setResponses(r => [...r, res.response]);
+                    } else {
+                        errorHolder.push(res.response)
+                    }   
+                }
+                setTimeout(() => {
+                    setLoadedVal(l => l + 15);
+                }, 1000);
+            }
+
+            //set the form errors to all errors received during importing of data
+            await setErrors();
+        }, 1000);
+
+        // send credentials for spotify scrape off
+        if(formData.spotifyEmail || formData.spotifyPwd){
+            try {
+                const data = { email: formData.spotifyEmail, password: formData.spotifyPwd }
+                const res = await StreamingApi.gatherSpotifyData(data, currUser.username);
+                setResponses(r => [...r, res]);
+                setLoadedVal(l => l + 15);
+            } catch (errors) {
+                setLoadedVal(l => l + 15);
+                errorHolder.push(errors);
+            }
+
+            await setErrors();
+            setFormData(f => ({ ...INITIAL_STATE, errors: f.errors }));
+        } else {
+            setTimeout(() => {
+                setLoadedVal(l => l + 15);
+                setFormData(f => ({ ...INITIAL_STATE, errors: f.errors }));
+            }, 1000);        
+        }       
+    }
+/*************************************** */
 
     return (
         <div className="container-narrow">
@@ -191,8 +176,6 @@ function DataInput(){
                         
                         <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={`${loadedVal}`} aria-valuemin="0" aria-valuemax="100" style={{ width: `${loadedVal}%` }}></div></div></>}
                     {!responses.every((el) => el === undefined) ? <Alert type="success" messages={['importSuccesses', ...responses]} /> : null}
-
-                    
                 </form>
             </div>
         </div>

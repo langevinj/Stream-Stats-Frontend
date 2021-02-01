@@ -2,11 +2,8 @@ import axios from 'axios';
 
 const BASE_API_URL = process.env.REACT_APP_BASE_URL || "http://localhost:5000"
 
-/**
- * class containing methods for reaching out to API endpoint
- */
 class StreamingApi {
-    //where the local token gets saved
+    //Where the local token gets saved
     static token;
 
     static async request(endpoint, data={}, method = "get") {

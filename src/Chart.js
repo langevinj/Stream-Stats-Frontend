@@ -3,7 +3,7 @@ import StreamingApi from './Api';
 import UserContext from './UserContext';
 import useLocalStorage from './hooks';
 import BarGraph from './BarGraph'
-import { servicePicker, checkEmpty, formatDistrokidData } from './helpers'
+import { checkEmpty, formatDistrokidData, setupSeriesData } from './helpers'
 
 function Chart(){
     const { currUser } = useContext(UserContext);
@@ -22,7 +22,7 @@ function Chart(){
         loadedVal === 100 ? setLoadedVal(0) : setLoadedVal(old => old + 25);
     }
 
-    //toggle between view ranges
+    //Toggle between view ranges
     const toggleView = (evt) => {
         if (chartRange === "alltime") {
             setChartRange("month");
@@ -31,17 +31,17 @@ function Chart(){
         }
     }
 
-    //Get all streaming data for a user when the page loads
+    //Get all streaming data for a user when the page loads.
     useEffect(() => {
         async function loadUserData() {
-            //reset the value of the loading bar
+            //Reset the value of the loading bar.
             incrementLoadingVal();
 
             try {
-                //.temp fix for error of hook adding [object Object] to local storage
+                //Temporary fix for error of hook adding [object Object] to local storage
                 if (Object.keys(localData).length === 15) setLocalData(old => ({ bandcamp_alltime: old.bandcamp_alltime || [], bandcamp_month: old.bandcamp_month || [], distrokid: old.distrokid || [], spotify_alltime: old.spotify_alltime || [], spotify_month: old.spotify_month || [] }));
 
-                //if the bandcamp data is not in local storage, retrieve and save it
+                //if the bandcamp data is not in local storage, retrieve and save it.
                 if (localData[`bandcamp_${chartRange}`] === undefined || !localData[`bandcamp_${chartRange}`].length){
                     let bdata = await StreamingApi.getUserBandcampData(username, { range: chartRange });
 
@@ -50,7 +50,7 @@ function Chart(){
                 }
                 incrementLoadingVal();
 
-                //if the spotify data is not in local storage, retrieve and save it
+                //if the spotify data is not in local storage, retrieve and save it.
                 if (localData[`spotify_${chartRange}`] === undefined || !localData[`spotify_${chartRange}`].length){
                     let sdata = await StreamingApi.getUserSpotifyData({ range: chartRange }, username);
 
@@ -60,7 +60,7 @@ function Chart(){
                 }
                 incrementLoadingVal();
 
-                //if the distrokid data is not in local storage, retrieve and save it
+                //if the distrokid data is not in local storage, retrieve and save it.
                 if(localData[`distrokid`] === undefined || !localData[`distrokid`].length){
                     let ddata = await StreamingApi.getUserDistrokidData(username, { range: chartRange });
                     let formatted = formatDistrokidData(ddata);
@@ -68,7 +68,7 @@ function Chart(){
                 }
                 incrementLoadingVal();
 
-                //if the state for all songs isn't set, retrieve all songs for the user
+                //if the state for all songs isn't set, retrieve all songs for the user.
                 if(!allSongs.length){
                     let songs = await StreamingApi.getAllSongs(username);
                     setAllSongs(songs.map(s => s.title));
@@ -82,51 +82,8 @@ function Chart(){
         loadUserData()
     }, [chartRange, currUser]);
 
-    
-
-    //format the local data into series data for the bargraph
-    function setupSeriesData(){
-        const toFormat = chartRange === "alltime" ? [`bandcamp_${chartRange}`, `spotify_${chartRange}`, 'amazon', 'apple', 'deezer', 'itunes', 'google', 'tidal', 'tiktok', 'youtube'] :
-        [`bandcamp_${chartRange}`, `spotify_${chartRange}`]
-        //iterate through each service
-        for(let service of toFormat){
-            let serviceData;
-            //set the name for each service
-            let name;
-            if(service.includes('bandcamp')){
-                name = "Bandcamp";
-                serviceData = localData[service];
-            } else if (service.includes('spotify')){
-                name = "Spotify";
-                serviceData = localData[service];
-            } else {
-                serviceData = (localData.distrokid)[service]
-                name = service.charAt(0).toUpperCase() + service.slice(1);
-            }
-
-            let temp = [];
-            //account for all songs
-            if(serviceData){
-                for (let song of allSongs) {
-                    //find if the service has a record of the song
-                    let found = serviceData.filter(s => s.title === song);
-
-                    if (found.length) {
-                        temp.push(found[0].plays || found[0].streams);
-                    } else {
-                        temp.push(0)
-                    }
-                }
-                
-            } else {
-                temp = new Array(allSongs.length).fill(0)
-            }
-            seriesData[service] = { name: name, data: temp }
-        }
-    }
-
     if (localData[`distrokid`]) {
-        setupSeriesData();
+        seriesData = setupSeriesData(localData, chartRange, seriesData, allSongs);
     }
 
     // if there is no alltime data to load, automatically check if there is any in the 30day chart

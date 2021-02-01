@@ -55,4 +55,46 @@ function formatDistrokidData(data) {
     return masterObj;
 }
 
-module.exports = { servicePicker, checkEmpty, formatDistrokidData}
+//Format the local data into series data for the bargraph.
+function setupSeriesData(localData, chartRange, seriesData, allSongs) {
+    const toFormat = chartRange === "alltime" ? [`bandcamp_${chartRange}`, `spotify_${chartRange}`, 'amazon', 'apple', 'deezer', 'itunes', 'google', 'tidal', 'tiktok', 'youtube'] :
+        [`bandcamp_${chartRange}`, `spotify_${chartRange}`]
+    //iterate through each service
+    for (let service of toFormat) {
+        let serviceData;
+        //set the name for each service
+        let name;
+        if (service.includes('bandcamp')) {
+            name = "Bandcamp";
+            serviceData = localData[service];
+        } else if (service.includes('spotify')) {
+            name = "Spotify";
+            serviceData = localData[service];
+        } else {
+            serviceData = (localData.distrokid)[service]
+            name = service.charAt(0).toUpperCase() + service.slice(1);
+        }
+
+        let temp = [];
+        //account for all songs
+        if (serviceData) {
+            for (let song of allSongs) {
+                //find if the service has a record of the song
+                let found = serviceData.filter(s => s.title === song);
+
+                if (found.length) {
+                    temp.push(found[0].plays || found[0].streams);
+                } else {
+                    temp.push(0)
+                }
+            }
+
+        } else {
+            temp = new Array(allSongs.length).fill(0)
+        }
+        seriesData[service] = { name: name, data: temp }
+    }
+    return seriesData;
+}
+
+module.exports = { servicePicker, checkEmpty, formatDistrokidData, setupSeriesData}

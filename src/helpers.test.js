@@ -51,7 +51,19 @@ describe("formatDistrokidData", function() {
 
 describe("setupSeriesData", function() {
     it("properly formats the data", function() {
-
+        const res = setupSeriesData(testLocalData, "alltime", {}, songs);
+        expect(res).toEqual({
+            "bandcamp_alltime": { name: "Bandcamp", data: [100, 200, 0]},
+            "spotify_alltime": {name: "Spotify", data: [100, 200, 100]},
+            "amazon": {name: "Amazon", data: [0,0,0]},
+            "apple": {name: "Apple", data: [0, 200, 0]},
+            "deezer": {name: "Deezer", data: [0,0,0]},
+            "itunes": { name: "Itunes", data: [0, 0, 0] },
+            "google": { name: "Google", data: [0, 0, 0] },
+            "tidal": { name: "Tidal", data: [0, 0, 0] },
+            "tiktok": { name: "Tiktok", data: [0, 0, 0] },
+            "youtube": { name: "Youtube", data: [0, 0, 0] }
+        });
     });
 });
 

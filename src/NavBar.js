@@ -17,7 +17,6 @@ function NavBar({ logOut }) {
             <div className="collapse navbar-collapse" id="navbarNavDropdown">
                 <div className="navbar-nav ml-auto">
                     <Link to="/chartdata" className="nav-link nav-item" data-toggle="collapse" data-target='#navbarNavDropdown'>Chart</Link>
-                    {/* <Link to="/table" className="nav-link nav-item">Table</Link> */}
                     <Link to="/input" className="nav-link nav-item" data-toggle="collapse" data-target='#navbarNavDropdown'>Import Data</Link>
                     <Link to="/" className="nav-link nav-item" onClick={logOut} data-toggle="collapse" data-target='#navbarNavDropdown'>Logout</Link>
                 </div>

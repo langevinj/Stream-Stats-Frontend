@@ -50,7 +50,7 @@ describe("formatDistrokidData", function() {
 });
 
 describe("setupSeriesData", function() {
-    it("properly formats the data", function() {
+    it("properly formats the data and adds zeros for missing songs", function() {
         const res = setupSeriesData(testLocalData, "alltime", {}, songs);
         expect(res).toEqual({
             "bandcamp_alltime": { name: "Bandcamp", data: [100, 200, 0]},

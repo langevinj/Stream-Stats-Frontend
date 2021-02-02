@@ -4,7 +4,6 @@ import Home from './Home'
 import Login from './Login'
 import DataInput from './DataInput'
 import Chart from './Chart'
-import Table from './Table'
 import UserContext from './UserContext'
 
 function Routes({ setToken }) {

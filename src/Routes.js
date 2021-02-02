@@ -20,10 +20,8 @@ function Routes({ setToken }) {
     const loggedInRoutes = (
         <Switch>
             <Route exact path="/chartdata"><Chart /></Route>
-            {/* <Route exact path="/table"><Table /></Route> */}
             <Route exact path="/input"><DataInput /></Route>
             <Route exact path="/"><Home /></Route>
-            
             <Redirect to="/"></Redirect>
         </Switch>
     )

@@ -1,15 +1,13 @@
 import React, { useContext } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import UserContext from './UserContext'
-
 import './NavBar.css'
 
-//the navbar for the app
+//the Navbar component for the App.
 function NavBar({ logOut }) {
-    //grab the user from the Context provider
     const { currUser } = useContext(UserContext);
  
-    //navbar view if a user is logged in
+    //Navbar view if a user is logged in.
     const loggedInView = (
         <nav className="navbar navbar-expand-sm navbar-light">
             <NavLink to="/" className="navbar-brand">Stream Stats</NavLink>
@@ -25,9 +23,9 @@ function NavBar({ logOut }) {
                 </div>
             </div>
         </nav>
-    )
+    );
 
-    //navbar view if a user is logged out
+    //Navbar view if a user is logged out.
     const loggedOutView = (
         <nav className="navbar navbar-expand-sm navbar-light">
             <NavLink to="/" className="navbar-brand">Stream Stats</NavLink>
@@ -35,7 +33,7 @@ function NavBar({ logOut }) {
                 <Link to="/login" className="nav-link nav-item">Login</Link>
             </div>
         </nav>
-    )
+    );
 
     return (
         <>

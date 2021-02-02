@@ -103,7 +103,7 @@ function Chart(){
     return(
         <div className="container-narrow">
             <div className="container" style={{height: "75vh", paddingRight: "2vw"}}>
-                <h2 className="chart-title mt-2" data-testid="chartTitle">{chartTitle}</h2>
+                <h2 className="chart-title" data-testid="chartTitle">{chartTitle}</h2>
                 <>{renderToggleButton()}</>
                 {loadedVal > 0 && loadedVal < 100 ? renderProgressBar() : seriesData !== {} && allSongs.length ? <BarGraph songs={allSongs} seriesData={seriesData} range={chartRange} className="mt-3" /> : <><h4>No data has been imported for {chartTitle} yet. Wait a few seconds, or import data now.</h4></>}
             </div>

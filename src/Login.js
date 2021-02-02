@@ -6,10 +6,7 @@ import './Login.css'
 
 function Login({ setToken }) {
     const history = useHistory();
-
-    //set initial viewstate to the login form
-    const [formView, setFormView] = useState("login")
-    //set the initial entered formData to blank
+    const [formView, setFormView] = useState("login");
     const [formData, setFormData] = useState({
         username: "",
         password: "",
@@ -18,13 +15,13 @@ function Login({ setToken }) {
         errors: []
     });
 
-    //flip between login and signup views
-    function loginView() {
-        setFormView("login")
-    }
-
-    function signupView() {
-        setFormView("signup")
+    //Toggle between login and signup views.
+    function toggleView(){
+        if(formView === "login"){
+            setFormView("signup");
+        } else {
+            setFormView("login");
+        }
     }
 
     async function handleSubmit(evt) {
@@ -66,7 +63,7 @@ function Login({ setToken }) {
         //set the token in local storage
         setToken(token);
         //return to homepage
-        history.push("/");
+        history.push("/chartdata");
     }
 
     function handleChange(evt) {
@@ -114,7 +111,7 @@ function Login({ setToken }) {
     return (
         <div className="container login-container">
             <div className="toggle-container mb-3 mt-3">
-                {formView === "login" ? <button id="signup-toggle" value="signup" onClick={signupView} className="btn-primary rounded ml-1">Sign-Up</button> : <button id="login-toggle" value="login" onClick={loginView} className="btn-primary mr-1 rounded">Login</button>}
+                {formView === "login" ? <button id="signup-toggle" value="signup" onClick={toggleView} className="btn-primary rounded ml-1">Sign-Up</button> : <button id="login-toggle" value="login" onClick={toggleView} className="btn-primary mr-1 rounded">Login</button>}
             </div>
             <div className="form-container">
                 {loginActive ? loginForm : signupForm}

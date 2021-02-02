@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import StreamingApi from './Api';
 import UserContext from './UserContext';
 import BarGraph from './BarGraph';
-const { useLocalStorage } = require('./hooks.js');
+import useLocalStorage from './hooks.js';
 const { checkEmpty, formatDistrokidData, setupSeriesData } = require('./helpers');
 
 function Chart(){

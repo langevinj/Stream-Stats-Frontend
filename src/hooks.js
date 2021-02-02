@@ -23,4 +23,5 @@ function useLocalStorage(key, startingValue = null) {
     return [value, setValue]
 }
 
-module.exports = { useLocalStorage }
+
+export default useLocalStorage;

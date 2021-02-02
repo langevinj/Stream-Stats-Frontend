@@ -7,7 +7,7 @@ import StreamingApi from './Api';
 import UserContext from './UserContext';
 import './App.css';
 
-const { useLocalStorage } = require('./hooks.js');
+import useLocalStorage from './hooks.js';
 
 export const TOKEN_KEY = "stream-stat-token"
 

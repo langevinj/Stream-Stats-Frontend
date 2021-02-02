@@ -37,5 +37,15 @@ describe("formatDistrokidData", function() {
             'amazon': [{ "title": "song1", "plays": 300}], 'apple': [{ "title": "song1", "plays": 200}], 'deezer': [{ "title": "song1", "plays": 100}], 'itunes': [{ "title": "song2", "plays": 100}], 'google': [{ "title": "song2", "plays": 200}], 'tidal': [{ "title": "song2", "plays": 300}], 'tiktok': [{ "title": "song2", "plays": 200}], 'youtube': [{ "title": "song2", "plays": 100}] 
         });
     });
+
+    it("pushes together data of streaming platforms with different titles", function() {
+        testDistrokidData.push({"plays": "200", "profit": "0.111", "store": "youtube", "title": "song2"},
+                                { "plays": "200", "profit": "0.111", "store": "google play all access", "title": "song2" },
+                                { "plays": "100", "profit": "0.111", "store": "google play all access", "title": "song1" });
+        const resp = formatDistrokidData(testDistrokidData);
+        expect(resp).toEqual({
+            'amazon': [{ "title": "song1", "plays": 300 }], 'apple': [{ "title": "song1", "plays": 200 }], 'deezer': [{ "title": "song1", "plays": 100 }], 'itunes': [{ "title": "song2", "plays": 100 }], 'google': [{ "title": "song2", "plays": 400 }, {"title": "song1", "plays": 100}], 'tidal': [{ "title": "song2", "plays": 300 }], 'tiktok': [{ "title": "song2", "plays": 200 }], 'youtube': [{ "title": "song2", "plays": 300 }]
+        });
+    });
 });
 

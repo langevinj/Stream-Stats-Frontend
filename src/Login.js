@@ -24,13 +24,20 @@ function Login({ setToken }) {
         }
     }
 
+    function handleChange(evt) {
+        const { name, value } = evt.target;
+        setFormData(f => ({ ...f, [name]: value }));
+    }
+
+    //Handle submission and perform action of login or register.
     async function handleSubmit(evt) {
         evt.preventDefault();
         let data;
         let endpoint;
+        let token;
 
         if (formView === "signup") {
-            //if the field is not required, have undefined as backup
+            //If the field is not required, have undefined as default.
             data = {
                 username: formData.username,
                 password: formData.password,
@@ -46,8 +53,6 @@ function Login({ setToken }) {
             endpoint = "login"
         }
 
-        let token;
-
         try {
             if (endpoint === 'login') {
                 token = await StreamingApi.login(data);
@@ -60,18 +65,12 @@ function Login({ setToken }) {
             return setFormData(f => ({ ...f, errors }));
         }
 
-        //set the token in local storage
+        //Set the token in local storage.
         setToken(token);
-        //return to homepage
+
+        //Bring the user to the chart page.
         history.push("/chartdata");
     }
-
-    function handleChange(evt) {
-        const { name, value } = evt.target;
-        setFormData(f => ({ ...f, [name]: value }));
-    }
-
-    let loginActive = formView === "login";
 
     const signupForm = (<form className="signup-form form-container" onSubmit={handleSubmit}>
         <div className="form-group">
@@ -108,13 +107,15 @@ function Login({ setToken }) {
         <button className="submitButton btn-primary rounded mb-3">Submit</button>
     </form>)
 
+    /****************************************/
+
     return (
         <div className="container login-container">
             <div className="toggle-container mb-3 mt-3">
                 {formView === "login" ? <button id="signup-toggle" value="signup" onClick={toggleView} className="btn-primary rounded ml-1">Sign-Up</button> : <button id="login-toggle" value="login" onClick={toggleView} className="btn-primary mr-1 rounded">Login</button>}
             </div>
             <div className="form-container">
-                {loginActive ? loginForm : signupForm}
+                {formView === "login" ? loginForm : signupForm}
             </div>
         </div>
     )

@@ -3,7 +3,7 @@ import StreamingApi from './Api';
 import UserContext from './UserContext';
 import { useLocalStorage } from './hooks.js';
 import BarGraph from './BarGraph'
-import { checkEmpty, formatDistrokidData, setupSeriesData } from './helpers'
+const { checkEmpty, formatDistrokidData, setupSeriesData } = require('./helpers');
 
 function Chart(){
     const { currUser } = useContext(UserContext);

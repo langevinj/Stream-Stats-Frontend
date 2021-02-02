@@ -1,5 +1,5 @@
 const { servicePicker, checkEmpty, formatDistrokidData, setupSeriesData } = require('./helpers.js');
-const { testDistrokidData } = require('./_testcommon');
+const { testDistrokidData, songs, testLocalData } = require('./_testcommon');
 
 describe("servicePicker", function() {
     it("returns a correct key", function() {
@@ -46,6 +46,12 @@ describe("formatDistrokidData", function() {
         expect(resp).toEqual({
             'amazon': [{ "title": "song1", "plays": 300 }], 'apple': [{ "title": "song1", "plays": 200 }], 'deezer': [{ "title": "song1", "plays": 100 }], 'itunes': [{ "title": "song2", "plays": 100 }], 'google': [{ "title": "song2", "plays": 400 }, {"title": "song1", "plays": 100}], 'tidal': [{ "title": "song2", "plays": 300 }], 'tiktok': [{ "title": "song2", "plays": 200 }], 'youtube': [{ "title": "song2", "plays": 300 }]
         });
+    });
+});
+
+describe("setupSeriesData", function() {
+    it("properly formats the data", function() {
+
     });
 });
 

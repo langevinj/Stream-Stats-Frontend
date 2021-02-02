@@ -1,4 +1,5 @@
 const { servicePicker, checkEmpty, formatDistrokidData, setupSeriesData } = require('./helpers.js');
+const { testDistrokidData } = require('./_testcommon');
 
 describe("servicePicker", function() {
     it("returns a correct key", function() {
@@ -28,3 +29,13 @@ describe("checkEmpty", function() {
         expect(checkEmpty({"bandcamp_month": [1,2,3], "spotify_month": [] }, "month")).toEqual(false);
     });
 });
+
+describe("formatDistrokidData", function() {
+    it("correctly formats the data", function() {
+        const resp = formatDistrokidData(testDistrokidData);
+        expect(resp).toEqual({
+            'amazon': [{ "title": "song1", "plays": 300}], 'apple': [{ "title": "song1", "plays": 200}], 'deezer': [{ "title": "song1", "plays": 100}], 'itunes': [{ "title": "song2", "plays": 100}], 'google': [{ "title": "song2", "plays": 200}], 'tidal': [{ "title": "song2", "plays": 300}], 'tiktok': [{ "title": "song2", "plays": 200}], 'youtube': [{ "title": "song2", "plays": 100}] 
+        });
+    });
+});
+

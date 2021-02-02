@@ -97,5 +97,4 @@ function setupSeriesData(localData, chartRange, seriesData, allSongs) {
     return seriesData;
 }
 
-
-module.exports = { servicePicker, checkEmpty, formatDistrokidData, setupSeriesData} 
+export {servicePicker, checkEmpty, formatDistrokidData, setupSeriesData}

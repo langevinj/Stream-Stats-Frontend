@@ -72,7 +72,7 @@ function Login({ setToken }) {
         history.push("/chartdata");
     }
 
-    const signupForm = (<form className="signup-form form-container" onSubmit={handleSubmit}>
+    const signupForm = (<form className="signup-form form-container" onSubmit={handleSubmit} data-testid="signupView">
         <div className="form-group">
             <label htmlFor="username">Username:</label>
             <input name="username" value={formData.username} id="username" onChange={handleChange} type="text" className="form-control"></input>
@@ -93,7 +93,7 @@ function Login({ setToken }) {
         <button className="submitButton btn-primary rounded mb-3">Submit</button>
     </form>)
 
-    const loginForm = (<form className="login-form form-container" onSubmit={handleSubmit}>
+    const loginForm = (<form className="login-form form-container" onSubmit={handleSubmit} data-testid="loginView">
         <h4>Welcome back!</h4>
         <div className="form-group edit">
             <label htmlFor="username">Username: </label>

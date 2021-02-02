@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react"
-import { BrowserRouter } from "react-router-dom"
-import { decode } from "jsonwebtoken"
-import { useLocalStorage } from './hooks.js'
-
-import NavBar from './NavBar'
-import Routes from './Routes'
-import StreamingApi from './Api'
-import UserContext from './UserContext'
+import React, { useEffect, useState } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { decode } from "jsonwebtoken";
+import NavBar from './NavBar';
+import Routes from './Routes';
+import StreamingApi from './Api';
+import UserContext from './UserContext';
 import './App.css';
+
+const { useLocalStorage } = require('./hooks.js');
 
 export const TOKEN_KEY = "stream-stat-token"
 

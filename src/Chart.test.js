@@ -17,8 +17,6 @@ afterEach(() => {
 });
 
 it("renders without crashing", function() {
-    // localStorage.setItem("data", {distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: [] });
-
     render(<MemoryRouter>
         <UserContext.Provider value={{currUser, setCurrUser}}>
             <Chart />
@@ -27,8 +25,6 @@ it("renders without crashing", function() {
 });
 
 it("matches the snapshot", function() {
-    // localStorage.setItem("data", { distrokid: [], bandcamp_alltime: [], bandcamp_month: [], spotify_alltime: [], spotify_month: [] });
-
     const {asFragement} = render(<MemoryRouter>
         <UserContext.Provider value={{ currUser, setCurrUser }}>
             <Chart />

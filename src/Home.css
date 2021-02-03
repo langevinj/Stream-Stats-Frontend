@@ -14,7 +14,7 @@ li span {
 }
 
 .logo {
-    height: 4vh;
+    height: 2vh;
 }
 
 ul {
@@ -25,5 +25,9 @@ ul {
     margin-bottom: 5vh;
     height: 75%;
     color: white;
+}
+
+.img-fluid {
+    height: 5vh;
 }
 

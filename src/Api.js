@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_API_URL = process.env.REACT_APP_BASE_URL || "http://localhost:5000"
+const BASE_API_URL = process.env.REACT_APP_BASE_URL || "https://stream-stats-backend.herokuapp.com"
 
 class StreamingApi {
     //Where the local token gets saved

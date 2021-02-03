@@ -124,14 +124,15 @@ function DataInput(){
         <div className="container">
             <div>
                 <h3 id="prompt">Want to add some stats?</h3>
-                {toggleData.videoView ? 
+                {/* {toggleData.videoView ? 
                 <>
-                            <button className="btn-primary rounded mb-4" onClick={toggler} name="videoView" data-testid="toggleVideoOff">Hide Video</button>
-                <div className="media">
+                            <button className="btn-primary rounded mb-4" onClick={toggler} name="videoView" data-testid="toggleVideoOff">Hide Video</button> */}
+                <div className="media mb-3">
                     <div className="embed-responsive embed-responsive-16by9 text-center align-self-center" id="howtovid">
                             <iframe className="embed-responsive-item align-self-center" src="https://www.youtube.com/embed/5bGsiBzUQ5U" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                     </div>
-                    </div></> : < button className="btn-primary rounded mb-4" onClick={toggler} name="videoView" data-testid="toggleVideoOn">View how-to video</button>}
+                    </div>
+                    {/* </div></> : < button className="btn-primary rounded mb-4" onClick={toggler} name="videoView" data-testid="toggleVideoOn">View how-to video</button>} */}
                     </div>
             <div className="form-container">
                 <form className="form-container" onSubmit={(evt) => handleSubmit(evt)}>

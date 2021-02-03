@@ -1,0 +1,23 @@
+#apexchartsw50dnkyn, foreignObject {
+    height:100%;
+    width:100%;
+}
+
+.apexcharts-canvas {
+    height: 100%;
+}
+
+/* #bar-container > **div{
+    height: 100%;
+}
+*svg{
+    height:100%;
+}
+
+*foreignObject{
+    height: 100%;
+} */
+
+.apexcharts-legend {
+    position: relative !important;
+}

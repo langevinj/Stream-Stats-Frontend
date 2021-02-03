@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactApexChart from 'react-apexcharts'
+import './BarGraph.css'
 
 function BarGraph({seriesData, songs, range}){
     //Confirm the correct series data to pass to the graph based on the current range.
@@ -11,7 +12,7 @@ function BarGraph({seriesData, songs, range}){
         chart: {
             type: 'bar',
             height: '100%',
-            stacked: true
+            stacked: true,
         },
         plotOptions: {
             bar: {
@@ -39,11 +40,22 @@ function BarGraph({seriesData, songs, range}){
         xaxis: {
             categories: songs,
         },
+        legend: {
+            itemMargin: {
+                horizontal: 5
+            },
+            floating: false
+        },
+        grid: {
+            padding: {
+                top: 10
+            }
+        }
     };
 
     return(
         <>
-            {songs.length ? <ReactApexChart options={options} series={series} type="bar" height={430} /> : <h3>No data has been imported for {range === "month" ? "30 days" : "all time"} yet.</h3>}
+                {songs.length ? <ReactApexChart options={options} series={series} type="bar" height="75%"/> : <h3>No data has been imported for {range === "month" ? "30 days" : "all time"} yet.</h3>}
         </>
     )
 }

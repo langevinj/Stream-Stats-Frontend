@@ -7,7 +7,7 @@ A data visualization tool for streaming data. Try it out: [Stream Stats](https:/
 * [Technologies](#technologies)
 * [Using the App](#using-the-app)
 * [Testing](#testing)
-* [Example](#example)
+* [Backend](#backend)
 
 ## Introduction
 Streams Stats was built with the goal of helping artists, record labels, and musicians compare data from a variety of streaming services in one central location. For the backend repository, which includes details on the API created for this project, [follow this link](https://github.com/langevinj/Stream-Stats-Backend).
@@ -43,10 +43,12 @@ The services this app can currently compare are:
 ### Importing Data
 [![](Import-Data.gif)](https://www.youtube.com/embed/5bGsiBzUQ5U)
 
+Users paste data from the platforms they choose into the inputs of the data input page. There is also an option to login to your Spotify for Artists account through the application account and allow it to scrape the statistics.
+
 ### Viewing Your Data
+![](Chart-Example.gif)
 
-
-## Testing:
+## Testing :white_check_mark::
 Enter the correct directory:
 ```
 cd src
@@ -62,10 +64,7 @@ Or individually:
 npm test NAME_OF_FILE
 ```
 
-
-
-## Example
-
-
+## Backend:arrows_counterclockwise:: 
+For information concerning the API created for this app or any other information regarding the backend. You can [find the repository here](https://github.com/langevinj/Stream-Stats-Backend).
 
 

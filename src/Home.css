@@ -13,9 +13,9 @@ li span {
     left: -10px;
 }
 
-.logo {
+/* .logo {
     height: 2vh;
-}
+} */
 
 ul {
     list-style: none;
@@ -26,8 +26,17 @@ ul {
     height: 75%;
     color: white;
 }
-
+/* 
 .img-fluid {
     height: 5vh;
 }
+
+.img-thumbnail {
+    height: 5vh;
+} */
+
+#distrokidLogo, #spotifyLogo, #bandcampLogo {
+    height: 5vh;
+}
+
 

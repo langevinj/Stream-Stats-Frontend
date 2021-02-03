@@ -20,9 +20,9 @@ function Home() {
                             <div className="col-3"></div>
                             <div className="col-6">
                             <ul>
-                                <li className="m-2"><img src={bandcampLogo} className="img-fluid logo" alt="bandcamp"></img></li>
-                                    <li className="m-2"><img src={spotifyLogo} alt="spotifyforarists" className="img-fluid logo" id="spotify-logo"></img></li>
-                                    <li className="m-2"><img src={distrokidLogo} className="img-fluid logo" alt="distrokid"></img></li>
+                                <li className="m-2"><img src={bandcampLogo} id="bandcampLogo" className="img-fluid logo" alt="bandcamp"></img></li>
+                                    <li className="m-2"><img src={spotifyLogo} alt="spotifyforarists" className="img-fluid logo" id="spotifyLogo"></img></li>
+                                    <li className="m-2"><img src={distrokidLogo} id="distrokidLogo" className="img-fluid logo" alt="distrokid"></img></li>
                             </ul>
                             </div>
                             <div className="col-3"></div>

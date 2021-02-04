@@ -5,6 +5,14 @@ import BarGraph from './BarGraph';
 import useLocalStorage from './hooks.js';
 import { checkEmpty, formatDistrokidData, setupSeriesData } from './helpers';
 
+/**Data displayed in these charts comes from multiple locations:
+ *      Spotify for Artists: https://artists.spotify.com/
+ *      Distrokid: https://distrokid.com/
+ *      Bandcamp: https://bandcamp.com/
+ * 
+ * Without the data these services provide, this application would not be possible.
+ */
+
 function Chart(){
     const { currUser } = useContext(UserContext);
     const username = currUser.username;

@@ -137,7 +137,7 @@ function DataInput(){
             <div className="form-container">
                 <form className="form-container" onSubmit={(evt) => handleSubmit(evt)}>
         
-                        {toggleData.spotifyPaste ? 
+                        {!toggleData.spotifyPaste ? 
                         <div className="form-group">
                         <div id="spotifyForArtists">
                             <h5>Add your login info for Spotify for Artists:</h5> 

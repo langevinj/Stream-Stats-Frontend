@@ -141,11 +141,11 @@ function DataInput(){
                         <div className="form-group">
                         <div id="spotifyForArtists">
                             <h5>Add your login info for Spotify for Artists:</h5> 
-                            <p>This service currently being updated. Please check back for updates.</p>
-                            {/* <label htmlFor="spotifyEmail">Email:</label>
+                            {/* <p>This service currently being updated. Please check back for updates.</p> */}
+                            <label htmlFor="spotifyEmail">Email:</label>
                             <input name="spotifyEmail" value={formData.spotifyEmail} id="spotifyEmail" onChange={handleChange} type="text" className="form-control"></input>
                             <label htmlFor="spotifyPwd">Password:</label>
-                            <input name="spotifyPwd" value={formData.spotifyPwd} id="spotifyPwd" type="password" onChange={handleChange} className="form-control"></input> */}
+                            <input name="spotifyPwd" value={formData.spotifyPwd} id="spotifyPwd" type="password" onChange={handleChange} className="form-control"></input>
                         </div> 
                         </div>: <>
                         <div className="form-group">
